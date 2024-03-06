@@ -116,7 +116,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 174, 174, 0.5);
+    background-color: rgba(186, 222, 250, 0.5);
     /* 半透明背景颜色 */
     z-index: -1;
     /* 将背景置于模态框下方 */
@@ -163,12 +163,12 @@ label {
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.124);
     /* 使用红色背景并调整透明度 */
-    border: 1px solid #f3c9c9;
+    border: 1px solid #99d3fe;
     border-radius: 15px;
     height: 35px;
     margin-top: 35px;
-    background: -webkit-linear-gradient(left, #9bb3ea, #eda7b4);
-    box-shadow: #f2c4cd 0 1px 0;
+    background: -webkit-linear-gradient(left, #b8cdfe, #fcd3dc);
+    box-shadow: #a1baf3 0 1px 0;
     transition: all 0.5s ease-in-out;
 }
 
@@ -185,14 +185,14 @@ input {
     outline: none !important;
     border-radius: 15px;
     height: 35px;
-    border: 1px solid #ebd5d5;
+    border: 1px solid #c8deff;
     backdrop-filter: blur(10px);
     /* 使用模糊效果，可以根据需要调整模糊程度 */
     background-color: transparent;
     /* 使用红色背景并调整透明度 */
     margin-top: 10px;
-    box-shadow: 0 3px 0 rgba(247, 195, 195, 0.2);
     /* 在底部添加阴影，模拟浮动效果 */
     transition: all 0.5s ease-in-out;
 
-}</style>
+}
+</style>

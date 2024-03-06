@@ -1,37 +1,173 @@
 <template>
+    <navbar></navbar>
+
+    <div class="text_title">
+        <div class="text" style="margin:auto;">Fly View</div>
+    </div>
     <div class="post_part">
         <el-upload
-        class="upload-demo"
-        drag
-        action="http://127.0.0.1:8000/submit_jsonpost"
-        accept=".json"
-        name="files"
-        multiple
+            class="upload-demo"
+            drag
+            action="http://127.0.0.1:8000/submit_jsonpost"
+            accept=".json"
+            name="files"
+            :auto-upload="false"
+            :before-remove="beforeRemove"
+            :on-preview="onPreview"
+            multiple
         >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">
-            Drop file here or <em>click to upload</em>
-        </div>
-        <template #tip>
-            <div class="el-upload__tip">
-                <em>only json files are allowed</em>
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+                Drop file here or <em>click to upload</em>
             </div>
-        </template>
+            <template #tip>
+                <div class="el-upload__tip">
+                    <em>only json files are allowed</em>
+                </div>
+            </template>
         </el-upload>
     </div>
+
+    <div class="delete_part" v-if="ispreview_delete">
+        <div class="model_background"></div>
+        <div class="choose_delete">
+            <p>是否要删除 <a onclick="event.preventDefault()">{{ delete_item }}</a>?</p>
+            <div class="delete_btns">
+                <button @click="confirmDelete">确定</button>
+                <button @click="cancelDelete">取消</button>
+            </div>
+        </div>
+    </div>
+
+
 </template>
-  
+
 <script setup lang="js">
-   import { UploadFilled } from '@element-plus/icons-vue'
+import navbar from "../navbar/navbar.vue";
+import { ref } from "vue";
+import { UploadFilled } from '@element-plus/icons-vue';
+
+let ispreview_delete = ref(false);
+let delete_item = ref(null);
+let isdelete = ref(false);
+let resolveBeforeRemove;
+
+function beforeRemove(file, fileList) {
+    const fileName = file.name;
+    delete_item.value = fileName;
+    ispreview_delete.value = true;
+    return new Promise(resolve => {
+        resolveBeforeRemove = resolve;
+    });
+}
+
+function confirmDelete() {
+    isdelete.value = true;
+    ispreview_delete.value = false;
+    resolveBeforeRemove(isdelete.value);
+}
+
+function cancelDelete() {
+    isdelete.value = false;
+    ispreview_delete.value = false;
+    resolveBeforeRemove(isdelete.value);
+}
+
+function onPreview(file, fileList){
+}
 </script>
 
-<style lang="css">
-.post_part{
+<style scoped>
+.post_part {
+    z-index: 1;
     width: 500px;
-    height: 400px;
-    position:absolute;
+    position: absolute;
     top: 50%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
+.delete_part {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.model_background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.choose_delete {
+    z-index: 10;
+    width: 200px;
+    height: 100px;
+    padding: 30px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px;
+    text-align: center;
+}
+
+.preview_img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.delete_btns{
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete_btns button{
+    width: 60px;
+}
+
+a{
+    color: rgb(98, 208, 255);
+    text-decoration-color:rgb(98, 208, 255) ;
+}
+
+.text_title{
+    margin: auto;
+    display: flex;
+    align-items: center;
+    font-size: 80px;
+    margin-top: 50px;
+    font-weight: 800;
+}
+
+.text{
+    font-size: 100px;
+    font-weight: 800;
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(to right, white, rgb(136, 181, 253)); /* Set the gradient colors */
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    background-position: left; /* Initial position to start from the left */
+    animation: gradientAnimation 4s linear infinite alternate; /* Apply the animation */
+    font-family: "Paytone One", sans-serif;
+    font-style: normal;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: left; /* Start from the left */
+    }
+    100% {
+        background-position: right; /* Move to the right */
+    }
+}
+
 </style>

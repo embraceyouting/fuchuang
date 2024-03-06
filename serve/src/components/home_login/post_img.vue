@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="main">
         <div class="append">
             <transition-group name="fade_img">
@@ -293,4 +293,4 @@ export default {
     transform: translateY(-50%);
     /* 你可以根据需要更改动画属性 */
 }
-</style>
+</style> -->

@@ -22,6 +22,18 @@ export default[
         ]
     },
     {
+        path:'/subject',
+        name:'subject',
+        component:()=>import('../views/subject/index.vue'),
+
+    },
+    {
+        path:'/user',
+        name:'user',
+        component:()=>import('../views/user/index.vue'),
+
+    },
+    {
         path: '/',
         redirect: '/home'
     },

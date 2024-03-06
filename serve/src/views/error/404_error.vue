@@ -1,20 +1,28 @@
 <template>
+  <div class="error">
     <el-empty :description="msg">
     </el-empty>
-  </template>
+  </div>  
+</template>
   
-  <script>
-  import { useRoute } from 'vue-router';
-  export default {
-    setup(){
-      let route = useRoute()
-      return {
-        msg: `Error! Can't find the page of ${route.path} !`
-      }
+<script>
+import { useRoute } from 'vue-router';
+export default {
+  setup(){
+    let route = useRoute()
+    return {
+      msg: `Error! Can't find the page of ${route.path} !`
     }
-      
-    
   }
-  </script>
+}
+</script>
   
-  <style></style>
+<style scoped>
+.error{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+</style>
