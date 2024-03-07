@@ -46,21 +46,38 @@ app.post('/submit_jsonpost', function (req, res) {
         }
         // 文件上传成功
         console.log(req.files);
-        // 将文件路径存储到数据库
+        // 获取上传的用户名，您可以根据实际情况从请求中获取
+        const username = req.body.username;
+        // 将文件路径和用户名存储到数据库
         req.files.forEach(file => {
-            const imagePath = 'uploads/' + file.filename; // 构建文件路径，相对于 public 目录
+            const jsonPath = 'uploads/' + file.filename; // 构建文件路径，相对于 public 目录
+            const filename = file.originalname;
             // 执行数据库插入操作
-            const sql = "INSERT INTO images (path) VALUES (?)";
-            db.query(sql, [imagePath], function (err, result) {
+            const sql = "INSERT INTO files (username, path, filename) VALUES (?, ?, ?)";
+            db.query(sql, [username, jsonPath, filename], function (err, result) {
                 if (err) {
                     console.error('Error inserting into database:', err);
                     return res.status(500).send('Error inserting into database.');
                 }
-                console.log('Image path inserted into database.');
+                console.log('File information inserted into database.');
             });
         });
         // 响应客户端
         res.status(200).send('Files uploaded successfully.');
+    });
+});
+
+
+app.get('/subject', (req, res) => {
+    // 执行查询以从数据库中获取路径
+    const sql = "SELECT filename FROM files"; // 根据您的数据库模式调整查询
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error('从数据库中获取路径时出错:', err);
+            return res.status(500).send('从数据库中获取路径时出错。');
+        }
+        // 将结果以JSON格式发送回客户端
+        res.send(results);
     });
 });
 
@@ -82,31 +99,3 @@ server.on('close', function () {
         console.log('Database connection closed.');
     });
 });
-
-
-
-
-// app.post('/submit_imgpost', function(req, res) {
-//     // 处理文件上传
-//     upload(req, res, function(err) {
-//         if (err) {
-//             console.error('Error uploading files:', err);
-//             return res.status(500).send('Error uploading files.');
-//         }
-//         // 文件上传成功
-//         console.log(req.files)
-//         // 将文件路径存储到数据库
-//         req.files.forEach(file => {
-//             const imagePath = file.path.replace(/^public\\/, ''); // 去除路径中的 'public' 部分
-//             // 执行数据库插入操作，假设您使用MySQL数据库
-//             const sql = "INSERT INTO images (path) VALUES (?)";
-//             db.query(sql, [imagePath], function(err, result) {
-//                 if (err) {
-//                     console.error('Error inserting into database:', err);
-//                     return res.status(500).send('Error inserting into database.');
-//                 }
-//                 console.log('Image path inserted into database.');
-//             });
-//         });        
-//     });
-// });

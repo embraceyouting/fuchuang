@@ -13,10 +13,12 @@
                     </div>
                 </div>
                 <form @submit="submit" style="display: flex; flex-direction: column;">
-                    <label for="user_name">Email Address</label>
-                    <input type="text" class="user_name" v-model="user.username">
+                    <label for="user_address">Email Address</label>
+                    <input type="text" class="user_address" v-model="user.address">
+                    <p v-if="if_wrong_name" style="margin: 0;color: red;font-size: 10px;margin-left: 5px;">邮箱格式不正确，请输入正确邮箱</p>
                     <label for="user_password">Password</label>
                     <input type="password" class="user_password" v-model="user.password">
+                    <p v-if="if_wrong_pass" style="margin: 0;color: red;font-size: 10px;margin-left: 5px;">密码格式不正确，密码不小于8位</p>
                     <button class="button" type="submit" style="">Sign</button>
                 </form>
             </div>
@@ -24,7 +26,7 @@
     </main>
 </template>
 <script>
-import { onMounted, reactive, watchEffect } from 'vue';
+import { onMounted, reactive, watchEffect , ref } from 'vue';
 import axios from 'axios';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -32,15 +34,22 @@ export default {
     name: "login",
     setup() {
         let user = reactive({
-            username: "",
+            address: "",
             password: "",
         })
+        let if_wrong_name=ref(false);
+        let if_wrong_pass=ref(false);
+        const qqEmailPattern = /^[1-9]\d{4,10}@qq\.com$/;
+        const passwordPattern = /^[a-zA-Z0-9]{8,}$/;
+
         let store = useStore();
         let router = useRouter()
+        let timer1 = null; // 定义定时器标识
+        let timer2 = null; 
         function submit(event) {
             event.preventDefault();
             const formData = {
-                user_name: user.username,
+                user_name: user.address,
                 user_password: user.password
             };
             // 使用axios发送POST请求到Node.js后端
@@ -53,9 +62,9 @@ export default {
                     // 处理错误
                     console.error('表单提交出错', error);
                 });
-            setCookie("name", user.username, 7);//如选中则添加Cookie，添加内容为用户输入的密码和用户名
+            setCookie("name", user.address, 7);//如选中则添加Cookie，添加内容为用户输入的密码和用户名
             setCookie("pas", user.password, 7);
-            user.username = '';
+            user.address = '';
             user.password = '';
             if (store) {
                 store.state.islogin = true;
@@ -68,16 +77,45 @@ export default {
         })
 
         watchEffect(() => {
-            if (user.username.includes(" ")) {
-                user.username = user.username.replace(/\s/g, '');
+            if (user.address.includes(" ")) {
+                user.address = user.address.replace(/\s/g, '');
             }
             if (user.password.includes(" ")) {
                 user.password = user.password.replace(/\s/g, '');
             }
+
+
+            if (!qqEmailPattern.test(user.address) && user.address !== '') {
+                if (!timer1) { // 如果定时器标识不存在，则创建定时器
+                    timer1 = setTimeout(() => {
+                        if_wrong_name.value = true;
+                    }, 1000);
+                }
+            } else {
+                clearTimeout(timer1); // 清除定时器
+                timer1 = null; // 清除定时器标识
+                if_wrong_name.value = false;
+            }
+
+
+            if (!passwordPattern.test(user.password) && user.password !== '') {
+                if (!timer2) { // 如果定时器标识不存在，则创建定时器
+                    timer2 = setTimeout(() => {
+                        if_wrong_pass.value = true;
+                    }, 1000);
+                }
+            } else {
+                clearTimeout(timer2); // 清除定时器
+                timer2 = null; // 清除定时器标识
+                if_wrong_pass.value = false;
+            }
         })
+
         return {
             user,
             submit,
+            if_wrong_name,
+            if_wrong_pass,
         }
     }
 }
@@ -166,7 +204,7 @@ label {
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.124);
     /* 使用红色背景并调整透明度 */
-    border: 1px solid #99d3fe;
+    border:none;
     border-radius: 15px;
     height: 35px;
     margin-top: 35px;
@@ -181,12 +219,12 @@ label {
 
 input {
     width: 100%;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 200;
-    text-indent: 20px;
+    text-indent: 15px;
     /* 指定缩进的像素值 */
     outline: none !important;
-    border-radius: 15px;
+    border-radius: 12px;
     height: 35px;
     border: 1px solid #c8deff;
     backdrop-filter: blur(10px);
@@ -196,6 +234,5 @@ input {
     margin-top: 10px;
     /* 在底部添加阴影，模拟浮动效果 */
     transition: all 0.5s ease-in-out;
-
 }
 </style>

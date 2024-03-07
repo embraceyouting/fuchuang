@@ -163,7 +163,7 @@ label {
     backdrop-filter: blur(10px);
     background-color: rgba(255, 255, 255, 0.124);
     /* 使用红色背景并调整透明度 */
-    border: 1px solid #99d3fe;
+    border:none;
     border-radius: 15px;
     height: 35px;
     margin-top: 35px;

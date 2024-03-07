@@ -11,12 +11,12 @@
             action="http://127.0.0.1:8000/submit_jsonpost"
             accept=".json"
             name="files"
-            :auto-upload="false"
             :before-remove="beforeRemove"
             :on-preview="onPreview"
+            :data="uploadData"
             multiple
         >
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <el-icon class="el-icon--upload"><upload-filled class="file_style"/></el-icon>
             <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
             </div>
@@ -31,15 +31,13 @@
     <div class="delete_part" v-if="ispreview_delete">
         <div class="model_background"></div>
         <div class="choose_delete">
-            <p>是否要删除 <a onclick="event.preventDefault()">{{ delete_item }}</a>?</p>
+            <p>Cancel the transfer of <a onclick="event.preventDefault()">{{ delete_item }}</a> ?</p>
             <div class="delete_btns">
-                <button @click="confirmDelete">确定</button>
-                <button @click="cancelDelete">取消</button>
+                <button @click="cancelDelete">Cancel</button>
+                <button @click="confirmDelete">OK</button>
             </div>
         </div>
     </div>
-
-
 </template>
 
 <script setup lang="js">
@@ -51,6 +49,13 @@ let ispreview_delete = ref(false);
 let delete_item = ref(null);
 let isdelete = ref(false);
 let resolveBeforeRemove;
+
+// 获取用户名，可以从任何适当的地方获取
+let username = getCookie("name");
+// 上传时发送的额外数据，包括用户名
+const uploadData = ref({
+    username: username
+});
 
 function beforeRemove(file, fileList) {
     const fileName = file.name;
@@ -105,17 +110,22 @@ function onPreview(file, fileList){
     width: 100%;
     height: 100%;
     z-index: 1;
+    background-color: rgba(185, 185, 185, 0.5);
 }
 
 .choose_delete {
     z-index: 10;
-    width: 200px;
-    height: 100px;
-    padding: 30px;
+    padding: 20px;
     background-color: rgb(255, 255, 255);
-    border-radius: 20px;
-    box-shadow: 5px 5px 5px;
+    border-radius: 5px;
     text-align: center;
+}
+
+.choose_delete p{
+    color: rgb(95, 95, 95);
+    font-family: "Paytone One", sans-serif;
+    font-weight: 200;
+    font-style: normal;
 }
 
 .preview_img {
@@ -125,12 +135,29 @@ function onPreview(file, fileList){
 }
 
 .delete_btns{
-    display: flex;
-    justify-content: space-between;
+    display: float;
+    float: right;
 }
 
+
+
 .delete_btns button{
-    width: 60px;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 5px;
+    border:0.5px solid #a5a6a7;
+    background-color: #409eff;
+    font-family: "Paytone One", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    cursor: pointer;
+}
+
+.delete_btns button:first-child{
+    margin-right: 20px;
+    color: #7c7c7c;
+    background-color: #ffff;
+    border:0.5px solid #cccecf;
 }
 
 a{
