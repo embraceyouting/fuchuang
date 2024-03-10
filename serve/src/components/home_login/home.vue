@@ -1,22 +1,16 @@
 <template>
-    <navbar></navbar>
-
     <div class="text_title">
-        <div class="text" style="margin:auto;">Fly View</div>
+        <div class="text">Fly View</div>
+        <div class="sub_text">
+            <p>An effective, fast, convenient and accurate website experience assistant</p>
+            <p>that helps you to understand the experience of using the site better!</p>
+        </div>
     </div>
+
     <div class="post_part">
-        <el-upload
-            class="upload-demo"
-            drag
-            action="http://127.0.0.1:8000/submit_jsonpost"
-            accept=".json"
-            name="files"
-            :before-remove="beforeRemove"
-            :on-preview="onPreview"
-            :data="uploadData"
-            multiple
-        >
-            <el-icon class="el-icon--upload"><upload-filled class="file_style"/></el-icon>
+        <el-upload class="upload-demo" drag action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
+            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" multiple>
+            <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
             <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
             </div>
@@ -28,10 +22,20 @@
         </el-upload>
     </div>
 
+    <div class="info">
+        <div v-for="card in cardList" :key="card.icon" class="card">
+            <component :is="card.icon" class="icon"></component>
+            <div class="content">
+                <h4>{{ card.title }}</h4>
+                <p>{{ card.content }}</p>
+            </div>
+        </div>
+    </div>
+
     <div class="delete_part" v-if="ispreview_delete">
         <div class="model_background"></div>
         <div class="choose_delete">
-            <p>Cancel the transfer of <a onclick="event.preventDefault()">{{ delete_item }}</a> ?</p>
+            <p>Cancel the transfer of <a @click.prevent>{{ delete_item }}</a> ?</p>
             <div class="delete_btns">
                 <button @click="cancelDelete">Cancel</button>
                 <button @click="confirmDelete">OK</button>
@@ -41,9 +45,11 @@
 </template>
 
 <script setup lang="js">
-import navbar from "../navbar/navbar.vue";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
+import WebSite from "@/icons/WebSite.vue";
+import BigData from "@/icons/BigData.vue";
+import SelectApp from "@/icons/SelectApp.vue";
 
 let ispreview_delete = ref(false);
 let delete_item = ref(null);
@@ -78,19 +84,129 @@ function cancelDelete() {
     resolveBeforeRemove(isdelete.value);
 }
 
-function onPreview(file, fileList){
+function onPreview(file, fileList) {
 }
+
+const cardList = reactive([
+    {
+        title: "网站体验",
+        icon: WebSite,
+        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+    },
+    {
+        title: "大数据分析",
+        icon: BigData,
+        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+    },
+    {
+        title: "最佳体验",
+        icon: SelectApp,
+        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+    }
+])
 </script>
 
-<style scoped>
-.post_part {
-    z-index: 1;
-    width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+<style scoped lang="scss">
+.text_title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+
+    .text {
+        font-size: 100px;
+        font-weight: 800;
+        margin: auto;
+        background-image: linear-gradient(to right, white, #88b5fd);
+        /* Set the gradient colors */
+        background-clip: text;
+        color: transparent;
+        background-size: 200% auto;
+        background-position: left;
+        /* Initial position to start from the left */
+        animation: gradientAnimation 4s linear infinite alternate;
+        /* Apply the animation */
+        font-family: "Paytone One", sans-serif;
+        user-select: none;
+    }
+
+    .sub_text {
+        margin: 40px 100px;
+
+        p {
+            margin: 0;
+            text-align: center;
+            font-size: 20px;
+            font-family: "Paytone One", sans-serif;
+            color: #323232b0;
+        }
+    }
+
+    @keyframes gradientAnimation {
+        0% {
+            background-position: left;
+            /* Start from the left */
+        }
+
+        100% {
+            background-position: right;
+            /* Move to the right */
+        }
+    }
 }
+
+.post_part {
+    width: 600px;
+    margin: 20px auto;
+
+    .upload-demo {
+
+        :deep(.el-upload) {
+
+            .el-upload-dragger {
+                transition: .3s;
+                background-color: transparent;
+                height: 280px;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                border-width: 0px;
+                position: relative;
+
+                &:hover {
+                    border-width: 4px;
+                }
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0px;
+                    border-radius: inherit;
+                    background-color: #fff9;
+                }
+            }
+
+            .el-upload__text {
+                color: white;
+                margin-top: 4px;
+
+                em {
+                    color: #0048ff;
+                }
+            }
+        }
+
+        :deep(.el-upload__tip) {
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+    }
+
+
+}
+
 .delete_part {
     position: fixed;
     top: 0;
@@ -101,95 +217,94 @@ function onPreview(file, fileList){
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .model_background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background-color: rgba(185, 185, 185, 0.5);
+    }
+
+    .choose_delete {
+        z-index: 10;
+        padding: 20px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 5px;
+        text-align: center;
+
+
+        p {
+            color: rgb(95, 95, 95);
+            font-family: "Paytone One", sans-serif;
+            font-weight: 200;
+            font-style: normal;
+
+            a {
+                color: rgb(98, 208, 255);
+                text-decoration-color: rgb(98, 208, 255);
+            }
+        }
+
+        .delete_btns {
+            display: float;
+            float: right;
+
+            button {
+                padding: 8px 15px;
+                color: white;
+                border-radius: 5px;
+                border: 0.5px solid #a5a6a7;
+                background-color: #409eff;
+                font-family: "Paytone One", sans-serif;
+                font-weight: 200;
+                font-style: normal;
+                cursor: pointer;
+
+                &:first-child {
+                    margin-right: 20px;
+                    color: #7c7c7c;
+                    background-color: #ffff;
+                    border: 0.5px solid #cccecf;
+                }
+            }
+        }
+    }
 }
 
-.model_background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background-color: rgba(185, 185, 185, 0.5);
-}
-
-.choose_delete {
-    z-index: 10;
-    padding: 20px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 5px;
-    text-align: center;
-}
-
-.choose_delete p{
-    color: rgb(95, 95, 95);
-    font-family: "Paytone One", sans-serif;
-    font-weight: 200;
-    font-style: normal;
-}
-
-
-.delete_btns{
-    display: float;
-    float: right;
-}
-
-
-
-.delete_btns button{
-    padding: 8px 15px;
-    color: white;
-    border-radius: 5px;
-    border:0.5px solid #a5a6a7;
-    background-color: #409eff;
-    font-family: "Paytone One", sans-serif;
-    font-weight: 200;
-    font-style: normal;
-    cursor: pointer;
-}
-
-.delete_btns button:first-child{
-    margin-right: 20px;
-    color: #7c7c7c;
-    background-color: #ffff;
-    border:0.5px solid #cccecf;
-}
-
-a{
-    color: rgb(98, 208, 255);
-    text-decoration-color:rgb(98, 208, 255) ;
-}
-
-.text_title{
-    margin: auto;
+.info {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    font-size: 80px;
-    margin-top: 50px;
-    font-weight: 800;
-}
+    justify-content: center;
+    margin-top: 80px;
+    padding-bottom: 80px;
 
-.text{
-    font-size: 100px;
-    font-weight: 800;
-    font-family: Arial, sans-serif;
-    background-image: linear-gradient(to right, white, rgb(136, 181, 253)); /* Set the gradient colors */
-    -webkit-background-clip: text;
-    color: transparent;
-    background-size: 200% auto;
-    background-position: left; /* Initial position to start from the left */
-    animation: gradientAnimation 4s linear infinite alternate; /* Apply the animation */
-    font-family: "Paytone One", sans-serif;
-    font-style: normal;
-}
+    .card {
+        width: 720px;
+        display: flex;
+        align-items: center;
+        gap: 40px;
 
-@keyframes gradientAnimation {
-    0% {
-        background-position: left; /* Start from the left */
+        svg {
+            width: 400px;
+            height: 400px;
+        }
+
+        .content {
+            flex: 1;
+
+            h4 {
+                margin-top: 0;
+                font-size: 20px;
+            }
+        }
+
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+        }
     }
-    100% {
-        background-position: right; /* Move to the right */
-    }
 }
-
 </style>

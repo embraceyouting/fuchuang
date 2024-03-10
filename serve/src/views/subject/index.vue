@@ -1,5 +1,4 @@
 <template>
-    <Navbar></Navbar> 
     <div class="main">
         <div class="side_part">
             <div class="title">My Subject</div>
@@ -35,7 +34,6 @@
 </template>
 
 <script setup lang="js">
-import Navbar from "../../components/navbar/navbar.vue"
 import echarts_percent from "../../components/subject/echarts_percent.vue"
 import echarts_percent2 from "../../components/subject/echarts_percent2.vue"
 import { ref } from "vue"
@@ -108,6 +106,7 @@ function cancelDelete() {
 
 </script>
 
+<style lang="scss" scoped>
 <style scoped>
 
 .scoll_part::-webkit-scrollbar{

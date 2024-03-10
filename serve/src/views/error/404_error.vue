@@ -1,28 +1,35 @@
 <template>
   <div class="error">
-    <el-empty :description="msg">
-    </el-empty>
-  </div>  
+    <EmptyIcon></EmptyIcon>
+    <p>{{ msg }}</p>
+  </div>
 </template>
-  
-<script>
+
+<script setup>
+import EmptyIcon from '@/icons/EmptyIcon.vue';
 import { useRoute } from 'vue-router';
-export default {
-  setup(){
-    let route = useRoute()
-    return {
-      msg: `Error! Can't find the page of ${route.path} !`
-    }
-  }
-}
+import { ref } from 'vue';
+const msg = ref("");
+const route = useRoute();
+msg.value = `Error! Can't find the page of ${route.path} !`;
 </script>
-  
-<style scoped>
-.error{
+
+<style scoped lang="scss">
+.error {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   height: 100%;
+
+  svg {
+    width: 200px;
+    height: 200px;
+  }
+
+  p {
+    margin-top: 20px;
+  }
 }
 </style>

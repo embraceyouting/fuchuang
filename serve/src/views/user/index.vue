@@ -1,12 +1,8 @@
 <template>
-    <Navbar></Navbar> 
+    <h1>User Page</h1>
 </template>
 
 <script setup lang="js">
-import { ref } from "vue"
-import Navbar from "../../components/navbar/navbar.vue"
-
-
 </script>
 
 
