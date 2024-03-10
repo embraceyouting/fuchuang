@@ -21,7 +21,7 @@ msg.value = `Error! Can't find the page of ${route.path} !`;
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 100%;
+  min-height: 100vh;
 
   svg {
     width: 200px;
