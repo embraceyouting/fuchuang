@@ -25,7 +25,13 @@ export default[
         path:'/subject',
         name:'subject',
         component:()=>import('../views/subject/index.vue'),
-
+        children:[
+            {
+                path:':file_name',
+                name:':file_name',
+                component:()=>import('../views/subject/index.vue'),
+            }
+        ]
     },
     {
         path:'/user',

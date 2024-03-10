@@ -128,11 +128,6 @@ function onPreview(file, fileList){
     font-style: normal;
 }
 
-.preview_img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
 
 .delete_btns{
     display: float;
