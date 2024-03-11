@@ -42,6 +42,8 @@
             </div>
         </div>
     </div>
+
+    <Contact></Contact>
 </template>
 
 <script setup lang="js">
@@ -50,6 +52,7 @@ import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
 import SelectApp from "@/icons/SelectApp.vue";
+import Contact from "@/components/contact/index.vue";
 
 let ispreview_delete = ref(false);
 let delete_item = ref(null);
@@ -156,7 +159,9 @@ const cardList = reactive([
 }
 
 .post_part {
-    width: 600px;
+    max-width: 600px;
+    min-width: 300px;
+    width: 80%;
     margin: 20px auto;
 
     .upload-demo {
@@ -280,10 +285,14 @@ const cardList = reactive([
     align-items: center;
     justify-content: center;
     margin-top: 80px;
-    padding-bottom: 80px;
+    margin-bottom: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 720px;
+    width: 90%;
 
     .card {
-        width: 720px;
+        width: 100%;
         display: flex;
         align-items: center;
         gap: 40px;
@@ -298,12 +307,30 @@ const cardList = reactive([
 
             h4 {
                 margin-top: 0;
+                margin-bottom: 20px;
                 font-size: 20px;
             }
         }
 
         &:nth-child(even) {
             flex-direction: row-reverse;
+        }
+
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            gap: 0;
+
+            .content {
+                width: 80%;
+
+                h4 {
+                    text-align: center;
+                }
+            }
+
+            &:nth-child(even) {
+                flex-direction: column;
+            }
         }
     }
 }

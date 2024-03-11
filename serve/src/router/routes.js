@@ -2,24 +2,17 @@ export default [
 	{
 		path: "/login",
 		name: "login",
-		component: () => import("../components/home_login/login.vue"),
+		component: () => import("../views/login/login.vue"),
 	},
 	{
 		path: "/signup",
 		name: "signup",
-		component: () => import("../components/home_login/signup.vue"),
+		component: () => import("../views/login/signup.vue"),
 	},
 	{
 		path: "/home",
 		name: "home",
-		component: () => import("../views/home/home_page.vue"),
-		children: [
-			{
-				path: "",
-				name: "home_main",
-				component: () => import("../components/home_login/home.vue"),
-			},
-		],
+		component: () => import("../views/home/index.vue"),
 		meta: {
             isNav: true
 		},
@@ -50,6 +43,6 @@ export default [
 	},
 	{
 		path: "/:catchAll(.*)",
-		component: () => import("../views/error/404_error.vue"),
+		component: () => import("../views/error/index.vue"),
 	},
 ];

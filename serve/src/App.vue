@@ -1,7 +1,7 @@
 <template>
+  <div id="bg"></div>
   <Navbar v-if="route.meta.isNav"></Navbar>
   <router-view></router-view>
-  <div id="bg"></div>
 </template>
 
 <script setup>
