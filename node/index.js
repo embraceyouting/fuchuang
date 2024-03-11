@@ -24,8 +24,8 @@ const upload = multer({ storage }).array('files');
 const db = mysql.createConnection({
     host: 'localhost',
     user: "root",
-    password: "LR159753246810",
-    database: 'datatest1',
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
 });
 
 // 数据库链接是否成功

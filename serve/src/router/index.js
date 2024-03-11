@@ -12,7 +12,7 @@ router.beforeEach((to, from, next) => {
     if (store) {
       const currentRoute = to.path; // 使用 to.path 获取目标路由的路径
       store.state.islogin = localStorage.getItem("islogin");
-      if (!store.state.islogin && currentRoute !== '/home/login'&&currentRoute !== '/home/signup') {
+      if (!store.state.islogin && currentRoute !== '/login'&&currentRoute !== '/signup') {
         return false;
       }
     }
@@ -24,7 +24,7 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     // 如果用户未通过身份验证，重定向到登录页面或其他页面
-    next('/home/login');
+    next('/login');
   }
 });
 

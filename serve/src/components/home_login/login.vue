@@ -6,10 +6,10 @@
                 <div
                     style="width: 100%;display: flex; justify-content: space-between;  align-items: flex-end; /* 将内容垂直对齐到底部 */">
                     <div>
-                        <router-link active-class="active" to="/home/login">Sign in</router-link>
+                        <router-link active-class="active" to="/login">Sign in</router-link>
                     </div>
                     <div>
-                        <router-link class="sign" active-class="active" to="/home/signup">Sign up</router-link>
+                        <router-link class="sign" active-class="active" to="/signup">Sign up</router-link>
                     </div>
                 </div>
                 <form @submit="submit" style="display: flex; flex-direction: column;">
