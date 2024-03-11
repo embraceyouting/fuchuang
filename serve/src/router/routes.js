@@ -13,6 +13,13 @@ export default [
 		path: "/home",
 		name: "home",
 		component: () => import("../views/home/index.vue"),
+		children: [
+			{
+				path: "",
+				name: "home_main",
+				component: () => import("../views/home/index.vue"),
+			},
+		],
 		meta: {
             isNav: true
 		},

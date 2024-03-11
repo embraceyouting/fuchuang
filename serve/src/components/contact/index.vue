@@ -1,6 +1,6 @@
 <template>
     <section class="contact">
-        <h1>联系我们</h1>
+        <h1>{{ $t('card.title4') }}</h1>
         <div class="icon">
             <Contact></Contact>
         </div>

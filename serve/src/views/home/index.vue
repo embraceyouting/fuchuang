@@ -48,12 +48,17 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref } from "vue";
+import { reactive, ref ,computed} from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
 import SelectApp from "@/icons/SelectApp.vue";
 import Contact from "@/components/contact/index.vue";
+
+
+import { getCurrentInstance } from 'vue'
+const { $t } = getCurrentInstance().proxy
+console.log($t('card.title1'))
 
 let ispreview_delete = ref(false);
 let delete_item = ref(null);
@@ -91,23 +96,27 @@ function cancelDelete() {
 function onPreview(file, fileList) {
 }
 
-const cardList = reactive([
-    {
-        title: "网站体验",
-        icon: WebSite,
-        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
-    },
-    {
-        title: "大数据分析",
-        icon: BigData,
-        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
-    },
-    {
-        title: "最佳体验",
-        icon: SelectApp,
-        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
-    }
-])
+const cardList =computed(()=>{
+    return [
+        {
+            title: $t('card.title1'),
+            icon: WebSite,
+            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+        },
+        {
+            title: $t('card.title2'),
+            icon: BigData,
+            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+        },
+        {
+            title: $t('card.title3'),
+            icon: SelectApp,
+            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+        }
+    ]
+})
+    
+
 </script>
 
 <style scoped lang="scss">

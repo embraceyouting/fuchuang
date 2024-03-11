@@ -52,7 +52,7 @@ app.post('/submit_jsonpost', function (req, res) {
         // 将文件路径和用户名存储到数据库
         req.files.forEach(file => {
             const jsonPath = 'uploads/' + file.filename; // 构建文件路径，相对于 public 目录
-            const filename = Buffer.from( file.originalname,'latin1').toString('utf-8');
+            const filename = Buffer.from(file.originalname, 'latin1').toString('utf-8');
             // 执行数据库插入操作
             const sql = "INSERT INTO files (username, path, filename) VALUES (?, ?, ?)";
             db.query(sql, [username, jsonPath, filename], function (err, result) {
@@ -67,6 +67,20 @@ app.post('/submit_jsonpost', function (req, res) {
         res.status(200).send('Files uploaded successfully.');
     });
 });
+
+
+app.get('/user', (req, res) => {
+    let username = req.query.username;
+    console.log(username);
+    const sql = `SELECT * FROM users WHERE username = ?`;
+    db.query(sql, [username], (err, result) => {
+        if (err) {
+            console.error('从数据库中获取数据时出错:', err);
+            return res.status(500).send('从数据库中获取数据出错。');
+        }
+        res.send(result);
+    });
+})
 
 
 app.get('/subject', (req, res) => {
@@ -88,22 +102,22 @@ app.delete('/subject/delete', (req, res) => {
     console.log(filename);
     // 检查filename是否提供
     if (!filename) {
-    return res.status(400).send('文件名未提供。');
+        return res.status(400).send('文件名未提供。');
     }
     // 构建用于删除记录的SQL查询
     const sql = "DELETE FROM files WHERE filename = ?";
     // 执行查询，使用文件名作为参数
     db.query(sql, [filename], (err, result) => {
-    if (err) {
-    console.error('删除数据库记录时出错:', err);
-    return res.status(500).send('删除数据时出错。');
-    }
-    // 判断是否成功删除数据
-    if (result.affectedRows === 0) {
-    return res.status(404).send('未找到匹配的文件名，删除失败。');
-    } else {
-    res.send('文件已成功删除。');
-    }
+        if (err) {
+            console.error('删除数据库记录时出错:', err);
+            return res.status(500).send('删除数据时出错。');
+        }
+        // 判断是否成功删除数据
+        if (result.affectedRows === 0) {
+            return res.status(404).send('未找到匹配的文件名，删除失败。');
+        } else {
+            res.send('文件已成功删除。');
+        }
     });
 });
 

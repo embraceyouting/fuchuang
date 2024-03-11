@@ -14,9 +14,8 @@
                     <option label="english" value="en" class="option"></option>
                 </select>
                 <!-- 使用循环动态渲染 -->
-                <router-link v-for="item in nav" :key="item.path" active-class="active" :to="item.path">
-                    {{ item.meta.title }}
-                </router-link>
+                <router-link to="/subject" active-class="active">{{ $t('navbar.subject') }}</router-link>
+                <router-link to="/user" active-class="active">{{ $t('navbar.mine') }}</router-link>
             </div>
         </div>
     </div>
@@ -64,7 +63,9 @@ const chooseLang = (language)=>{
         background-color: transparent;
         box-shadow: 0px 0px 0px 0px;//去除阴影
         text-align: center;
-        line-height: 50px
+        font-family: "Paytone One", sans-serif;
+        color:rgba(28, 94, 237, 0.5) ;
+        transform: translateY(2px);
     }
 
     
@@ -73,7 +74,7 @@ const chooseLang = (language)=>{
     .bar_right {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 20px;
         height: 100%;
 
         a {
@@ -89,6 +90,7 @@ const chooseLang = (language)=>{
             padding: 8px 12px;
             transition: all .2s;
             line-height: 1;
+            font-family: "Paytone One", sans-serif;
 
             &:hover {
                 color: white;

@@ -1,66 +1,33 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<style type="text/css">
-			.container {
-				perspective: 1000;
-				transform-style: preserve-3d;
-			}
 
-			.flip {
-				transition: 0.6s;
-				transform-style: preserve-3d;
-			}
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		body {
+			overflow: hidden;
+			/* 禁止页面出现滚动条 */
+			margin: 0;
+			/* 清除默认的外边距 */
+			padding: 0;
+			/* 清除默认的内边距 */
+		}
 
-			.container,
-			.front,
-			.back {
-				width: 380px;
-				height: 270px;
-			}
+		.qiu {
+			position: absolute;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: blue;
+		}
+	</style>
+</head>
 
-			.flip {
-				position: relative;
-				transition: 0.6s;
-				transform-style: preserve-3d;
-			}
+<body>
+	<script>
+		
+	</script>
+</body>
 
-			.front,
-			.back {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				backface-visibility: hidden;
-			}
-
-			.front {
-				z-index: 2;
-				background-color: #52ACF7;
-			}
-
-			.back {
-				transform: rotateY(-180deg);
-				background-color: red;
-			}
-			/* 重点 */
-			.container:hover .flip {
-				transform: rotateY(180deg);
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="flip">
-				<div class="front">
-					前面
-				</div>
-				<div class="back">
-					后面
-				</div>
-			</div>
-		</div>
-	</body>
 </html>
-
