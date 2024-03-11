@@ -1,7 +1,6 @@
 <template>
     <main>
         <div class="modal-container">
-            <div class="modal-background"></div>
             <div class="middle_part">
                 <div
                     style="width: 100%;display: flex; justify-content: space-between;  align-items: flex-end; /* 将内容垂直对齐到底部 */">
@@ -81,7 +80,11 @@ export default {
 </script>
 
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+main {
+    height: 100vh;
+}
+
 .middle_part {
     position: fixed;
     width: 350px;
@@ -108,18 +111,6 @@ export default {
     align-items: center;
     z-index: 999;
     /* 使模态框在最上层 */
-}
-
-.modal-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(186, 222, 250, 0.5);
-    /* 半透明背景颜色 */
-    z-index: -1;
-    /* 将背景置于模态框下方 */
 }
 
 a {
