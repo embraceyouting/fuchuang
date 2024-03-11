@@ -23,7 +23,8 @@
     </div>
 
     <div class="info">
-        <div v-for="card in cardList" :key="card.icon" class="card">
+        <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
+            class="card">
             <component :is="card.icon" class="icon"></component>
             <div class="content">
                 <h4>{{ card.title }}</h4>
@@ -43,7 +44,7 @@
         </div>
     </div>
 
-    <Contact></Contact>
+    <Contact v-animate="{ direction: 'bottom' }"></Contact>
 </template>
 
 <script setup lang="js">
