@@ -4,10 +4,15 @@
             <div class="bar_left">
                 <router-link class="icon_title" active-class="active" to="/home">
                     <Logo></Logo>
-                    <span>FlyView</span>
+                    <span>{{ $t('navbar.title') }}</span>
                 </router-link>
             </div>
+            
             <div class="bar_right">
+                <select name="" id="" class="language" v-model="language" @change="chooseLang(language)">
+                    <option label="中文" value="zh" selected class="option"></option>
+                    <option label="english" value="en" class="option"></option>
+                </select>
                 <!-- 使用循环动态渲染 -->
                 <router-link v-for="item in nav" :key="item.path" active-class="active" :to="item.path">
                     {{ item.meta.title }}
@@ -18,10 +23,17 @@
 </template>
 
 <script setup>
+import {ref} from "vue"
 import Logo from '@/icons/Logo.vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
+import { useI18n } from 'vue-i18n'
+let { locale } = useI18n()
+let language =ref("zh")
+const chooseLang = (language)=>{
+    locale.value = language
+}
 </script>
 
 <style scoped lang="scss">
@@ -44,6 +56,18 @@ const nav = router.getRoutes().filter(item => item.meta.isNavItem)
         align-items: center;
         justify-content: space-between;
     }
+
+    .language{
+        width: fit-content;
+        border: none;
+        outline:none;
+        background-color: transparent;
+        box-shadow: 0px 0px 0px 0px;//去除阴影
+        text-align: center;
+        line-height: 50px
+    }
+
+    
 
     .bar_left,
     .bar_right {
@@ -68,11 +92,11 @@ const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 
             &:hover {
                 color: white;
-                background-color: #0002;
+                background-color: rgba(205, 205, 205, 0.2);
             }
 
             &.active {
-                background-color: #0003;
+                background-color: rgba(150, 150, 150, 0.2);
                 color: white;
             }
         }

@@ -2,8 +2,8 @@
     <div class="text_title">
         <div class="text">Fly View</div>
         <div class="sub_text">
-            <p>An effective, fast, convenient and accurate website experience assistant</p>
-            <p>that helps you to understand the experience of using the site better!</p>
+            <p>{{ $t('text.one') }}</p>
+            <p>{{ $t('text.two') }}</p>
         </div>
     </div>
 
