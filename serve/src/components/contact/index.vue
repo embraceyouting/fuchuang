@@ -51,7 +51,7 @@ import Contact from '@/icons/Contact.vue';
 
         em {
             font-style: normal;
-            font-family: "Paytone One", sans-serif;
+            font-family: "Paytone One", sans-serif, "PingFangSC";
             font-weight: 200;
             background: linear-gradient(45deg, #ff829d, #004cff);
             background-clip: text;

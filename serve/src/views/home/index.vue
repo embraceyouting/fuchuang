@@ -139,7 +139,7 @@ const cardList =computed(()=>{
         /* Initial position to start from the left */
         animation: gradientAnimation 4s linear infinite alternate;
         /* Apply the animation */
-        font-family: "Paytone One", sans-serif;
+        font-family: "Paytone One", sans-serif, "PingFangSC";
         user-select: none;
     }
 
@@ -150,7 +150,7 @@ const cardList =computed(()=>{
             margin: 0;
             text-align: center;
             font-size: 20px;
-            font-family: "Paytone One", sans-serif;
+            font-family: "Paytone One", sans-serif, "PingFangSC";
             color: #323232b0;
         }
     }
@@ -253,7 +253,7 @@ const cardList =computed(()=>{
 
         p {
             color: rgb(95, 95, 95);
-            font-family: "Paytone One", sans-serif;
+            font-family: "Paytone One", sans-serif, "PingFangSC";
             font-weight: 200;
             font-style: normal;
 
@@ -273,7 +273,7 @@ const cardList =computed(()=>{
                 border-radius: 5px;
                 border: 0.5px solid #a5a6a7;
                 background-color: #409eff;
-                font-family: "Paytone One", sans-serif;
+                font-family: "Paytone One", sans-serif, "PingFangSC";
                 font-weight: 200;
                 font-style: normal;
                 cursor: pointer;

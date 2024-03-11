@@ -26,7 +26,46 @@
 
 <body>
 	<script>
-		
+		function getRandomNumber(min, max) {
+			return Math.random() * (max - min) + min;
+		}
+
+		function createBall() {
+			var ball = document.createElement('div');
+			ball.className = 'qiu';
+			ball.style.top = getRandomNumber(0, window.innerHeight - 10) + 'px';
+			ball.style.left = getRandomNumber(0, window.innerWidth - 10) + 'px';
+			document.body.appendChild(ball);
+
+			var xSpeed = getRandomNumber(-3, 3); // 水平速度
+			var ySpeed = getRandomNumber(-3, 3); // 垂直速度
+
+			setInterval(function () {
+				var rect = ball.getBoundingClientRect();
+				var maxX = window.innerWidth - rect.width;
+				var maxY = window.innerHeight - rect.height;
+
+				var newX = rect.left + xSpeed;
+				var newY = rect.top + ySpeed;
+
+				// 边界碰撞检测
+				if (newX <= 0 || newX >= maxX) {
+					xSpeed = -xSpeed; // 水平方向反弹
+				}
+				if (newY <= 0 || newY >= maxY) {
+					ySpeed = -ySpeed; // 垂直方向反弹
+				}
+
+				// 更新小球位置
+				ball.style.left = Math.max(0, Math.min(newX, maxX)) + 'px';
+				ball.style.top = Math.max(0, Math.min(newY, maxY)) + 'px';
+			}, 30); // 每30毫秒移动一次
+		}
+
+		// 生成更多小球
+		for (var i = 0; i < 50; i++) {
+			createBall();
+		}
 	</script>
 </body>
 

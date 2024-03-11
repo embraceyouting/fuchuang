@@ -9,14 +9,9 @@
             </div>
             
             <div class="bar_right">
-                <select name="" id="" class="language" v-model="language" @change="chooseLang(language)">
-                    <option label="中文" value="zh" selected class="option"></option>
-                    <option label="english" value="en" class="option"></option>
-                </select>
-                <!-- 使用循环动态渲染 -->
-                <router-link to="/subject" active-class="active">{{ $t('navbar.subject') }}</router-link>
-                <router-link to="/user" active-class="active">{{ $t('navbar.mine') }}</router-link>
-                <router-link to="/login">登录</router-link>
+                <router-link v-for="(item,index) in nav" :key="index" :to="`${item.path}`" active-class="active">{{ $t(item.meta.title) }}</router-link>
+                <a href="::javascript" @click.prevent="chooseLang(language)">{{ $t('navbar.lang') }}</a>
+                <router-link to="/login">{{ $t('navbar.login') }}</router-link>
             </div>
         </div>
     </div>
@@ -30,9 +25,10 @@ const router = useRouter();
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 import { useI18n } from 'vue-i18n'
 let { locale } = useI18n()
-let language =ref("zh")
-const chooseLang = (language)=>{
-    locale.value = language
+let language =ref('zh')
+const chooseLang = (languagevalue)=>{
+    language = (languagevalue == 'zh' ? 'en' : 'zh');
+    locale.value = (languagevalue == 'zh' ? 'en' : 'zh');
 }
 </script>
 
@@ -64,7 +60,7 @@ const chooseLang = (language)=>{
         background-color: transparent;
         box-shadow: 0px 0px 0px 0px;//去除阴影
         text-align: center;
-        font-family: "Paytone One", sans-serif;
+        font-family: "Paytone One","PingFangSC", sans-serif ;
         color:rgba(28, 94, 237, 0.5) ;
         transform: translateY(2px);
     }
@@ -91,7 +87,7 @@ const chooseLang = (language)=>{
             padding: 8px 12px;
             transition: all .2s;
             line-height: 1;
-            font-family: "Paytone One", sans-serif;
+            font-family: "Paytone One", sans-serif, "PingFangSC";
 
             &:hover {
                 color: white;
@@ -117,7 +113,7 @@ const chooseLang = (language)=>{
             gap: 4px;
 
             span {
-                font-family: "Paytone One", sans-serif;
+                font-family: "Paytone One", sans-serif, "PingFangSC";
             }
         }
     }

@@ -1,12 +1,10 @@
 export default {
-    person: {
-        name: 'zhangsan',
-        hobby: 'Singing and dancing, rap, basketball',
-    },
     navbar:{
         title:'FlyView',
         subject:'subject',
-        mine:'me'
+        mine:'me',
+        login:'login',
+        lang:'中文'
     },
     text:{
         one:'An effective, fast, convenient and accurate website experience assistant',

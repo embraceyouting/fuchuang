@@ -26,7 +26,7 @@ export default [
 		meta: {
 			isNavItem: true,
             isNav: true,
-			title: "项目"
+			title: "navbar.subject"
 		},
 	},
 	{
@@ -36,7 +36,7 @@ export default [
 		meta: {
 			isNavItem: true,
             isNav: true,
-			title: "我的"
+			title: "navbar.mine"
 		},
 	},
 	{
