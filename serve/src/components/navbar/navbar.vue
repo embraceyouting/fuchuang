@@ -12,6 +12,7 @@
                 <router-link v-for="item in nav" :key="item.path" active-class="active" :to="item.path">
                     {{ item.meta.title }}
                 </router-link>
+                <router-link to="/login">登录</router-link>
             </div>
         </div>
     </div>

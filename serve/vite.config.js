@@ -10,6 +10,7 @@ export default defineConfig({
 		host: "0.0.0.0", // ← 新增内容 ←
 	},
 	resolve: {
+		extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
 		alias: {
 			"@": path.resolve(__dirname, "./src"),
 		},
