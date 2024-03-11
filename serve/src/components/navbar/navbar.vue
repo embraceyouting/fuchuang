@@ -16,6 +16,7 @@
                 <!-- 使用循环动态渲染 -->
                 <router-link to="/subject" active-class="active">{{ $t('navbar.subject') }}</router-link>
                 <router-link to="/user" active-class="active">{{ $t('navbar.mine') }}</router-link>
+                <router-link to="/login">登录</router-link>
             </div>
         </div>
     </div>

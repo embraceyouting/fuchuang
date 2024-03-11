@@ -36,6 +36,11 @@ import Contact from '@/icons/Contact.vue';
     background-color: #fff6;
     border-radius: 8px;
 
+    &:hover {
+        transition: box-shadow .1s;
+        box-shadow: 0 10px 20px 0px #0003;
+    }
+
     h1 {
         margin-bottom: 0;
     }

@@ -1,6 +1,8 @@
 <template>
-  <div id="bg"></div>
-  <Navbar v-if="route.meta.isNav"></Navbar>
+  <Backdrop></Backdrop>
+  <Transition name="slide" mode="out-in">
+    <Navbar v-if="route.meta.isNav"></Navbar>
+  </Transition>
   <Transition name="fade" mode="out-in">
     <div :key="route.fullPath">
       <router-view></router-view>
@@ -10,6 +12,7 @@
 
 <script setup>
 import Navbar from "@/components/navbar/navbar.vue"
+import Backdrop from "@/components/backdrop/backdrop.vue"
 import { useRoute } from "vue-router";
 const route = useRoute();
 </script>
@@ -26,13 +29,14 @@ const route = useRoute();
   transform: translateY(10px) scale(0.98);
 }
 
-#bg {
-  position: fixed;
-  inset: 0;
-  background: url('@/assets/image/bg.png') no-repeat 100%/100%;
-  background-size: cover;
-  z-index: -99;
-  filter: blur(20px);
-  transform: scale(1.1);
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.7s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-55px);
 }
 </style>
