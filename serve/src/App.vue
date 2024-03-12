@@ -14,7 +14,9 @@
 import Navbar from "@/components/navbar/navbar.vue"
 import Backdrop from "@/components/backdrop/backdrop.vue"
 import { useRoute } from "vue-router";
+import { useUserStore } from "./store/user";
 const route = useRoute();
+useUserStore().userLogin();
 </script>
 
 <style scoped lang="scss">

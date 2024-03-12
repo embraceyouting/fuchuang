@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import './style.scss';
 import '@/assets/font/font.scss';
 import App from './App.vue';
-import store from './store/index';  
 import router from './router/index';  
 import { createPinia } from 'pinia';
 import ElementPlus from 'element-plus'
@@ -17,7 +16,6 @@ const app = createApp(App);
 app.use(i18n)
 app.use(createPinia());
 app.use(ElementPlus)
-app.use(store);  
 app.use(router);
 app.directive('animate', animate)
 app.component('ECharts',ECharts) 
