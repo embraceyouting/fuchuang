@@ -9,6 +9,18 @@ const app = express();
 app.use(cors());
 app.use(express.static('public'));
 
+
+
+// files
+// username||time||filename||path||email
+
+
+
+// users
+// username||password||email
+
+
+
 // 创建一个用于存储上传文件的 Multer 实例
 const storage = multer.diskStorage({
     destination: 'public/uploads',
@@ -48,14 +60,14 @@ app.post('/submit_jsonpost', function (req, res) {
         // 文件上传成功
         console.log(req.files);
         // 获取上传的用户名，您可以根据实际情况从请求中获取
-        const username = req.body.username;
+        const email = req.body.email;
         // 将文件路径和用户名存储到数据库
         req.files.forEach(file => {
             const jsonPath = 'uploads/' + file.filename; // 构建文件路径，相对于 public 目录
             const filename = Buffer.from(file.originalname, 'latin1').toString('utf-8');
             // 执行数据库插入操作
-            const sql = "INSERT INTO files (username, path, filename) VALUES (?, ?, ?)";
-            db.query(sql, [username, jsonPath, filename], function (err, result) {
+            const sql = "INSERT INTO files (email, path, filename) VALUES (?, ?, ?)";
+            db.query(sql, [email, jsonPath, filename], function (err, result) {
                 if (err) {
                     console.error('Error inserting into database:', err);
                     return res.status(500).send('Error inserting into database.');
@@ -70,10 +82,10 @@ app.post('/submit_jsonpost', function (req, res) {
 
 
 app.get('/user', (req, res) => {
-    let username = req.query.username;
-    console.log(username);
-    const sql = `SELECT * FROM users WHERE username = ?`;
-    db.query(sql, [username], (err, result) => {
+    let email = req.query.email;
+    console.log(email);
+    const sql = `SELECT * FROM files WHERE email = ? ORDER BY time DESC`;
+    db.query(sql, [email], (err, result) => {
         if (err) {
             console.error('从数据库中获取数据时出错:', err);
             return res.status(500).send('从数据库中获取数据出错。');
@@ -120,6 +132,9 @@ app.delete('/subject/delete', (req, res) => {
         }
     });
 });
+
+
+
 
 // 启动服务器
 const server = app.listen(8000, function () {

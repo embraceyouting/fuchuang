@@ -15,5 +15,14 @@ export default {
         title2:'Big Data Analysis',
         title3:'Optimal Experience',
         title4:'Contact Us' 
+    },
+    user:{
+        name:'UserName',
+        subject:'My Subject',
+        info:'My Profile'
+    },
+    sub:{
+        today:'today',
+        yesterday:'yesterday'
       }
 }

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <main>
         <div class="modal-container">
             <div class="middle_part">
@@ -17,7 +17,7 @@
                     <p v-if="if_wrong_name" style="margin: 0;color: red;font-size: 10px;margin-left: 5px;">邮箱格式不正确，请输入正确邮箱</p>
                     <label for="user_password">Password</label>
                     <input type="password" class="user_password" v-model="user.password">
-                    <p v-if="if_wrong_pass" style="margin: 0;color: red;font-size: 10px;margin-left: 5px;">密码格式不正确，密码不小于8位</p>
+                    <p v-if="if_wrong_pass" style="margin: 0;color: red;font-size: 10px;margin-left: 5px;">密码格式不正确,密码不小于8位</p>
                     <button class="button" type="submit" style="">Sign</button>
                 </form>
             </div>
@@ -227,4 +227,4 @@ input {
     transition: all 0.5s ease-in-out;
 }
 
-</style>
+</style> -->

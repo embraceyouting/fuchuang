@@ -38,6 +38,19 @@ export default [
             isNav: true,
 			title: "navbar.mine"
 		},
+		redirect: "/user/subject",//默认到subject
+		children:[
+			{
+				path:'subject',
+				name: 'usersubject',
+				component: () => import("../components/user/subject.vue")
+			},
+			{
+				path:'info',
+				name: 'info',
+				component: () => import("../components/user/info.vue")
+			}
+		]
 	},
 	{
 		path: "/",

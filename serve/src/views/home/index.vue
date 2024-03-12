@@ -65,11 +65,11 @@ let delete_item = ref(null);
 let isdelete = ref(false);
 let resolveBeforeRemove;
 
-// 获取用户名，可以从任何适当的地方获取
-let username = getCookie("name");
+// 获取email，可以从任何适当的地方获取
+let email = getCookie("email");
 // 上传时发送的额外数据，包括用户名
 const uploadData = ref({
-    username: username
+    email: email
 });
 
 function beforeRemove(file, fileList) {

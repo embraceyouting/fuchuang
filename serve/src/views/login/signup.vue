@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <main>
         <div class="modal-container">
             <div class="middle_part">
@@ -186,4 +186,4 @@ input {
     transition: all 0.5s ease-in-out;
 
 }
-</style>
+</style> -->

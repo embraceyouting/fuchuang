@@ -106,6 +106,7 @@ const loginFn = () => {
         return
     }
     ElMessage.success('登录成功')
+    setCookie("email", login.email, 7);//添加Cookie,用来模拟请求
     router.push('/home')
 }
 </script>

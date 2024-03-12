@@ -1,59 +1,36 @@
 <template>
     <div class="main">
-        <div class="change_info">
-            <label for="">用户名：</label>
-            <input type="text" v-model.trim="userdata.name" :maxlength="11">
+        <div class="leftpart">
+            <p>{{$t('user.name')}}: 111</p>
+            <p><router-link to="/user/subject" active-class="active">{{$t('user.subject')}}</router-link></p>
+            <p><router-link to="/user/info" active-class="active">{{$t('user.info')}}</router-link></p>    
         </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
-        </div>
-        <div class="change_info">
-            <label for="">电子邮件：</label>
-            <input type="text" v-model.trim="userdata.email" @input="formatEmail">
+        <div class="rightpart">
+            <router-view></router-view>
         </div>
     </div>
 </template>
 
 <script setup lang="js">
-import { ref, reactive } from "vue";
-import axios from 'axios';
+// import { ref, reactive } from "vue";
+// import axios from 'axios';
 
-const username = getCookie("name");
-const userdata = reactive({
-    name: '',
-    password: '',
-    email: '',
-});
+// // 这里假设你已经定义了 getCookie() 函数
+// const email = getCookie("email");
+// let subjects = ref([]);
 
-axios.get("http://127.0.0.1:8000/user", { params: { username: username } })
-    .then(res => {
-        const { username: name, password, email } = res.data[0];
-        Object.assign(userdata, { name, password, email });
-    })
-    .catch(error => {
-        console.error('获取用户数据时出错：', error);
-    });
+// axios.get("http://127.0.0.1:8000/user", { params: { email: email } })
+// .then(res => {
+//     if (res.data.length > 0) {
+//         console.log(res.data)
+//         subjects.value = res.data;
+//     } else {
+//         console.error('未找到相关用户数据');
+//     }
+// })
+// .catch(error => {
+//     console.error('获取用户数据时出错：', error);
+// });
 
 const formatEmail = () => {
     userdata.email = userdata.email.trim().replace(/(@qq\.com$)|[^a-zA-Z0-9_\-.@]/g, '');
@@ -63,33 +40,68 @@ const formatEmail = () => {
 <style scoped lang="scss">
 .main {
     width: 50%;
+    height: 80vh;
     max-width: 800px;
-    min-width: 291px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    height: auto;
+    min-width: 400px;
+    margin: auto;
+    margin-top: 50px;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 25px;
-    background-color: #ffffff;
-    border-radius: 25px;
-    padding: 25px 50px 50px 50px;
+    padding:40px 40px 40px 40px;
+    border-radius: 15px;
+    background-color: rgba(156, 168, 242, 0.6); /* 背景颜色透明度设置为 0.1 */
+    backdrop-filter: blur(10px); /* 背景模糊度 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 边框颜色透明度设置为 0.2 */
 
-    .change_info { 
-        margin-top: 25px;
-        input {
-            font-size: 16px;
-            border: none;
-            line-height: 1.5;
-            text-decoration: underline 1px solid #000000;
-            text-underline-offset: 4px;
-            outline: none;
-            background-color: #ffffff;
-            max-width: 300px; 
+    .leftpart {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        flex: 2;
+        border-right: 2px solid rgba(255, 255, 255, 0.217);
+        p{
+            
+            &:first-child{
+                padding: 8px 6px;
+                margin:17px 0;
+                font-size: 20px;
+            } 
+            margin:30px 0;
+            color: #ffffff;
+            font-weight: 400;
+            font-style: normal;
+            transition: all .2s;
+            line-height: 1;
+            font-family: "Paytone One", "PingFangSC", sans-serif;
         }
+        a{
+            outline: 0;
+            text-decoration: none;
+            text-underline-position: under;
+            cursor: pointer;
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 400;
+            font-style: normal;
+            border-radius: 4px;
+            padding: 8px 12px;
+            transition: all .2s;
+            line-height: 1;
+            font-family: "Paytone One", "PingFangSC", sans-serif;
+            &:hover {
+                color: #8c8c8c;
+                background-color: #e7e7e733;
+            }
+
+            &.active {
+                background-color: #ffffff33;
+                color: #fff;
+            }
+        }
+    }
+
+    .rightpart {
+        flex: 7;
+        overflow-y: scroll;
     }
 }
 </style>
