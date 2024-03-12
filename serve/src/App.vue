@@ -32,6 +32,7 @@ const route = useRoute();
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.7s ease;
+  position: absolute;
 }
 
 .slide-enter-from,

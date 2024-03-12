@@ -115,7 +115,7 @@ function cancelDelete() {
             height: 50px;
             border-bottom: #dbdbdb 1px solid;
             text-align: center;
-            font-family: "Paytone One", sans-serif, "PingFangSC";
+            font-family: "Paytone One", "PingFangSC", sans-serif;
             font-weight: 200;
             font-style: normal;
             color: #5f86ea;
@@ -159,7 +159,7 @@ function cancelDelete() {
                     padding-right: 24px;
                     /* 禁止换行 */
                     text-overflow: ellipsis;
-                    font-family: "Paytone One", sans-serif, "PingFangSC", "YouYuan";
+                    font-family: "Paytone One", "PingFangSC", sans-serif, "YouYuan";
                     /* 禁止手型光标 */
                 }
 
@@ -259,7 +259,7 @@ function cancelDelete() {
 
         p {
             color: rgb(95, 95, 95);
-            font-family: "Paytone One", sans-serif, "PingFangSC";
+            font-family: "Paytone One", "PingFangSC", sans-serif;
             font-weight: 200;
             font-style: normal;
         }
@@ -274,7 +274,7 @@ function cancelDelete() {
                 border-radius: 5px;
                 border: 0.5px solid #a5a6a7;
                 background-color: #409eff;
-                font-family: "Paytone One", sans-serif, "PingFangSC";
+                font-family: "Paytone One", "PingFangSC", sans-serif;
                 font-weight: 200;
                 font-style: normal;
                 cursor: pointer;

@@ -3,8 +3,8 @@
         <div class="modal-container">
             <div class="canvas">
                 <img class="bihua" src="@/assets/image/bihua.png" alt="">
-                <img class="fei" src="@/assets/image/fei.png" alt="">
-                <img class="yue" src="@/assets/image/yue.png" alt="">
+                <img class="fei" src="@/assets/image/fei.png" v-animate="{ direction: 'bottom', offset: 40, duration: '1s' }" alt="">
+                <img class="yue" src="@/assets/image/yue.png" v-animate="{ direction: 'top', offset: 40, duration: '1s' }" alt="">
                 <canvas ref="canvas"></canvas>
             </div>
             <div class="middle_part">
