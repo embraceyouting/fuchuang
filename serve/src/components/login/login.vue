@@ -64,6 +64,7 @@ import LoginIcon from '@/icons/LoginIcon.vue';
 import RegisterIcon from '@/icons/RegisterIcon.vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/store/user';
 
 const router = useRouter()
 
@@ -105,8 +106,10 @@ const loginFn = () => {
     if (!check()) {
         return
     }
-    ElMessage.success('登录成功')
-    router.push('/home')
+    useUserStore().userLogin(login.email, login.password).then(res => {
+        ElMessage.success('登录成功')
+        router.push('/home')
+    })
 }
 </script>
 
