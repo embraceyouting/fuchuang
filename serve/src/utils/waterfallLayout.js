@@ -18,7 +18,7 @@ export default function waterFall(el, columnCount = 5, gap = 20) {
     for (let i = 0; i < columnCount; i++) {
         columnHeight[i] = 0
     }
-    const children = el.children
+    const children = el.children;
     for (let i = 0; i < children.length; i++) {
         children[i].style.width = columnWidth + 'px'
         children[i].style.position = 'absolute'

@@ -46,7 +46,8 @@ const formatEmail = () => {
     margin: auto;
     margin-top: 50px;
     display: flex;
-    padding:40px 40px 40px 40px;
+    align-items: center;
+    padding:0px 40px 0px 40px;
     border-radius: 15px;
     background-color: rgba(156, 168, 242, 0.6); /* 背景颜色透明度设置为 0.1 */
     backdrop-filter: blur(10px); /* 背景模糊度 */
@@ -58,6 +59,8 @@ const formatEmail = () => {
         align-items: start;
         flex: 2;
         border-right: 2px solid rgba(255, 255, 255, 0.217);
+        height: 92%;
+        margin-right: 40px;
         p{
             
             &:first-child{
@@ -100,6 +103,7 @@ const formatEmail = () => {
     }
 
     .rightpart {
+        height: 88%;
         flex: 7;
         overflow-y: scroll;
     }

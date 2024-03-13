@@ -16,7 +16,7 @@ import Backdrop from "@/components/backdrop/backdrop.vue"
 import { useRoute } from "vue-router";
 import { useUserStore } from "./store/user";
 const route = useRoute();
-useUserStore().userLogin();
+// useUserStore().userLogin();   每次刷新就会重置token，不方便调试
 </script>
 
 <style scoped lang="scss">
