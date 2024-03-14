@@ -1,6 +1,6 @@
 <template>
   <div class="subjectpart">
-    <div v-for="(item, index) in subjectsWithTips" :key="index" class="item">
+    <div v-for="(item, index) in subjectsWithTips" :key="index" class="item" @click="router_to(item.filename)">
       <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></img>
       <div class="itemInfo">
         <p>{{ item.filename }}</p>
@@ -61,7 +61,9 @@ import { ref, onMounted , nextTick } from 'vue';
 import axios from 'axios';
 import { getToken, decrypt } from '@/utils/token';
 import waterFall from "../../utils/waterfallLayout.js";
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const subjects = ref([]);
 const subjectsWithTips = ref([]);
 const loading = ref(true)
@@ -92,6 +94,12 @@ onMounted(async () => {
     console.error('获取用户数据时出错：', error);
   }
 });
+
+
+function router_to(name){
+  console.log(name);
+  router.push(`/subject/${name}`);
+}
 
 function calculateSubjectsWithTips() {
   subjectsWithTips.value = subjects.value.map((item, index) => {

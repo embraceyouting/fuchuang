@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="side_part">
+        <!-- <div class="side_part">
             <div class="title">My Subject</div>
             <div class="scoll_part">
                 <div class="name_file" v-for="(item, index) in subjects" :key="item.id" :title="item.filename">
@@ -12,13 +12,18 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="middle_part">
-            <div class="echarts">
-                <echarts_percent></echarts_percent>
-                <echarts_percent2></echarts_percent2>
+            <div class="introduce" v-for="(info,index) in infos" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
+                <component :is="info.echart" class="echart"></component>
+                <div class="content">
+                    <h4>{{ info.title }}</h4>
+                    <p>{{ info.content }}</p>
+                </div>
             </div>
-            <div class="vary_part"></div>
+            <div class="vary_part">
+
+            </div>
         </div>
     </div>
     <div class="delete_part" v-if="ispreview_delete">
@@ -35,7 +40,7 @@
 
 <script setup lang="js">
 import echarts_percent from "../../components/subject/echarts_percent.vue"
-import echarts_percent2 from "../../components/subject/echarts_percent2.vue"
+import echarts_score from "../../components/subject/echarts_score.vue"
 import { ref } from "vue"
 import axios from "axios"
 import { CloseBold } from '@element-plus/icons-vue'
@@ -55,6 +60,21 @@ axios.get("http://127.0.0.1:8000/subject")
     .catch(error => {
         console.error("Error fetching subjects:", error);
     });
+
+let infos = [
+    {
+        title:"占比情况",
+        echart:echarts_percent,
+        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+
+    },
+    {
+        title:"得分情况",
+        echart:echarts_score,
+        content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+
+    }
+]
 
 
 function delete_json(item, index) {
@@ -95,7 +115,6 @@ function cancelDelete() {
 .main {
     display: flex;
     align-items: flex-start;
-    margin-top: 57px;
     justify-content: space-between;
     height: calc(100vh - 112px);
     /* 剩下页面高度减去导航栏高度 */
@@ -195,13 +214,49 @@ function cancelDelete() {
 }
 
 .middle_part {
-    margin-right: 20%;
-    min-width: 640px;
-    width: 60%;
-
-    .echarts {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    .introduce {
+        width: 100%;
         display: flex;
-        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+
+        .echart{
+
+        }
+
+        .content {
+            flex: 1;
+
+            h4 {
+                margin-top: 0;
+                margin-bottom: 20px;
+                font-size: 20px;
+            }
+        }
+
+        &:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            gap: 0;
+
+            .content {
+                width: 85%;
+                h4 {
+                    text-align: center;
+                }
+            }
+
+            &:nth-child(even) {
+                flex-direction: column;
+            }
+        }
     }
 }
 

@@ -28,6 +28,13 @@ export default [
             isNav: true,
 			title: "navbar.subject"
 		},
+		children:[
+			{
+				path:":name",
+				name:"subject-file",
+				component: () => import("../views/subject/index.vue"), //根据具体file来变化，need change
+			}
+		]
 	},
 	{
 		path: "/user",
