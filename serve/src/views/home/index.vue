@@ -23,7 +23,7 @@
     </div>
 
     <div class="editor-container">
-        <CodeEditor :files="file_list" :current="current"></CodeEditor>
+        <CodeEditor :files="file_list"></CodeEditor>
     </div>
 
     <div class="info">
@@ -67,7 +67,6 @@ console.log($t('card.title1'))
 
 let ispreview_delete = ref(false);
 let file_list = ref([]);
-let current = ref(null);
 let delete_item = ref(null);
 let isdelete = ref(false);
 let resolveBeforeRemove;
@@ -102,10 +101,6 @@ function cancelDelete() {
 
 function handleChange(file, fileList) {
     file_list.value = Array.from(fileList);
-}
-
-function preview(file){
-
 }
 
 function onPreview(file, fileList) {
