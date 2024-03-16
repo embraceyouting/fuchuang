@@ -15,21 +15,20 @@
         </div> -->
         <div class="middle_part">
             <div class="introduce" v-for="(info,index) in infos" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
-                <component :is="info.echart" class="echart"></component>
+                <component :is="info.echart" class="echart" @change_percent="change_percent"></component>
                 <div class="content">
                     <h4>{{ info.title }}</h4>
                     <p>{{ info.content }}</p>
                 </div>
             </div>
             <div class="vary_part">
-
             </div>
         </div>
     </div>
-    <div class="delete_part" v-if="ispreview_delete">
+    <div class="delete_part" v-if="ispreview">
         <div class="model_background"></div>
         <div class="choose_delete">
-            <p>Cancel the transfer of <a onclick="event.preventDefault()">{{ delete_item }}</a> ?</p>
+            
             <div class="delete_btns">
                 <button @click="cancelDelete">Cancel</button>
                 <button @click="confirmDelete">OK</button>
@@ -46,7 +45,7 @@ import axios from "axios"
 import { CloseBold } from '@element-plus/icons-vue'
 import { ElIcon } from "element-plus"
 
-let ispreview_delete = ref(false);
+let ispreview = ref(false);
 let delete_item = ref(null);
 const subjects = ref([]);
 let isdelete = ref(null);
@@ -63,13 +62,13 @@ axios.get("http://127.0.0.1:8000/subject")
 
 let infos = [
     {
-        title:"占比情况",
+        title:"比重",
         echart:echarts_percent,
         content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
 
     },
     {
-        title:"得分情况",
+        title:"得分",
         echart:echarts_score,
         content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
 
@@ -78,7 +77,7 @@ let infos = [
 
 
 function delete_json(item, index) {
-    ispreview_delete.value = true
+    ispreview.value = true
     delete_item.value = item.filename;
     console.log(delete_item.value)
     new Promise(resolve => { resolveBeforeRemove = resolve; })
@@ -99,16 +98,21 @@ function confirmDelete() {
             // 请求失败，处理错误
             console.error(error);
         });
-    ispreview_delete.value = false;
+    ispreview.value = false;
     isdelete.value = true;
     resolveBeforeRemove(isdelete.value);
 }
 
 function cancelDelete() {
-    ispreview_delete.value = false;
+    ispreview.value = false;
 }
 
+function change_percent(props){
+    ispreview.value = true
+    console.log(props)
+}
 
+defineExpose({ change_percent });
 </script>
 
 <style lang="scss" scoped>
@@ -214,7 +218,7 @@ function cancelDelete() {
 }
 
 .middle_part {
-    width: 50%;
+    width: 55%;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -223,7 +227,6 @@ function cancelDelete() {
         display: flex;
         align-items: center;
         gap: 40px;
-
         .echart{
 
         }
