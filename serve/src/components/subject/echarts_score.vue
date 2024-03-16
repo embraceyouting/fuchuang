@@ -1,6 +1,6 @@
 <template>
     <div>
-      <e-charts class="chart" :option="option" style="height: 360px; width: 380px; " />
+      <e-charts class="chart" :option="option" style="height: 360px; width: 400px; " />
     </div>
   </template>
     
