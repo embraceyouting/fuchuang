@@ -9,7 +9,7 @@
 
     <div class="post_part">
         <el-upload class="upload-demo" drag action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
-            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" multiple>
+            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list" :on-change="handleChange" multiple>
             <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
             <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
@@ -20,6 +20,10 @@
                 </div>
             </template>
         </el-upload>
+    </div>
+
+    <div class="editor-container">
+        <CodeEditor :files="file_list" :current="current"></CodeEditor>
     </div>
 
     <div class="info">
@@ -48,19 +52,22 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref ,computed} from "vue";
+import { reactive, ref, computed } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
 import SelectApp from "@/icons/SelectApp.vue";
 import Contact from "@/components/contact/index.vue";
-
-
+import CodeEditor from "@/components/editor/code-editor.vue";
 import { getCurrentInstance } from 'vue'
+import { useUserStore } from "@/store/user";
+
 const { $t } = getCurrentInstance().proxy
 console.log($t('card.title1'))
 
 let ispreview_delete = ref(false);
+let file_list = ref([]);
+let current = ref(null);
 let delete_item = ref(null);
 let isdelete = ref(false);
 let resolveBeforeRemove;
@@ -69,7 +76,7 @@ let resolveBeforeRemove;
 let email = getCookie("email");
 // 上传时发送的额外数据，包括用户名
 const uploadData = ref({
-    email: email
+    email: useUserStore().userInfo?.email
 });
 
 function beforeRemove(file, fileList) {
@@ -93,10 +100,19 @@ function cancelDelete() {
     resolveBeforeRemove(isdelete.value);
 }
 
-function onPreview(file, fileList) {
+function handleChange(file, fileList) {
+    file_list.value = Array.from(fileList);
 }
 
-const cardList =computed(()=>{
+function preview(file){
+
+}
+
+function onPreview(file, fileList) {
+    console.log('preview', file);
+}
+
+const cardList = computed(() => {
     return [
         {
             title: $t('card.title1'),
@@ -115,7 +131,7 @@ const cardList =computed(()=>{
         }
     ]
 })
-    
+
 
 </script>
 
@@ -287,6 +303,13 @@ const cardList =computed(()=>{
             }
         }
     }
+}
+
+.editor-container {
+    height: 400px;
+    width: 80%;
+    max-width: 720px;
+    margin: 100px auto;
 }
 
 .info {

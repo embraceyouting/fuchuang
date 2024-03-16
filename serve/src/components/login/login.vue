@@ -106,7 +106,7 @@ const loginFn = () => {
     if (!check()) {
         return
     }
-    useUserStore().userLogin(login.email, login.password).then(res => {
+    useUserStore().login(login.email, login.password).then(res => {
         ElMessage.success('登录成功')
         router.push('/home')
     })

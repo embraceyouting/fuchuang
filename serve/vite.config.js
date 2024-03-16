@@ -15,4 +15,14 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 		},
 	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				additionalData: `@import "@/scss/color.scss";`,
+			},
+		},
+	},
+	optimizeDeps: {
+		include: [`monaco-editor/esm/vs/language/json/json.worker`],
+	},
 });

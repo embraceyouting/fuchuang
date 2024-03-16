@@ -8,7 +8,7 @@ export const useUserStore = defineStore("user", {
         token: null
 	}),
 	actions: {
-        async userLogin(email, password){
+        async login(email, password){
             const res = await Promise.resolve({
                 id: nanoid(),
                 email,

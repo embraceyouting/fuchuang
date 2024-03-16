@@ -16,7 +16,7 @@ import Backdrop from "@/components/backdrop/backdrop.vue"
 import { useRoute } from "vue-router";
 import { useUserStore } from "./store/user";
 const route = useRoute();
-// useUserStore().userLogin();   每次刷新就会重置token，不方便调试
+useUserStore().login();   // 每次刷新就会重置token，不方便调试
 </script>
 
 <style scoped lang="scss">
@@ -34,7 +34,6 @@ const route = useRoute();
 .slide-enter-active,
 .slide-leave-active {
   transition: all 0.7s ease;
-  position: absolute;
 }
 
 .slide-enter-from,

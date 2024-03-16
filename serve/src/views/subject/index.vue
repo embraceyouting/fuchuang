@@ -137,7 +137,7 @@ function cancelDelete() {
             font-family: "Paytone One", "PingFangSC", sans-serif;
             font-weight: 200;
             font-style: normal;
-            color: #5f86ea;
+            color: $color;
             font-size: 28px;
             display: flex;
             justify-content: center;

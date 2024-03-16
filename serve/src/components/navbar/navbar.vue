@@ -73,7 +73,7 @@ const chooseLang = (languagevalue) => {
     .bar_right {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 8px;
         height: 100%;
 
         a {

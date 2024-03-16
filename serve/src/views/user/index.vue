@@ -1,111 +1,269 @@
 <template>
-    <div class="main">
-        <div class="leftpart">
-            <p>{{$t('user.name')}}: 111</p>
-            <p><router-link to="/user/subject" active-class="active">{{$t('user.subject')}}</router-link></p>
-            <p><router-link to="/user/info" active-class="active">{{$t('user.info')}}</router-link></p>    
-        </div>
-        <div class="rightpart">
-            <router-view></router-view>
-        </div>
-    </div>
+    <el-container>
+        <header>
+            <!-- 用户信息 -->
+            <el-avatar :size="120" :src="userInfo.avatar">{{ userInfo.username || '未登录' }}</el-avatar>
+            <div class="userInfo">
+                <h1 class="username">{{ userInfo.username || '未登录' }}</h1>
+                <p class="list" @click="isShowFollowList = true">
+                    <span>关注</span><i>{{ userInfo.id ? userInfo.followCount || '0' : '-' }}</i>
+                    <el-divider direction="vertical"></el-divider>
+                    <span>粉丝</span><i>{{ userInfo.id ? userInfo.fanCount || '0' : '-' }}</i>
+                    <el-divider direction="vertical"></el-divider>
+                    <span>获赞</span><i>{{ userInfo.id ? userInfo.likedCount || '0' : '-' }}</i>
+                </p>
+                <p class="other" v-if="userInfo.id">
+                    <span class="account">账号ID: {{ userInfo.id }}</span>
+                    <span class="gender tag">
+                        <GenderIcon :gender="userInfo.gender"></GenderIcon>
+                        <span>{{ userInfo.age || 0 }}岁</span>
+                    </span>
+
+                    <span class="location tag">
+                        {{ userInfo.location || '电子科技大学' }}</span>
+                </p>
+                <p class="signature" :title="userInfo.signature">{{ userInfo.signature || '这个人很懒，什么也没留下...' }}</p>
+            </div>
+            <div class="tool" v-if="userInfo.id">
+                <el-button @click="logout" type="danger">退出登录</el-button>
+            </div>
+        </header>
+
+        <main>
+            <!-- 导航栏 -->
+            <el-tabs v-model="activeChoice">
+                <!-- 作品: 用户未登录时不可选中 -->
+                <el-tab-pane :disabled="!userInfo.id" class="video-container"
+                    :label="`作品 ${userInfo.id ? userInfo.workCount || 0 : ''}`" name="work">
+                </el-tab-pane>
+                <!-- 喜欢: 用户未登录时不可选中 -->
+                <el-tab-pane :disabled="!userInfo.id" class="video-container" :label="`喜欢 ${userInfo.likeCount || ''}`"
+                    name="like">
+                </el-tab-pane>
+                <!-- 收藏: 用户未登录时不可选中 -->
+                <el-tab-pane :disabled="!userInfo.id" class="video-container"
+                    :label="`收藏 ${userInfo.collectCount || ''}`" name="collect">
+                </el-tab-pane>
+                <!-- 观看历史: 用户未登录时不可选中 -->
+                <el-tab-pane :disabled="!userInfo.id" class="video-container"
+                    :label="`观看历史 ${userInfo.historyCount || ''}`" name="history">
+                </el-tab-pane>
+            </el-tabs>
+
+            <div class="video-container">
+                <VideoBox v-for="item in videoList" :key="item.vid" v-bind="item" :ratio="4 / 3" :waterfall="false"
+                    @deleteVideo="deleteVideo" :isDelete="activeChoice === 'work'">
+                </VideoBox>
+            </div>
+
+            <!-- 用户没有登陆 -->
+            <el-empty description="点击右上角按钮进行登录" :image-size="180">
+            </el-empty>
+        </main>
+    </el-container>
 </template>
 
-<script setup lang="js">
-// import { ref, reactive } from "vue";
-// import axios from 'axios';
+<script lang="js" setup>
+import GenderIcon from '@/icons/GenderIcon.vue'
+import { useUserStore } from '@/store/user'
+import { storeToRefs } from 'pinia';
 
-// // 这里假设你已经定义了 getCookie() 函数
-// const email = getCookie("email");
-// let subjects = ref([]);
+const userStore = useUserStore()
+const { userInfo } = storeToRefs(userStore)
+console.log(userInfo);
 
-// axios.get("http://127.0.0.1:8000/user", { params: { email: email } })
-// .then(res => {
-//     if (res.data.length > 0) {
-//         console.log(res.data)
-//         subjects.value = res.data;
-//     } else {
-//         console.error('未找到相关用户数据');
-//     }
-// })
-// .catch(error => {
-//     console.error('获取用户数据时出错：', error);
-// });
-
-const formatEmail = () => {
-    userdata.email = userdata.email.trim().replace(/(@qq\.com$)|[^a-zA-Z0-9_\-.@]/g, '');
+function logout() {
+    // 退出登录，清空用户信息
+    userStore.logout()
+}
+function deleteVideo(vid) {
+    // 删除视频
+    this.videoList = this.videoList.filter(item => item.vid !== vid)
+    this.getUserInfo()
 }
 </script>
 
-<style scoped lang="scss">
-.main {
-    width: 50%;
-    height: 80vh;
-    max-width: 800px;
-    min-width: 400px;
-    margin: auto;
-    margin-top: 50px;
-    display: flex;
-    align-items: center;
-    padding:0px 40px 0px 40px;
-    border-radius: 15px;
-    background-color: rgba(156, 168, 242, 0.6); /* 背景颜色透明度设置为 0.1 */
-    backdrop-filter: blur(10px); /* 背景模糊度 */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* 边框颜色透明度设置为 0.2 */
+<style lang="scss" scoped>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    .leftpart {
+.el-container {
+    padding: 40px;
+    flex-direction: column;
+    min-width: 500px;
+    max-width: 968px;
+    margin: 8px auto;
+
+    header {
         display: flex;
-        flex-direction: column;
-        align-items: start;
-        flex: 2;
-        border-right: 2px solid rgba(255, 255, 255, 0.217);
-        height: 92%;
-        margin-right: 40px;
-        p{
-            
-            &:first-child{
-                padding: 8px 6px;
-                margin:17px 0;
-                font-size: 20px;
-            } 
-            margin:30px 0;
-            color: #ffffff;
-            font-weight: 400;
-            font-style: normal;
-            transition: all .2s;
-            line-height: 1;
-            font-family: "Paytone One", "PingFangSC", sans-serif;
+        align-items: center;
+        min-width: max-content;
+
+        .el-avatar {
+            font-size: 28px;
         }
-        a{
-            outline: 0;
-            text-decoration: none;
-            text-underline-position: under;
-            cursor: pointer;
-            font-size: 18px;
-            color: #ffffff;
-            font-weight: 400;
-            font-style: normal;
-            border-radius: 4px;
-            padding: 8px 12px;
-            transition: all .2s;
-            line-height: 1;
-            font-family: "Paytone One", "PingFangSC", sans-serif;
-            &:hover {
-                color: #8c8c8c;
-                background-color: #e7e7e733;
+
+        .userInfo {
+            margin-left: 32px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-right: auto;
+
+            .username {
+                color: $white;
+                margin-bottom: 16px;
+                font-size: 20px;
+                font-weight: 500;
+                line-height: 28px;
+                max-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                margin: 0;
             }
 
-            &.active {
-                background-color: #ffffff33;
-                color: #fff;
+            .list {
+                display: flex;
+                align-items: center;
+                margin-top: 4px;
+                width: 100%;
+                white-space: nowrap;
+                cursor: pointer;
+
+                span {
+                    font-size: 14px;
+                    line-height: 22px;
+                    margin-right: 6px;
+                }
+
+                i {
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: $white;
+                    font-style: normal;
+                }
+
+                .el-divider {
+                    background-color: $gray-3;
+                    transform: scaleX(.5);
+                    margin: 0 16px;
+                }
+            }
+
+            .other {
+                align-items: center;
+                display: flex;
+                height: 20px;
+                margin-top: 12px;
+                width: 100%;
+
+                .account {
+                    font-size: 12px;
+                    line-height: 20px;
+                    margin-right: 20px;
+                }
+
+                .tag {
+                    background: $transparent-dark;
+                    border-radius: 4px;
+                    color: $white;
+                    display: flex;
+                    align-items: center;
+                    font-size: 12px;
+                    height: 20px;
+                    line-height: 20px;
+                    margin-right: 4px;
+                    padding: 0 8px;
+                }
+            }
+
+            .signature {
+                font-size: 12px;
+                line-height: 20px;
+                color: $gray-1;
+                margin-top: 6px;
+                margin-right: 10px;
+                white-space: nowrap;
+                max-width: 300px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                cursor: pointer;
+            }
+
+        }
+
+        .tool {
+            align-self: flex-end;
+
+            .el-button {
+                background: $gray-3;
+                border: none;
+                color: $white;
+                font-size: 13px;
+                font-weight: 400;
+            }
+
+            .el-button--danger {
+                background: $light-color;
+                padding: 0 20px;
             }
         }
+
     }
 
-    .rightpart {
-        height: 88%;
-        flex: 7;
-        overflow-y: scroll;
+    main {
+
+        .el-tabs {
+            margin: 11px 0;
+            box-sizing: content-box;
+            padding-top: 16px;
+
+            :deep(.el-tabs__item) {
+                cursor: pointer;
+                color: $gray-1;
+                font-size: 18px;
+                height: unset;
+                line-height: 3;
+
+                &:hover {
+                    color: $gray-1;
+                }
+
+                &.is-active {
+                    color: $white;
+                }
+            }
+
+            :deep(.el-tabs__nav-wrap) {
+                &::after {
+                    background-color: $gray-3;
+                    transform: scaleY(.5);
+                    height: 1px;
+                }
+            }
+
+            :deep(.el-tabs__active-bar) {
+                display: none;
+                background-color: $white;
+            }
+        }
+
+        .video-container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-gap: 16px;
+
+            @media screen and (max-width: 1280px) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
     }
 }
-</style>
+</style>./user.vue
