@@ -4,10 +4,12 @@ const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const mysql = require("mysql");
 const { buffer } = require("stream/consumers");
+const gptRoute = require("./gpt.js");
 
 const app = express();
 app.use(cors());
 app.use(express.static("public"));
+app.use(express.json());
 
 // 创建一个用于存储上传文件的 Multer 实例
 const storage = multer.diskStorage({
@@ -47,6 +49,8 @@ db.connect(function (err) {
 	db.query(createFilesSql);
 	db.query(createUsersSql);
 });
+
+app.use('/gpt', gptRoute);
 
 // 使用 Multer 中间件处理上传文件
 app.post("/submit_jsonpost", function (req, res) {
@@ -153,3 +157,5 @@ server.on("close", function () {
 		console.log("Database connection closed.");
 	});
 });
+
+module.exports = app;
