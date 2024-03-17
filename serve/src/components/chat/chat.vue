@@ -19,11 +19,12 @@ function search() {
     isEnd.value = false;
     const source = new EventSource("http://127.0.0.1:8000/gpt?key=" + key.value);
     source.onmessage = (event) => {
+        if (event.data === "[DONE]") {
+            source.close();
+            isEnd.value = true;
+            return
+        }
         message.value += event.data;
-    };
-    source.onerror = (error) => {
-        source.close();
-        isEnd.value = true;
     };
 }
 </script>

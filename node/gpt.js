@@ -29,14 +29,15 @@ router.get("/", async (req, res) => {
 		res.write(`data: ${delta}\n\n`);
 	});
 
+	stream.on("end", () => {
+		res.write(`data: [DONE]\n\n`);
+	});
+
 	for await (const chunk of stream) {
 		process.stdout.write(chunk.choices[0]?.delta?.content || "");
 	}
 
-	await stream.finalChatCompletion();
 	process.stdout.write("\n");
-	
-	res.end();
 });
 
 module.exports = router;
