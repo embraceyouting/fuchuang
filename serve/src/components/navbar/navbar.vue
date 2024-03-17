@@ -44,8 +44,8 @@ const chooseLang = (languagevalue) => {
     z-index: 999;
 
     .navbar_center {
-        width: 60%;
-        max-width: 800px;
+        width: 65%;
+        max-width: 850px;
         padding: 0 20px;
         min-width: fit-content;
         height: 100%;
@@ -67,13 +67,11 @@ const chooseLang = (languagevalue) => {
         transform: translateY(2px);
     }
 
-
-
     .bar_left,
     .bar_right {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         height: 100%;
 
         a {
