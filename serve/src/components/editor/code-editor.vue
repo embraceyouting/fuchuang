@@ -17,8 +17,8 @@
             <header>
                 <h4 class="title">
                     <span>{{ current ? '正在编辑：' + current?.name : '尚未打开任何文件' }}</span>
-                    <el-button plain text bg v-if="current">上传当前</el-button>
-                    <el-button type="primary" v-if="files.length">上传全部</el-button>
+                    <el-button plain text bg v-if="current" @click="uploadCurrent">上传当前</el-button>
+                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">上传全部</el-button>
                 </h4>
             </header>
             <div ref="editorRef" class="editor"></div>
@@ -31,6 +31,7 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
+import axios from 'axios';
 
 const props = defineProps({
     files: Array,
@@ -48,6 +49,7 @@ let code = ref('');
 const current = ref(null);
 const editorRef = ref(null);
 
+
 watch(code, () => {
     if (current.value) {
         current.value.raw = new File([new TextEncoder().encode(code.value)], current.value.name, { type: 'application/json' })
@@ -63,6 +65,72 @@ function preview(file) {
         editor.setValue(reader.result);
     }
 }
+
+function uploadCurrent() {
+    // 获取当前文件对象
+    if (current.value) {
+        const files = current.value.raw; 
+        const formData = new FormData();
+        formData.append('files', files); // 将文件添加到 FormData 中
+
+        // 发送 POST 请求
+        axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data' // 设置请求头
+            }
+        })
+        .then((res)=>{
+            // 处理上传成功的响应
+            console.log(res.data);
+        })
+        .catch((err)=>{
+            // 处理上传失败的错误
+            console.log(err);
+        });
+    }
+}
+
+
+// 处理上传全部文件的函数
+function uploadAll(files) {
+    // 获取所有文件列表
+    const allFiles = [...files];
+
+    // 创建 FormData 对象
+    const formData = new FormData();
+    
+    // 将所有文件添加到 FormData 对象中
+    allFiles.forEach(file => {
+        if (file.raw) {
+            formData.append('files', file.raw);
+        } else {
+            // 如果文件未编辑过，则从文件系统中读取文件并添加到 FormData 对象中
+            fetch(file.url)
+            .then(response => response.blob())
+            .then(blob => {
+                const newFile = new File([blob], file.name, { type: 'application/json' });
+                formData.append('files', newFile);
+            })
+            .catch(error => console.error('Error fetching file:', error));
+        }
+    });
+
+    // 发送 POST 请求
+    axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data' // 设置请求头
+        }
+    })
+    .then((res)=>{
+        // 处理上传成功的响应
+        console.log(res.data);
+    })
+    .catch((err)=>{
+        // 处理上传失败的错误
+        console.log(err);
+    });
+}
+
 
 function onEditorValueChange() {
     code.value = editor.getValue();

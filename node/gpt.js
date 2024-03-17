@@ -4,7 +4,7 @@ const OpenAI = require("openai");
 const { createMessage } = require("./util");
 
 const openai = new OpenAI({
-	apiKey: process.env.GPT_API_KEY,
+	apiKey: process.env.OPENAI_API_KEY,
 	baseURL: "https://api.chatanywhere.com.cn/v1",
 });
 

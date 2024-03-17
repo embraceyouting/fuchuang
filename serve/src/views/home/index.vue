@@ -8,8 +8,8 @@
     </div>
 
     <div class="post_part">
-        <el-upload class="upload-demo" drag action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
-            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list" :on-change="handleChange" multiple>
+        <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
+            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"  :on-change="handleChange" multiple>
             <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
             <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed, onMounted } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -61,6 +61,27 @@ import Contact from "@/components/contact/index.vue";
 import CodeEditor from "@/components/editor/code-editor.vue";
 import { getCurrentInstance } from 'vue'
 import { useUserStore } from "@/store/user";
+import 'intro.js/introjs.css';
+import introJs from 'intro.js';
+onMounted(()=>{
+    introJs().setOptions({
+        theme:'modern',
+        steps: [
+            {
+                element: document.querySelector('.el-upload-dragger'),
+                intro: '点击上传文件',
+                title:"第一步"
+            },
+            {
+                element: document.querySelector('.editor-container'),
+                intro: '修改json文件并上传',
+                title:"第二步"
+            },
+
+        ]
+    }).start();
+})
+
 
 const { $t } = getCurrentInstance().proxy
 console.log($t('card.title1'))
@@ -131,6 +152,7 @@ const cardList = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@import 'intro.js/introjs.css';
 .text_title {
     display: flex;
     flex-direction: column;
@@ -180,9 +202,9 @@ const cardList = computed(() => {
 }
 
 .post_part {
-    max-width: 600px;
     min-width: 300px;
     width: 80%;
+    max-width: 720px;
     margin: 20px auto;
 
     .upload-demo {
