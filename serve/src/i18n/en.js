@@ -4,7 +4,8 @@ export default {
         subject:'subject',
         mine:'me',
         login:'login',
-        lang:'中文'
+        lang:'中文',
+        chat: "GPT"
     },
     text:{
         one:'An effective, fast, convenient and accurate website experience assistant',

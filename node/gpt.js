@@ -26,11 +26,11 @@ router.get("/", async (req, res) => {
 	});
 
 	stream.on("content", (delta, snapshot) => {
-		res.write(`data: ${delta}\n\n`);
+		res.write(`data: ${JSON.stringify({msg: delta})}\n\n`);
 	});
 
 	stream.on("end", () => {
-		res.write(`data: [DONE]\n\n`);
+		res.write(`data: ${JSON.stringify({msg: '[DONE]'})}\n\n`);
 	});
 
 	for await (const chunk of stream) {

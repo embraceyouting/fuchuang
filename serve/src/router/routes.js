@@ -47,9 +47,14 @@ export default [
 		},
 	},
 	{
-		path: "/test",
-		name: "test",
-		component: () => import("../views/test/index.vue"),
+		path: "/chat",
+		name: "chat",
+		component: () => import("../views/chat/index.vue"),
+		meta: {
+			isNavItem: true,
+            isNav: true,
+			title: "navbar.chat"
+		},
 	},
 	{
 		path: "/",
