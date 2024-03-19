@@ -16,8 +16,5 @@ body {
 	min-width: 500px;
 	margin: 0;
 	padding: 0;
-}
-
-#app {
-	overflow: hidden;
+	scroll-behavior: smooth;
 }

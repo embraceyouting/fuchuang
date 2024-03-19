@@ -14,21 +14,32 @@
     background-size: 200% 200%;
     animation: bg 10s linear infinite;
     background-position: 0 0;
+    overflow: hidden;
     z-index: -99;
-    filter: blur(20px);
-    transform: scale(1.1);
 
-    @keyframes bg {
-        0% {
-            background-position: 0 0;
-        }
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: scale(1.1);
+        filter: blur(20px);
+        background: url('@/assets/image/bg.png') no-repeat;
+        background: linear-gradient(45deg, #d4e7ff, #425eff);
+        background-size: 200% 200%;
+        animation: bg 10s linear infinite;
 
-        50% {
-            background-position: 100% 100%;
-        }
+        @keyframes bg {
+            0% {
+                background-position: 0 0;
+            }
 
-        100% {
-            background-position: 0 0;
+            50% {
+                background-position: 100% 100%;
+            }
+
+            100% {
+                background-position: 0 0;
+            }
         }
     }
 

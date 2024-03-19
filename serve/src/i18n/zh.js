@@ -4,7 +4,8 @@ export default {
       subject:'项目',
       mine:'我的',
       login:'登录',
-      lang:"EN"
+      lang:"EN",
+      chat: "AI 问答"
     },
     text:{
       one:'一个有效、快捷、方便、准确的网站体验助手',
