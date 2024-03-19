@@ -6,8 +6,15 @@
             <p>{{ $t('text.two') }}</p>
         </div>
     </div>
-
-    <a href="#" style="margin: auto;" @click="handleClick">快速上手</a>
+    <div style="margin: auto;display: flex;justify-content: center;" >
+        <div>
+            <a href="#" style="margin-right: 5px;text-decoration: none;color: aliceblue;font-size: 30px;font-family:'PingFangSc';" @click="handleClick">快速上手</a>
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-dianji"></use>
+            </svg>
+        </div> 
+    </div>
+    
     <div class="post_part">
         <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
             :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"  :on-change="handleChange" multiple>
@@ -53,7 +60,7 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted, nextTick , watch ,toRef } from "vue";
+import { reactive, ref, computed, onMounted, nextTick , watch ,toRef, watchEffect } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -68,16 +75,11 @@ import introJs from 'intro.js';
 
 const intro = introJs()
 const childComponent = ref(null);
-const { $el } = toRef(childComponent.value);
 onMounted(()=>{
     //拿不到子组件的元素？？
-    watch(
-    () => $el,
-    () => {
-        console.log($el.value);
-    }
-    );
-    console.log(childComponent.value.$el)
+    watchEffect(()=>{
+        console.log(childComponent.value.fileItems[0]);
+    });
     intro.setOptions({
         theme:'modern',
         steps: [
@@ -90,6 +92,16 @@ onMounted(()=>{
                 element: childComponent.value.$el.querySelector('.editor-tree'),
                 intro: '选择json文件',
                 title:"第二步"
+            },
+            {
+                element: childComponent.value.$el.querySelector('.editor'),
+                intro: '查看/修改json文件',
+                title:"第三步"
+            },
+            {
+                element: childComponent.value.$el.querySelector('.title'),
+                intro: '上传json文件',
+                title:"第四步"
             }
         ],
         totalSteps: 2
@@ -221,6 +233,7 @@ const cardList = computed(() => {
     width: 80%;
     max-width: 720px;
     margin: 20px auto;
+    margin-top:40px;
 
     .upload-demo {
 
@@ -399,4 +412,12 @@ const cardList = computed(() => {
         }
     }
 }
+
+.icon {
+       width: 1.5em; height: 1.5em;
+       vertical-align: -0.15em;
+       fill: currentColor;
+       overflow: hidden;
+       color: #0048ff;
+    }
 </style>

@@ -92,27 +92,32 @@ onMounted(() => {
 
             &.enter {
 
-                &::after {
-                    content: "";
-                    position: relative;
-                    vertical-align: -2px;
-                    display: inline-block;
-                    width: 5px;
-                    height: 16px;
-                    background-color: #ffffff;
-                    animation: blink 0.5s infinite;
+                &>:deep(*:last-child),
+                &:not(:has(*)) {
 
-                    @keyframes blink {
-                        0% {
-                            opacity: 0;
-                        }
+                    &::after {
+                        content: "";
+                        position: relative;
+                        margin-left: 2px;
+                        vertical-align: -2px;
+                        display: inline-block;
+                        width: 5px;
+                        height: 16px;
+                        background-color: #ffffff;
+                        animation: blink 0.5s infinite;
 
-                        50% {
-                            opacity: 1;
-                        }
+                        @keyframes blink {
+                            0% {
+                                opacity: 0;
+                            }
 
-                        100% {
-                            opacity: 0;
+                            50% {
+                                opacity: 1;
+                            }
+
+                            100% {
+                                opacity: 0;
+                            }
                         }
                     }
                 }

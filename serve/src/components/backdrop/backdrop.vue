@@ -24,7 +24,7 @@
         transform: scale(1.1);
         filter: blur(20px);
         background: url('@/assets/image/bg.png') no-repeat;
-        background: linear-gradient(45deg, #d4e7ff, #425eff);
+        background: linear-gradient(45deg, #d4e7ff, #778bff);
         background-size: 200% 200%;
         animation: bg 10s linear infinite;
 
@@ -45,11 +45,11 @@
 
     .ball {
         position: absolute;
-        width: 60vmin;
-        height: 60vmin;
+        width: 80vmin;
+        height: 80vmin;
         border-radius: 50%;
-        background-color: #6f6ffa;
-        filter: blur(15vmin);
+        background-color: #4971ff;
+        filter: blur(20vmin);
 
         &:first-child {
             top: 10%;
