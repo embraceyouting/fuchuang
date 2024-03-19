@@ -5,24 +5,24 @@
             <el-avatar :size="120" :src="userInfo.avatar">{{ userInfo.username || '未登录' }}</el-avatar>
             <div class="userInfo">
                 <h1 class="username">{{ userInfo.username || '未登录' }}</h1>
-                <p class="list" @click="isShowFollowList = true">
+                <!-- <p class="list" @click="isShowFollowList = true">
                     <span>关注</span><i>{{ userInfo.id ? userInfo.followCount || '0' : '-' }}</i>
                     <el-divider direction="vertical"></el-divider>
                     <span>粉丝</span><i>{{ userInfo.id ? userInfo.fanCount || '0' : '-' }}</i>
                     <el-divider direction="vertical"></el-divider>
                     <span>获赞</span><i>{{ userInfo.id ? userInfo.likedCount || '0' : '-' }}</i>
-                </p>
+                </p> -->
                 <p class="other" v-if="userInfo.id">
                     <span class="account">账号ID: {{ userInfo.id }}</span>
-                    <span class="gender tag">
+                    <!-- <span class="gender tag">
                         <GenderIcon :gender="userInfo.gender"></GenderIcon>
                         <span>{{ userInfo.age || 0 }}岁</span>
                     </span>
 
                     <span class="location tag">
-                        {{ userInfo.location || '电子科技大学' }}</span>
+                        {{ userInfo.location || '电子科技大学' }}</span> -->
                 </p>
-                <p class="signature" :title="userInfo.signature">{{ userInfo.signature || '这个人很懒，什么也没留下...' }}</p>
+                <!-- <p class="signature" :title="userInfo.signature">{{ userInfo.signature || '这个人很懒，什么也没留下...' }}</p> -->
             </div>
             <div class="tool" v-if="userInfo.id">
                 <el-button @click="logout" type="danger">退出登录</el-button>
@@ -34,19 +34,19 @@
             <el-tabs v-model="activeChoice">
                 <!-- 作品: 用户未登录时不可选中 -->
                 <el-tab-pane :disabled="!userInfo.id" class="video-container"
-                    :label="`作品 ${userInfo.id ? userInfo.workCount || 0 : ''}`" name="work">
+                    :label="`项目 ${userInfo.id ? userInfo.workCount || 0 : ''}`" name="work">
                 </el-tab-pane>
-                <!-- 喜欢: 用户未登录时不可选中 -->
+                <!-- 喜欢: 用户未登录时不可选中
                 <el-tab-pane :disabled="!userInfo.id" class="video-container" :label="`喜欢 ${userInfo.likeCount || ''}`"
                     name="like">
-                </el-tab-pane>
+                </el-tab-pane> -->
                 <!-- 收藏: 用户未登录时不可选中 -->
                 <el-tab-pane :disabled="!userInfo.id" class="video-container"
                     :label="`收藏 ${userInfo.collectCount || ''}`" name="collect">
                 </el-tab-pane>
                 <!-- 观看历史: 用户未登录时不可选中 -->
                 <el-tab-pane :disabled="!userInfo.id" class="video-container"
-                    :label="`观看历史 ${userInfo.historyCount || ''}`" name="history">
+                    :label="`浏览历史 ${userInfo.historyCount || ''}`" name="history">
                 </el-tab-pane>
             </el-tabs>
 

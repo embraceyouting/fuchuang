@@ -37,7 +37,7 @@ const chooseLang = (languagevalue) => {
 .navbar {
     width: 100%;
     height: 55px;
-    background-color: #98caff6b;
+    background-color: #7891eda8;
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;

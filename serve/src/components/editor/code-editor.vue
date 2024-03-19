@@ -2,7 +2,7 @@
     <div class="editor-with-list">
         <div class="editor-tree" :class="{ center: !files.length }">
             <ul v-if="files.length" class="file-list">
-                <li class="file" v-for="file in files" :key="file.uid" :class="{ active: current === file }"
+                <li class="file" ref="fileItem" v-for="file in files" :key="file.uid" :class="{ active: current === file }"
                     @click="preview(file)">
                     <i class="icon">
                         <JsonIcon></JsonIcon>
@@ -27,14 +27,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick ,defineExpose } from 'vue';
 import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
 import axios from 'axios';
 
+
+
 const props = defineProps({
     files: Array,
+})
+const fileItems = ref([]);
+watch(() => props.files, () => {
+    nextTick(()=>{
+        fileItems.value = Array.from(document.querySelectorAll('.file'));
+    })
+
+}, { deep: true });
+
+defineExpose({
+    fileItems
 })
 
 watch(() => props.files, () => {

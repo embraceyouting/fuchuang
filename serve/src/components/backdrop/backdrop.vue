@@ -10,7 +10,7 @@
     position: fixed;
     inset: 0;
     background: url('@/assets/image/bg.png') no-repeat;
-    background: linear-gradient(45deg,#d4e7ff,#425eff);
+    background: linear-gradient(45deg,#d4e7ff,#5e74f4);
     background-size: 200% 200%;
     animation: bg 10s linear infinite;
     background-position: 0 0;
@@ -37,7 +37,7 @@
         width: 60vmin;
         height: 60vmin;
         border-radius: 50%;
-        background-color: #4949ff;
+        background-color: #6f6ffa;
         filter: blur(15vmin);
 
         &:first-child {

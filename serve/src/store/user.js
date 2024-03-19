@@ -5,7 +5,8 @@ import { encrypt, setToken } from "@/utils/token";
 export const useUserStore = defineStore("user", {
 	state: () => ({
 		userInfo: null,
-        token: null
+        token: null,
+        isfirst: null,
 	}),
 	actions: {
         async login(email, password){

@@ -7,6 +7,7 @@
         </div>
     </div>
 
+    <a href="#" style="margin: auto;" @click="handleClick">快速上手</a>
     <div class="post_part">
         <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
             :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"  :on-change="handleChange" multiple>
@@ -23,7 +24,7 @@
     </div>
 
     <div class="editor-container">
-        <CodeEditor :files="file_list"></CodeEditor>
+        <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
     </div>
 
     <div class="info">
@@ -52,7 +53,7 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted, nextTick , watch ,toRef } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -63,8 +64,21 @@ import { getCurrentInstance } from 'vue'
 import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
+
+
+const intro = introJs()
+const childComponent = ref(null);
+const { $el } = toRef(childComponent.value);
 onMounted(()=>{
-    introJs().setOptions({
+    //拿不到子组件的元素？？
+    watch(
+    () => $el,
+    () => {
+        console.log($el.value);
+    }
+    );
+    console.log(childComponent.value.$el)
+    intro.setOptions({
         theme:'modern',
         steps: [
             {
@@ -73,19 +87,20 @@ onMounted(()=>{
                 title:"第一步"
             },
             {
-                element: document.querySelector('.editor-container'),
-                intro: '修改json文件并上传',
+                element: childComponent.value.$el.querySelector('.editor-tree'),
+                intro: '选择json文件',
                 title:"第二步"
-            },
-
-        ]
-    }).start();
+            }
+        ],
+        totalSteps: 2
+    });
 })
 
+function handleClick(){
+    intro.start();
+}
 
 const { $t } = getCurrentInstance().proxy
-console.log($t('card.title1'))
-
 let ispreview_delete = ref(false);
 let file_list = ref([]);
 let delete_item = ref(null);
