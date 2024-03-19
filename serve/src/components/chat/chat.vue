@@ -13,18 +13,21 @@
             </ul>
         </div>
         <div class="content" v-else>
+            <h4>GPT 4.0</h4>
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
                 :isDie="index !== messageList.length - 1"></ChatCard>
         </div>
-        <div class="input">
+        <ElForm class="input" @submit.prevent="search">
             <ElInput type="textarea" :autosize="{ minRows: 1, maxRows: 6 }" v-model="key" placeholder="请输入内容"
-                resize="none">
+                resize="none" @keydown.enter="search">
             </ElInput>
-            <ElIcon @click="search"
-                :disabled="(messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
-                <SubmitIcon />
-            </ElIcon>
-        </div>
+            <ElButton native-type="submit">
+                <ElIcon @click="search"
+                    :disabled="(messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
+                    <SubmitIcon />
+                </ElIcon>
+            </ElButton>
+        </ElForm>
     </div>
 </template>
 
@@ -54,7 +57,9 @@ const infos = ref([
     }
 ])
 
-function search() {
+function search(e) {
+    if(e.ctrlKey || e.shiftKey) return
+    e.preventDefault()
     if (!key.value.trim()) return
     messageList.value.push({ text: key.value, type: "user", isEnd: true })
     const source = new EventSource("http://127.0.0.1:8000/gpt?key=" + key.value);
@@ -70,12 +75,18 @@ function search() {
         }
         obj.text += data;
     };
+
+    source.onerror = (event) => {
+        source.close();
+        obj.isEnd = true;
+        obj.text = "出错了，请重试..."
+    };
 }
 </script>
 
 <style scoped lang="scss">
 .chat {
-    height: calc(100vh - 55px);
+    height: 100%;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
@@ -84,7 +95,6 @@ function search() {
 
     .content {
         flex: 1;
-        padding-top: 20px;
         padding-bottom: 20px;
         overflow-y: auto;
         mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
@@ -157,6 +167,16 @@ function search() {
                 }
             }
         }
+
+        h4 {
+            margin: 40px auto;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     .input {
@@ -172,21 +192,27 @@ function search() {
             }
         }
 
-        .el-icon {
+        .el-button {
+            all: unset;
+            height: 36px;
             position: absolute;
             right: 4px;
             bottom: 6px;
-            border-radius: 50%;
-            color: white;
-            height: 36px;
             width: 36px;
-            display: flex;
-            cursor: pointer;
-            align-items: center;
 
-            svg {
-                height: 36px;
-                width: 36px;
+            .el-icon {
+                height: 100%;
+                width: 100%;
+                border-radius: 50%;
+                color: white;
+                display: flex;
+                cursor: pointer;
+                align-items: center;
+
+                svg {
+                    height: 100%;
+                    width: 100%;
+                }
             }
         }
     }
