@@ -1,0 +1,10 @@
+@font-face {
+	font-family: "PingFangSC";
+	src: url("@/assets/font/PingFang\ SC.ttf") format("truetype");
+}
+
+*,
+*::before,
+*::after {
+	font-family: "PingFangSC";
+}

@@ -1,0 +1,30 @@
+* {
+	box-sizing: border-box;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+		height: 0;
+
+		&-thumb {
+			background-color: #ffffff;
+			border-radius: 0.5rem;
+		}
+
+		&-track {
+			background-color: $color;
+		}
+	}
+}
+
+img {
+	-webkit-user-drag: none;
+}
+
+html,
+body {
+	height: 100%;
+	min-width: 500px;
+	margin: 0;
+	padding: 0;
+	scroll-behavior: smooth;
+}
