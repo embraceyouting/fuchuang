@@ -101,6 +101,36 @@ app.get("/user", (req, res) => {
 	});
 });
 
+app.post('/login', (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    const sql = `SELECT * FROM users WHERE email = ? and password = ?`;
+    db.query(sql, [email, password], (err, result) => {
+        if (err) {
+            console.error("从数据库中获取数据时出错:", err);
+            return res.status(500).send("从数据库中获取数据出错。");
+        }
+		// if(result.length==0) {
+		// 	return res.status(400).send("账户或密码错误");
+		// }
+        res.send(result);
+    });
+});
+
+
+
+app.get("/register", (req, res) => {
+    const registerInfo = req.query.register;
+    const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+    db.query(sql, [registerInfo.username, registerInfo.email, registerInfo.password], (err, result) => {
+        if (err) {
+            console.error("插入数据库时出错:", err);
+            return res.status(500).send("插入数据库时出错。");
+        }
+        res.send(result);
+    });
+});
+
 app.get("/subject", (req, res) => {
 	// 执行查询以从数据库中获取路径
 	const sql = "SELECT filename FROM files"; // 根据您的数据库模式调整查询
@@ -109,7 +139,6 @@ app.get("/subject", (req, res) => {
 			console.error("从数据库中获取路径时出错:", err);
 			return res.status(500).send("从数据库中获取路径时出错。");
 		}
-		// 将结果以JSON格式发送回客户端
 		res.send(results);
 	});
 });

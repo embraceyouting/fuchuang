@@ -6,12 +6,14 @@
             <p>{{ $t('text.two') }}</p>
         </div>
     </div>
-    <div style="margin: auto;display: flex;justify-content: center;" >
-        <div>
-            <a href="#" style="margin-right: 5px;text-decoration: none;color: aliceblue;font-size: 30px;font-family:'PingFangSc';" @click="handleClick">快速上手</a>
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-dianji"></use>
-            </svg>
+    <div style="margin: auto;display: flex;justify-content: center;">
+        <div class="intro_div">
+            <a href="#" class="intro_a" @click="handleClick">
+                快速上手
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-dianji"></use>
+                </svg>
+            </a>
         </div> 
     </div>
     
@@ -76,10 +78,6 @@ import introJs from 'intro.js';
 const intro = introJs()
 const childComponent = ref(null);
 onMounted(()=>{
-    //拿不到子组件的元素？？
-    watchEffect(()=>{
-        console.log(childComponent.value.fileItems[0]);
-    });
     intro.setOptions({
         theme:'modern',
         steps: [
@@ -413,11 +411,29 @@ const cardList = computed(() => {
     }
 }
 
-.icon {
-       width: 1.5em; height: 1.5em;
-       vertical-align: -0.15em;
-       fill: currentColor;
-       overflow: hidden;
-       color: #0048ff;
+.intro_div{
+    transition: all 0.5s ease;
+    &:hover{
+        transform: scale(1.1);
     }
+    .intro_a{
+        text-decoration: none;
+        font-size: 30px;
+        color: aliceblue;
+        .icon {
+            width: 0.85em; height: 0.85em;
+            vertical-align: -0.12em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+    }
+
+}
+
+
+
+
+
+
+
 </style>

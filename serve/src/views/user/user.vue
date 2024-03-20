@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="main">
         <div class="leftpart">
             <p>{{$t('user.name')}}: 111</p>
@@ -108,4 +108,4 @@ const formatEmail = () => {
         overflow-y: scroll;
     }
 }
-</style>
+</style> -->

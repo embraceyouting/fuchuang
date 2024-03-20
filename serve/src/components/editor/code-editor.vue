@@ -27,12 +27,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick ,defineExpose } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick  } from 'vue';
 import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
 import axios from 'axios';
-
+import { ElMessage } from 'element-plus';
 
 
 const props = defineProps({
@@ -94,6 +94,7 @@ function uploadCurrent() {
         })
         .then((res)=>{
             // 处理上传成功的响应
+            ElMessage.success('上传成功')
             console.log(res.data);
         })
         .catch((err)=>{
@@ -136,6 +137,7 @@ function uploadAll(files) {
     })
     .then((res)=>{
         // 处理上传成功的响应
+        ElMessage.success('上传成功')
         console.log(res.data);
     })
     .catch((err)=>{
