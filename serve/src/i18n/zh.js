@@ -9,7 +9,8 @@ export default {
     },
     text:{
       one:'一个有效、快捷、方便、准确的网站体验助手',
-      two:'这有助于您更好地理解使用网站的体验!'
+      two:'这有助于您更好地理解使用网站的体验!',
+      intro:'快速上手',
     },
     card:{
       title1:'网站评分',
@@ -24,8 +25,16 @@ export default {
   },
   sub:{
     today:'今天',
-    yesterday:'昨天'
+    yesterday:'昨天',
+    proportion:'比重',
+    score:'得分'
 
+  },
+  post:{
+    iffiles:'没有选择文件',
+    isedit:'正在编辑：',
+    uploadnow:'上传当前',
+    uploadall:'上传全部',
   }
-  }
+}
   

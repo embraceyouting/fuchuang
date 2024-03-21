@@ -9,7 +9,7 @@
     <div style="margin: auto;display: flex;justify-content: center;">
         <div class="intro_div">
             <a href="#" class="intro_a" @click="handleClick">
-                快速上手
+                {{ $t('text.intro') }}
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-dianji"></use>
                 </svg>

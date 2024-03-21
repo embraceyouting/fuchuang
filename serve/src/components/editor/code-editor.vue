@@ -16,9 +16,9 @@
         <section class="editor-section">
             <header>
                 <h4 class="title">
-                    <span>{{ current ? '正在编辑：' + current?.name : '尚未打开任何文件' }}</span>
-                    <el-button plain text bg v-if="current" @click="uploadCurrent">上传当前</el-button>
-                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">上传全部</el-button>
+                    <span>{{ current ? $t('post.isedit') + current?.name : $t('post.iffiles') }}</span>
+                    <el-button plain text bg v-if="current" @click="uploadCurrent">{{ $t('post.uploadnow') }}</el-button>
+                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall') }}</el-button>
                 </h4>
             </header>
             <div ref="editorRef" class="editor"></div>

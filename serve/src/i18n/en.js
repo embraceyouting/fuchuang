@@ -9,7 +9,8 @@ export default {
     },
     text:{
         one:'An effective, fast, convenient and accurate website experience assistant',
-        two:'that helps you to understand the experience of using the site better!'
+        two:'that helps you to understand the experience of using the site better!',
+        intro:'Get Started',
     },
     card:{
         title1:'Website Rating',
@@ -24,6 +25,14 @@ export default {
     },
     sub:{
         today:'today',
-        yesterday:'yesterday'
-      }
+        yesterday:'yesterday',
+        proportion:'Proportion',
+        score:'Score',
+    },
+    post:{
+        iffiles:'No files',
+        isedit:'Be editing : ',
+        uploadnow:'Upload Current',
+        uploadall:'Upload All',
+    }
 }

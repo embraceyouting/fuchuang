@@ -14,10 +14,11 @@
             </div>
         </div> -->
         <div class="middle_part">
-            <div class="introduce" v-for="(info,index) in infos" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
+            <div class="introduce" v-for="(info, index) in infos"
+                v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
                 <component :is="info.echart" class="echart" @change_percent="change_percent"></component>
                 <div class="content">
-                    <h4>{{ info.title }}</h4>
+                    <h4>{{ $t(info.title) }}</h4>
                     <p>{{ info.content }}</p>
                 </div>
             </div>
@@ -28,7 +29,11 @@
     <div class="delete_part" v-if="ispreview">
         <div class="model_background"></div>
         <div class="choose_delete">
-            
+            <div class="pointspart">
+                <div v-for="item in items" class="point">
+                    <div style="width: 100px;text-align: left;">{{ item.name }}</div><el-slider input-size="40px" v-model="item.value" show-input />
+                </div>
+            </div>
             <div class="delete_btns">
                 <button @click="cancelDelete">Cancel</button>
                 <button @click="confirmDelete">OK</button>
@@ -40,17 +45,18 @@
 <script setup lang="js">
 import echarts_percent from "../../components/subject/echarts_percent.vue"
 import echarts_score from "../../components/subject/echarts_score.vue"
-import { ref } from "vue"
+import { ref, toRef } from "vue"
 import axios from "axios"
 import { CloseBold } from '@element-plus/icons-vue'
 import { ElIcon } from "element-plus"
+import { toRaw } from "vue"
 
 let ispreview = ref(false);
 let delete_item = ref(null);
 const subjects = ref([]);
 let isdelete = ref(null);
-let resolveBeforeRemove;
-
+let items = ref([]);
+let propstem = ref([]);
 axios.get("http://127.0.0.1:8000/subject")
     .then(res => {
         subjects.value = res.data; // Assuming the response is an array of subjects
@@ -62,14 +68,14 @@ axios.get("http://127.0.0.1:8000/subject")
 
 let infos = [
     {
-        title:"比重",
-        echart:echarts_percent,
+        title: "sub.proportion",
+        echart: echarts_percent,
         content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
 
     },
     {
-        title:"得分",
-        echart:echarts_score,
+        title: "sub.score",
+        echart: echarts_score,
         content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
 
     }
@@ -89,27 +95,21 @@ function delete_json(item, index) {
 }
 
 function confirmDelete() {
-    axios.delete(`http://127.0.0.1:8000/subject/delete?filename=${delete_item.value}`)
-        .then((response) => {
-            // 请求成功，处理响应的数据
-            console.log(response.data);
-        })
-        .catch((error) => {
-            // 请求失败，处理错误
-            console.error(error);
-        });
     ispreview.value = false;
     isdelete.value = true;
-    resolveBeforeRemove(isdelete.value);
 }
 
 function cancelDelete() {
     ispreview.value = false;
+    // 恢复 items 的值为 propstem 的深拷贝
+    items.value = JSON.parse(JSON.stringify(toRaw(propstem.value)));
 }
 
-function change_percent(props){
+
+function change_percent(props) {
     ispreview.value = true
-    console.log(props)
+    propstem.value = JSON.parse(JSON.stringify(toRaw(props)))
+    items = props
 }
 
 defineExpose({ change_percent });
@@ -222,14 +222,14 @@ defineExpose({ change_percent });
     margin: auto;
     display: flex;
     flex-direction: column;
+
     .introduce {
         width: 100%;
         display: flex;
         align-items: center;
         gap: 40px;
-        .echart{
 
-        }
+        .echart {}
 
         .content {
             flex: 1;
@@ -251,6 +251,7 @@ defineExpose({ change_percent });
 
             .content {
                 width: 85%;
+
                 h4 {
                     text-align: center;
                 }
@@ -315,6 +316,14 @@ defineExpose({ change_percent });
         border-radius: 5px;
         text-align: center;
 
+        .pointspart {
+            .point {
+                margin-bottom: 15px;
+                width: 450px;
+                display: flex
+            }
+        }
+
         p {
             color: rgb(95, 95, 95);
             font-family: "Paytone One", "PingFangSC", sans-serif;
@@ -323,8 +332,8 @@ defineExpose({ change_percent });
         }
 
         .delete_btns {
-            display: float;
-            float: right;
+            display: flex;
+            justify-content: space-between;
 
             button {
                 padding: 8px 15px;
@@ -338,7 +347,7 @@ defineExpose({ change_percent });
                 cursor: pointer;
 
                 &:first-child {
-                    margin-right: 20px;
+                    margin-right: 40px;
                     color: #7c7c7c;
                     background-color: #ffff;
                     border: 0.5px solid #cccecf;
