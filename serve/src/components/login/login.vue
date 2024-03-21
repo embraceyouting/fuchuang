@@ -118,6 +118,7 @@ const loginFn = () => {
         router.push('/home')
     })
     .catch((err)=>{
+        console.log(err)
         ElMessage.error('账号或密码错误')
     })
 }
