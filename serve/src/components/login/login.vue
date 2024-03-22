@@ -83,8 +83,8 @@ const register = reactive({
 
 const check = () => {
     const obj = isLogin.value ? login : register
-    const qqEmailRegex = /^[1-9]\d{5,10}@[qQ][qQ]\.com$/;
-    if (!qqEmailRegex.test(obj.email)) {
+    const mailReg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+    if (!mailReg.test(obj.email)) {
         ElMessage.error('邮箱格式不正确');
         return false;
     }
@@ -100,12 +100,9 @@ const registerFn = () => {
     if (!check()) {
         return
     }
-    axios.get('http://127.0.0.1:8000/register',{params:{register}}).then((res)=>{
-        ElMessage.success('注册成功')
+    useUserStore().register(register.email, register.username, register.password).then((res) => {
+        ElMessage.success(res.msg)
         router.push('/home')
-    })
-    .catch((err)=>{
-        ElMessage.error('注册失败')
     })
 }
 
@@ -114,12 +111,8 @@ const loginFn = () => {
         return
     }
     useUserStore().login(login.email, login.password).then(res => {
-        ElMessage.success('登录成功')
+        ElMessage.success(res.msg)
         router.push('/home')
-    })
-    .catch((err)=>{
-        console.log(err)
-        ElMessage.error('账号或密码错误')
     })
 }
 </script>

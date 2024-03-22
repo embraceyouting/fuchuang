@@ -109,7 +109,7 @@ function cancelDelete() {
 function change_percent(props) {
     ispreview.value = true
     propstem.value = JSON.parse(JSON.stringify(toRaw(props)))
-    items = props
+    items.value = props
 }
 
 defineExpose({ change_percent });

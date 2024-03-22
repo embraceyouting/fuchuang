@@ -18,12 +18,11 @@
                 :isDie="index !== messageList.length - 1"></ChatCard>
         </div>
         <ElForm class="input" @submit.prevent="search">
-            <ElInput type="textarea" :autosize="{ minRows: 1, maxRows: 6 }" v-model="key" placeholder="请输入内容"
+            <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }" v-model="key" placeholder="请输入内容"
                 resize="none" @keydown.enter="search">
             </ElInput>
-            <ElButton native-type="submit">
-                <ElIcon @click="search"
-                    :disabled="(messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
+            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || (messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
+                <ElIcon>
                     <SubmitIcon />
                 </ElIcon>
             </ElButton>
@@ -40,6 +39,9 @@ import LogoIcon from '@/icons/Logo.vue';
 import Assistant from './image/assistant_normal.png';
 import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
+import { getToken } from '@/utils/token';
+import { useUserStore } from '@/store/user';
+
 const messageList = ref([]);
 const key = ref('');
 const infos = ref([
@@ -58,11 +60,11 @@ const infos = ref([
 ])
 
 function search(e) {
-    if(e.ctrlKey || e.shiftKey) return
+    if (e.ctrlKey || e.shiftKey) return
     e.preventDefault()
     if (!key.value.trim()) return
     messageList.value.push({ text: key.value, type: "user", isEnd: true })
-    const source = new EventSource("http://127.0.0.1:8000/gpt?key=" + key.value);
+    const source = new EventSource(`${import.meta.env.VITE_BASE_URL}gpt?key=${key.value}&token=${getToken()}`);
     key.value = '';
     const obj = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(obj);
@@ -79,7 +81,7 @@ function search(e) {
     source.onerror = (event) => {
         source.close();
         obj.isEnd = true;
-        obj.text = "出错了，请重试..."
+        obj.text = "出错了，请检查登录状态后重试..."
     };
 }
 </script>
@@ -182,12 +184,19 @@ function search(e) {
     .input {
         position: relative;
         margin-bottom: 24px;
+        display: flex;
+        align-items: flex-end;
+        background-color: #fffa;
+        border-radius: 12px;
 
         .el-textarea {
             :deep(.el-textarea__inner) {
-                background-color: #fffa;
-                border-radius: 12px;
-                padding: 12px 48px 12px 14px;
+                background-color: unset;
+                border-radius: unset;
+                border: unset;
+                outline: unset;
+                box-shadow: unset;
+                padding: 12px 14px 12px 14px;
                 line-height: 1.5;
             }
         }
@@ -195,10 +204,13 @@ function search(e) {
         .el-button {
             all: unset;
             height: 36px;
-            position: absolute;
-            right: 4px;
-            bottom: 6px;
             width: 36px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+
+            &:disabled {
+                filter: brightness(1.4);
+            }
 
             .el-icon {
                 height: 100%;
