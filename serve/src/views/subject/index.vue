@@ -16,7 +16,7 @@
         <div class="middle_part">
             <div class="introduce" v-for="(info, index) in infos"
                 v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
-                <component :is="info.echart" class="echart" @change_percent="change_percent"></component>
+                <component :is="info.echart" class="echart"></component>
                 <div class="content">
                     <h4>{{ $t(info.title) }}</h4>
                     <p>{{ info.content }}</p>
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="delete_part" v-if="ispreview">
+    <!-- <div class="delete_part" v-if="ispreview">
         <div class="model_background"></div>
         <div class="choose_delete">
             <div class="pointspart">
@@ -39,7 +39,7 @@
                 <button @click="confirmDelete">OK</button>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup lang="js">
@@ -54,9 +54,9 @@ import { toRaw } from "vue"
 let ispreview = ref(false);
 let delete_item = ref(null);
 const subjects = ref([]);
-let isdelete = ref(null);
-let items = ref([]);
-let propstem = ref([]);
+// let isdelete = ref(null);
+// let items = ref([]);
+// let propstem = ref([]);
 axios.get("http://127.0.0.1:8000/subject")
     .then(res => {
         subjects.value = res.data; // Assuming the response is an array of subjects
@@ -94,25 +94,6 @@ function delete_json(item, index) {
         });
 }
 
-function confirmDelete() {
-    ispreview.value = false;
-    isdelete.value = true;
-}
-
-function cancelDelete() {
-    ispreview.value = false;
-    // 恢复 items 的值为 propstem 的深拷贝
-    items.value = JSON.parse(JSON.stringify(toRaw(propstem.value)));
-}
-
-
-function change_percent(props) {
-    ispreview.value = true
-    propstem.value = JSON.parse(JSON.stringify(toRaw(props)))
-    items = props
-}
-
-defineExpose({ change_percent });
 </script>
 
 <style lang="scss" scoped>

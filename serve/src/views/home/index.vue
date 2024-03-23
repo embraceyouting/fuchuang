@@ -6,7 +6,7 @@
             <p>{{ $t('text.two') }}</p>
         </div>
     </div>
-    <div style="margin: auto;display: flex;justify-content: center;">
+    <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
         <div class="intro_div">
             <a href="#" class="intro_a" @click="handleClick">
                 {{ $t('text.intro') }}
@@ -14,12 +14,13 @@
                     <use xlink:href="#icon-dianji"></use>
                 </svg>
             </a>
-        </div> 
+        </div>
     </div>
-    
+
     <div class="post_part">
-        <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
-            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"  :on-change="handleChange" multiple>
+        <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost"
+            accept=".json" name="files" :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData"
+            :file-list="file_list" :on-change="handleChange" multiple>
             <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
             <div class="el-upload__text">
                 Drop file here or <em>click to upload</em>
@@ -29,12 +30,12 @@
                     <em>only json files are allowed</em>
                 </div>
             </template>
-        </el-upload>
-    </div>
+</el-upload>
+</div>
 
-    <div class="editor-container">
-        <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
-    </div>
+<div class="editor-container">
+    <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
+</div>
 
     <div class="info">
         <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
@@ -62,7 +63,7 @@
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted, nextTick , watch ,toRef, watchEffect } from "vue";
+import { reactive, ref, computed, onMounted, nextTick, watch, toRef, watchEffect } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -74,39 +75,38 @@ import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 
-
 const intro = introJs()
 const childComponent = ref(null);
-onMounted(()=>{
+onMounted(() => {
     intro.setOptions({
-        theme:'modern',
+        theme: 'modern',
         steps: [
             {
                 element: document.querySelector('.el-upload-dragger'),
                 intro: '点击上传文件',
-                title:"第一步"
+                title: "第一步"
             },
             {
                 element: childComponent.value.$el.querySelector('.editor-tree'),
                 intro: '选择json文件',
-                title:"第二步"
+                title: "第二步"
             },
             {
                 element: childComponent.value.$el.querySelector('.editor'),
                 intro: '查看/修改json文件',
-                title:"第三步"
+                title: "第三步"
             },
             {
                 element: childComponent.value.$el.querySelector('.title'),
                 intro: '上传json文件',
-                title:"第四步"
+                title: "第四步"
             }
         ],
         totalSteps: 2
     });
 })
 
-function handleClick(){
+function handleClick() {
     intro.start();
 }
 
@@ -178,6 +178,7 @@ const cardList = computed(() => {
 
 <style scoped lang="scss">
 @import 'intro.js/introjs.css';
+
 .text_title {
     display: flex;
     flex-direction: column;
@@ -231,7 +232,7 @@ const cardList = computed(() => {
     width: 80%;
     max-width: 720px;
     margin: 20px auto;
-    margin-top:40px;
+    margin-top: 40px;
 
     .upload-demo {
 
@@ -371,7 +372,7 @@ const cardList = computed(() => {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 40px;
+        gap: 30px;
 
         svg {
             width: 400px;
@@ -411,17 +412,21 @@ const cardList = computed(() => {
     }
 }
 
-.intro_div{
+.intro_div {
     transition: all 0.5s ease;
-    &:hover{
+
+    &:hover {
         transform: scale(1.1);
     }
-    .intro_a{
+
+    .intro_a {
         text-decoration: none;
         font-size: 30px;
         color: aliceblue;
+
         .icon {
-            width: 0.85em; height: 0.85em;
+            width: 0.85em;
+            height: 0.85em;
             vertical-align: -0.12em;
             fill: currentColor;
             overflow: hidden;
@@ -429,11 +434,4 @@ const cardList = computed(() => {
     }
 
 }
-
-
-
-
-
-
-
 </style>
