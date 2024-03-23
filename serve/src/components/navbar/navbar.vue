@@ -36,16 +36,16 @@ const chooseLang = (languagevalue) => {
 <style scoped lang="scss">
 .navbar {
     width: 100%;
-    height: 55px;
-    background-color: #7891eda8;
+    height: 60px;
+    background-color: #5e77d27b;
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
     z-index: 999;
 
     .navbar_center {
-        width: 65%;
-        max-width: 850px;
+        width: 80%;
+        max-width: 950px;
         padding: 0 20px;
         min-width: fit-content;
         height: 100%;
@@ -71,7 +71,7 @@ const chooseLang = (languagevalue) => {
     .bar_right {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 18px;
         height: 100%;
 
         a {

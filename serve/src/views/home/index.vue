@@ -1,21 +1,25 @@
 <template>
-    <div class="text_title">
-        <div class="text">Fly View</div>
-        <div class="sub_text">
-            <p>{{ $t('text.one') }}</p>
-            <p>{{ $t('text.two') }}</p>
+    <div style="height: calc(100vh - 55px);display: flex;align-items: center;justify-content: center;">
+        <div class="text_title">
+            <div class="text">Fly View</div>
+            <div class="sub_text">
+                <p>{{ $t('text.one') }}</p>
+                <p>{{ $t('text.two') }}</p>
+            </div>
+            <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
+                <div class="intro_div">
+                    <a href="#" class="intro_a" @click="handleClick">
+                        {{ $t('text.intro') }}
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-dianji"></use>
+                        </svg>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-    <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
-        <div class="intro_div">
-            <a href="#" class="intro_a" @click="handleClick">
-                {{ $t('text.intro') }}
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-dianji"></use>
-                </svg>
-            </a>
-        </div>
-    </div>
+
+
 
     <div class="post_part">
         <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost"
@@ -30,12 +34,12 @@
                     <em>only json files are allowed</em>
                 </div>
             </template>
-</el-upload>
-</div>
+        </el-upload>
+    </div>
 
-<div class="editor-container">
-    <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
-</div>
+    <div class="editor-container">
+        <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
+    </div>
 
     <div class="info">
         <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
@@ -183,12 +187,12 @@ const cardList = computed(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    justify-content: center;
+    margin: auto;
 
     .text {
-        font-size: 100px;
+        font-size: 110px;
         font-weight: 800;
-        margin: auto;
         background-image: linear-gradient(to right, white, #88b5fd);
         /* Set the gradient colors */
         background-clip: text;
@@ -200,6 +204,7 @@ const cardList = computed(() => {
         /* Apply the animation */
         font-family: "Paytone One", "PingFangSC", sans-serif;
         user-select: none;
+        letter-spacing: 6px;
     }
 
     .sub_text {
@@ -208,10 +213,38 @@ const cardList = computed(() => {
         p {
             margin: 0;
             text-align: center;
-            font-size: 20px;
+            font-size: 22px;
             font-family: "Paytone One", "PingFangSC", sans-serif;
-            color: #323232b0;
+            color: #212121b0;
+            letter-spacing: 1px;
         }
+    }
+
+    .intro_div {
+        transition: all 0.5s ease;
+
+        .intro_a {
+            text-decoration: none;
+            font-size: 22px;
+            color: aliceblue;
+            padding: 8px 16px;
+            background-color: #ffffff33;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                box-shadow: 5px 5px 10px -2px rgb(255, 255, 255);
+            }
+
+            .icon {
+                width: 0.9em;
+                height: 0.9em;
+                vertical-align: -0.12em;
+                fill: currentColor;
+                overflow: hidden;
+            }
+        }
+
     }
 
     @keyframes gradientAnimation {
@@ -365,7 +398,7 @@ const cardList = computed(() => {
     margin-bottom: 80px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 720px;
+    max-width: 820px;
     width: 90%;
 
     .card {
@@ -410,32 +443,5 @@ const cardList = computed(() => {
             }
         }
     }
-}
-
-.intro_div {
-    transition: all 0.5s ease;
-
-    .intro_a {
-        text-decoration: none;
-        font-size: 20px;
-        color: aliceblue;
-        padding: 8px 16px;
-        background-color: #ffffff33;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-
-        &:hover {
-            box-shadow: 0 4px 12px -4px #0003;
-        }
-
-        .icon {
-            width: 0.85em;
-            height: 0.85em;
-            vertical-align: -0.12em;
-            fill: currentColor;
-            overflow: hidden;
-        }
-    }
-
 }
 </style>

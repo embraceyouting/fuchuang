@@ -1,9 +1,9 @@
 export default {
     navbar:{
         title:'FlyView',
-        subject:'subject',
-        mine:'me',
-        login:'login',
+        subject:'Subject',
+        mine:'Me',
+        login:'Login',
         lang:'中文',
         chat: "GPT"
     },
@@ -34,5 +34,12 @@ export default {
         isedit:'Be editing : ',
         uploadnow:'Upload Current',
         uploadall:'Upload All',
-    }
+    },
+    gpt:{
+        assistant:'Assistant',
+        text1:'Welcome to use FlyView, enter what and click to Send.',
+        text2:'Do not understand the JSON , let the assistant help you.',
+        text3:'To see what can FlyView does, type [help] for it.',
+        placeholder:'please enter content'
+      }
 }

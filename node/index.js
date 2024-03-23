@@ -191,7 +191,7 @@ app.get("/subject", (req, res) => {
 			console.error("从数据库中获取路径时出错:", err);
 			return res.status(500).send("从数据库中获取路径时出错。");
 		}
-		res.send(results);
+		res.send(createMessage(200, "查询项目成功", [...results]));
 	});
 });
 
