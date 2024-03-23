@@ -12,7 +12,8 @@
                 <router-link v-for="(item, index) in nav" :key="index" :to="`${item.path}`" active-class="active">{{
                         $t(item.meta.title) }}</router-link>
                 <a href="::javascript" @click.prevent="chooseLang(language)">{{ $t('navbar.lang') }}</a>
-                <router-link to="/login">{{ $t('navbar.login') }}</router-link>
+                <router-link to="/login" v-if="!userStore.userInfo">{{ $t('navbar.login') }}</router-link>
+                <ElAvatar :src="userStore.userInfo?.avatar" :size="32" v-else>{{ userStore.userInfo?.username }}</ElAvatar>
             </div>
         </div>
     </nav>
@@ -22,6 +23,8 @@
 import { ref } from "vue"
 import Logo from '@/icons/Logo.vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/store/user';
+const userStore = useUserStore()
 const router = useRouter();
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 import { useI18n } from 'vue-i18n'

@@ -1,29 +1,44 @@
 <template>
-    <div id="bg">
+    <div id="bg" :style="{
+        backgroundPosition: `${bgX}% ${bgY}%`,
+    }">
         <div class="ball"></div>
         <div class="ball"></div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { debounce } from '@/utils/debounce';
 
 onMounted(() => {
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', debouncedResize);
 });
 
 onUnmounted(() => {
     window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('resize', debouncedResize);
 });
+
+let innerHeight = window.innerWidth;
+let innerWidth = window.innerHeight;
+const bgX = ref(0);
+const bgY = ref(0);
 
 function handleMouseMove(event) {
     const mouseX = event.pageX;
     const mouseY = event.pageY;
-    const bgX = mouseX / window.innerWidth * 5;
-    const bgY = mouseY / window.innerHeight * 5;
-    const bg = document.querySelector('#bg');
-    bg.style.backgroundPosition = `${bgX}% ${bgY}%`;
+    bgX.value = mouseX / innerWidth * 5;
+    bgY.value = mouseY / innerHeight * 5;
 }
+
+function handleResize() {
+    innerHeight = window.innerWidth;
+    innerWidth = window.innerHeight;
+}
+
+const debouncedResize = debounce(handleResize, 100);
 </script>
 
 <style scoped lang="scss">
@@ -35,6 +50,7 @@ function handleMouseMove(event) {
     background-image: url('@/assets/image/back.jpg');
     background-size: 200% 200%;
     overflow: hidden;
+    transform: scale(1.1);
     z-index: -99;
 }
 

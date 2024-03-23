@@ -1,6 +1,7 @@
 import routes from "./routes";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/store/user";
+import { getToken } from "@/utils/token";
 const router = createRouter({
 	history: createWebHistory(),
 	routes,
@@ -8,13 +9,10 @@ const router = createRouter({
 // 导航守卫
 router.beforeEach((to, from, next) => {
 	const isAuthenticated = () => {
-
-
-		const userStore = useUserStore();
-		if (!userStore.userInfo && to.path !== "/login") {
-			// 如果用户未登录并尝试访问登录页面，则重定向到登录页面
-			return false;
-		}
+		// if (!getToken() && to.path !== "/login") {
+		// 	// 如果用户未登录并尝试访问登录页面，则重定向到登录页面
+		// 	return false;
+		// }
 		return true; // 返回 true 表示通过身份验证或不需要验证
 	};
 
