@@ -39,7 +39,7 @@
             <el-tabs v-model="activeChoice">
                 <!-- 作品: 用户未登录时不可选中 -->
                 <el-tab-pane :disabled="!userInfo?.id" class="container"
-                    :label="`项目 ${userInfo?.id ? workList.length : ''}`" name="work">
+                    :label="`项目 ${userInfo?.id ? subjectList.length : ''}`" name="work">
                 </el-tab-pane>
                 <!-- 喜欢: 用户未登录时不可选中
                 <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`喜欢 ${userInfo?.likeCount || ''}`"
@@ -56,13 +56,13 @@
             </el-tabs>
 
             <div class="container">
-                <ProjectCard v-for="work in workList" :key="work.id" :time="work.time" :url="work.url" :title="work.title" :uid="work.uid" :username="work.username" :path="work.path"></ProjectCard>
+                <ProjectCard v-for="sub in subjectList" :key="sub.id" :time="sub.time" :url="sub.url" :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path"></ProjectCard>
             </div>
 
             <!-- 用户没有登陆 -->
             <el-empty v-if="!userInfo?.id" description="点击右上角按钮进行登录" :image-size="180">
             </el-empty>
-            <el-empty v-else-if="!workList.length" :image-size="180" description="暂无内容"></el-empty>
+            <el-empty v-else-if="!subjectList.length" :image-size="180" description="暂无内容"></el-empty>
         </main>
     </el-container>
 </template>
@@ -76,17 +76,14 @@ import { ref } from 'vue';
 import service from '@/service';
 
 const userStore = useUserStore()
-const { userInfo } = storeToRefs(userStore)
-const workList = ref([])
+const { userInfo, subjectList } = storeToRefs(userStore)
 const activeChoice = ref('work')
 
 function logout() {
     userStore.logout()
 }
 
-service.get("/subject").then(res=>{
-    workList.value = res.data
-})
+userStore.getSubjectList()
 </script>
 
 <style lang="scss" scoped>

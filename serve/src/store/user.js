@@ -4,7 +4,8 @@ import { removeToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", {
 	state: () => ({
-		userInfo: null
+		userInfo: null,
+		subjectList: [],
 	}),
 	actions: {
 		login(email, password) {
@@ -19,6 +20,7 @@ export const useUserStore = defineStore("user", {
 		logout(){
 			removeToken()
 			this.userInfo = null
+			this.subjectList = []
 		},
 		register(email, username, password) {
 			const store = this;
@@ -34,6 +36,11 @@ export const useUserStore = defineStore("user", {
 		getUserInfo() {
 			service.get("/user").then((res) => {
 				this.userInfo = res.data;
+			});
+		},
+		getSubjectList() {
+			service.get("/subject").then((res) => {
+				this.subjectList = res.data;
 			});
 		},
 	},

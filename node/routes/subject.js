@@ -35,8 +35,8 @@ router.post("/", function (req, res) {
 });
 
 router.get("/", (req, res) => {
-	const sql = "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id";
-	db.query(sql, (err, results) => {
+	const sql = "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id WHERE f.uid = ? ORDER BY f.id DESC";
+	db.query(sql, [req.user.id], (err, results) => {
 		if (err) {
 			return res.status(500).send(createMessage(500, "获取路径时出错。"));
 		}
