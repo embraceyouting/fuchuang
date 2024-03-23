@@ -2,13 +2,13 @@
     <div class="chat">
         <div v-if="!messageList.length" class="content center">
             <LogoIcon></LogoIcon>
-            <h2><em>Fly View</em> 小助手</h2>
+            <h2><em>Fly View</em> {{ $t('gpt.assistant') }}</h2>
             <ul class="list">
                 <li v-for="info in infos" class="card">
                     <div>
                         <img :src="info.img" alt="">
                     </div>
-                    <span>{{ info.text }}</span>
+                    <span>{{ $t(info.text) }}</span>
                 </li>
             </ul>
         </div>
@@ -58,15 +58,15 @@ const isEnter = computed(() => messageList.value[messageList.value.length - 1] &
 const key = ref('');
 const infos = ref([
     {
-        text: "欢迎使用 FlyView，输入框内输入你想要的内容，点击发送即可。",
+        text: "gpt.text1",
         img: AssistantDie
     },
     {
-        text: "看不懂的 JSON 文件格式，让小助手帮你解析内容。",
+        text: "gpt.text2",
         img: AssistantLoading
     },
     {
-        text: "想知道 FlyView 的功能，输入 [help] 即可查看。",
+        text: "gpt.text3",
         img: Assistant
     }
 ])
@@ -121,7 +121,7 @@ function goBack() {
     flex-direction: column;
     margin: 0 auto;
     width: 90%;
-    max-width: 720px;
+    max-width: 740px;
 
     .content {
         flex: 1;
@@ -158,7 +158,7 @@ function goBack() {
                 display: flex;
                 margin-top: 30px;
                 align-items: flex-start;
-                padding: 0 60px;
+                padding: 0 50px;
                 width: 100%;
                 list-style: none;
                 cursor: pointer;

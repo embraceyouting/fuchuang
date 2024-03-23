@@ -8,14 +8,13 @@ const router = createRouter({
 // 导航守卫
 router.beforeEach((to, from, next) => {
 	const isAuthenticated = () => {
-		// 只登陆一次保留token方便调试
 
 
-		// const userStore = useUserStore();
-		// if (!userStore.userInfo && to.path !== "/login") {
-		// 	// 如果用户未登录并尝试访问登录页面，则重定向到登录页面
-		// 	return false;
-		// }
+		const userStore = useUserStore();
+		if (!userStore.userInfo && to.path !== "/login") {
+			// 如果用户未登录并尝试访问登录页面，则重定向到登录页面
+			return false;
+		}
 		return true; // 返回 true 表示通过身份验证或不需要验证
 	};
 

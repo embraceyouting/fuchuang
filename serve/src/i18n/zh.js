@@ -35,6 +35,14 @@ export default {
     isedit:'正在编辑：',
     uploadnow:'上传当前',
     uploadall:'上传全部',
-  }
+  },
+  gpt:{
+    assistant:'小助手',
+    text1:'欢迎使用 FlyView，输入框内输入你想要的内容，点击发送即可。',
+    text2:'看不懂的 JSON 文件格式，让小助手帮你解析内容。',
+    text3:'想知道 FlyView 的功能，输入 [help] 即可查看。',
+    placeholder:'请输入内容'
+},
+  
 }
   
