@@ -5,11 +5,48 @@ const { v4: uuidv4 } = require("uuid");
 const mysql = require("mysql");
 const { buffer } = require("stream/consumers");
 const gptRoute = require("./gpt.js");
+const JWT = require("./utils/JWT.js");
+const { createMessage } = require("./utils/message.js");
 
 const app = express();
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
+
+const whiteList = ["/login", "/register"];
+
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Expose-Headers", "Authorization");
+	next();
+});
+
+app.use((req, res, next) => {
+	if (whiteList.includes(req.path)) {
+		next();
+		return;
+	}
+	const token =
+		req.headers.authorization?.split(" ")[1] ||
+		req.params.token ||
+		req.query.token;
+	try {
+		const payload = JWT.verify(token);
+		if (!payload) {
+			throw new Error();
+		}
+		req.user = {
+			id: payload.id,
+			username: payload.username,
+			email: payload.email,
+		};
+		const newToken = JWT.generate(req.user);
+		res.setHeader("Authorization", newToken);
+		next();
+	} catch (err) {
+		return res.status(401).send(createMessage(401, "请登录"));
+	}
+});
 
 // 创建一个用于存储上传文件的 Multer 实例
 const storage = multer.diskStorage({
@@ -44,13 +81,29 @@ db.connect(function (err) {
 
 	// users
 	// id||username||password||email
-	const createUsersSql = `CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), email VARCHAR(255))`;
+	const createUsersSql = `CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), password VARCHAR(255), email VARCHAR(255) NOT NULL, avatar VARCHAR(255))`;
 
 	db.query(createFilesSql);
 	db.query(createUsersSql);
 });
 
-app.use('/gpt', gptRoute);
+app.use("/gpt", gptRoute);
+
+app.get("/user", (req, res) => {
+	const id = req.user.id;
+	const sql = `SELECT * FROM users WHERE id = ?`;
+	db.query(sql, [id], (err, result) => {
+		if (err) {
+			console.error("从数据库中获取数据时出错:", err);
+			return res.status(500).send(createMessage(500, "服务器错误"));
+		}
+		if (result.length == 0) {
+			return res.status(400).send(createMessage(400, "用户不存在"));
+		}
+		const userInfo = result[0];
+		res.send(createMessage(200, "获取用户信息成功", { ...userInfo }));
+	});
+});
 
 // 使用 Multer 中间件处理上传文件
 app.post("/submit_jsonpost", function (req, res) {
@@ -88,47 +141,46 @@ app.post("/submit_jsonpost", function (req, res) {
 	});
 });
 
-app.get("/user", (req, res) => {
-	let email = req.query.email;
-	console.log(email);
-	const sql = `SELECT * FROM files WHERE email = ? ORDER BY time DESC`;
-	db.query(sql, [email], (err, result) => {
+app.post("/login", (req, res) => {
+	let email = req.body.email;
+	let password = req.body.password;
+	const sql = `SELECT * FROM users WHERE email = ? and password = ?`;
+	db.query(sql, [email, password], (err, result) => {
 		if (err) {
-			console.error("从数据库中获取数据时出错:", err);
-			return res.status(500).send("从数据库中获取数据出错。");
+			return res.status(500).send(createMessage(500, "服务器错误"));
 		}
-		res.send(result);
+		if (result.length == 0) {
+			return res.status(400).send(createMessage(400, "用户名或密码错误"));
+		}
+		const userInfo = result[0];
+		const token = JWT.generate({...userInfo});
+		res.setHeader("Authorization", token);
+		res.send(createMessage(200, "登录成功", userInfo));
 	});
 });
 
-app.post('/login', (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    const sql = `SELECT * FROM users WHERE email = ? and password = ?`;
-    db.query(sql, [email, password], (err, result) => {
-        if (err) {
-            console.error("从数据库中获取数据时出错:", err);
-            return res.status(500).send("从数据库中获取数据出错。");
-        }
-		// if(result.length==0) {
-		// 	return res.status(400).send("账户或密码错误");
-		// }
-        res.send(result);
-    });
-});
-
-
-
-app.get("/register", (req, res) => {
-    const registerInfo = req.query.register;
-    const sql = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
-    db.query(sql, [registerInfo.username, registerInfo.email, registerInfo.password], (err, result) => {
-        if (err) {
-            console.error("插入数据库时出错:", err);
-            return res.status(500).send("插入数据库时出错。");
-        }
-        res.send(result);
-    });
+app.post("/register", (req, res) => {
+	const registerInfo = req.body;
+	const sql = "INSERT INTO users (username, email, password, avatar) VALUES (?, ?, ?, ?)";
+	db.query(
+		sql,
+		[registerInfo.username, registerInfo.email, registerInfo.password, 'images/default.png'],
+		(err, result) => {
+			if (err) {
+				console.error("插入数据库时出错:", err);
+				return res.status(500).send("插入数据库时出错。");
+			}
+			const userInfo = {
+				id: result.insertId,
+				username: registerInfo.username,
+				email: registerInfo.email,
+				avatar: 'images/default.png'
+			};
+			const token = JWT.generate({...userInfo});
+			res.setHeader("Authorization", token);
+			res.send(createMessage(200, "注册成功", userInfo));
+		}
+	);
 });
 
 app.get("/subject", (req, res) => {

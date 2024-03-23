@@ -1,40 +1,41 @@
 import { defineStore } from "pinia";
-import { nanoid } from "nanoid";
-import { encrypt, setToken } from "@/utils/token";
-import axios from "axios";
+import service from "@/service";
+import { removeToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", {
-    state: () => ({
-        userInfo: null,
-        token: null,
-        isfirst: null,
-        avatar: null
-    }),
-    actions: {
-        login(email, password) {
-            const store = this; // 保存 this 到一个变量中
-            return new Promise((resolve, reject) => {
-                axios.post('http://127.0.0.1:8000/login', { email, password })
-                    .then(response => {
-                        const res = response.data[0]
-                        if (res) {
-                            store.userInfo = {
-                                id: nanoid(),
-                                username: res.username,
-                                email: res.email,
-                                // 如果您不希望在客户端保存密码，可以不将密码存储在 userInfo 中
-                                password: res.password,
-                            };
-                            const token = encrypt(store.userInfo); // 使用 store.userInfo
-                            setToken(token);
-                            resolve(store.userInfo);
-                        }
-                    })
-                    .catch(error => {
-                        reject(error);
-                    });
-            });
-        }
-    },
-    getters: {},
+	state: () => ({
+		userInfo: null
+	}),
+	actions: {
+		login(email, password) {
+			const store = this; // 保存 this 到一个变量中
+			return service
+				.post("/login", { email, password })
+				.then((response) => {
+					store.userInfo = response.data;
+					return response;
+				});
+		},
+		logout(){
+			removeToken()
+			this.userInfo = null
+		},
+		register(email, username, password) {
+			const store = this;
+			return service.post("/register", {
+				email,
+				username,
+				password,
+			}).then((response) => {
+				store.userInfo = response.data;
+				return response;
+			});
+		},
+		getUserInfo() {
+			service.get("/user").then((res) => {
+				this.userInfo = res.data;
+			});
+		},
+	},
+	getters: {},
 });

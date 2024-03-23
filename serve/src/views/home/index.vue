@@ -415,14 +415,18 @@ const cardList = computed(() => {
 .intro_div {
     transition: all 0.5s ease;
 
-    &:hover {
-        transform: scale(1.1);
-    }
-
     .intro_a {
         text-decoration: none;
-        font-size: 30px;
+        font-size: 20px;
         color: aliceblue;
+        padding: 8px 16px;
+        background-color: #ffffff33;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            box-shadow: 0 4px 12px -4px #0003;
+        }
 
         .icon {
             width: 0.85em;

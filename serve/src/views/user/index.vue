@@ -2,29 +2,32 @@
     <el-container>
         <header>
             <!-- 用户信息 -->
-            <el-avatar :size="120" :src="userInfo.avatar">{{ userInfo.username || '未登录' }}</el-avatar>
+            <el-avatar :size="120" :src="userInfo?.avatar">{{ userInfo?.username || '未登录' }}</el-avatar>
             <div class="userInfo">
-                <h1 class="username">{{ userInfo.username || '未登录' }}</h1>
-                <!-- <p class="list" @click="isShowFollowList = true">
-                    <span>关注</span><i>{{ userInfo.id ? userInfo.followCount || '0' : '-' }}</i>
+                <h1 class="username">{{ userInfo?.username || '访客' }}</h1>
+                <p class="list" @click="isShowFollowList = true">
+                    <!-- <span>关注</span><i>{{ userInfo?.id ? userInfo?.followCount || '0' : '-' }}</i>
                     <el-divider direction="vertical"></el-divider>
-                    <span>粉丝</span><i>{{ userInfo.id ? userInfo.fanCount || '0' : '-' }}</i>
+                    <span>粉丝</span><i>{{ userInfo?.id ? userInfo?.fanCount || '0' : '-' }}</i>
                     <el-divider direction="vertical"></el-divider>
-                    <span>获赞</span><i>{{ userInfo.id ? userInfo.likedCount || '0' : '-' }}</i>
-                </p> -->
-                <p class="other" v-if="userInfo.id">
-                    <span class="account">账号ID: {{ userInfo.id }}</span>
-                    <!-- <span class="gender tag">
-                        <GenderIcon :gender="userInfo.gender"></GenderIcon>
-                        <span>{{ userInfo.age || 0 }}岁</span>
+                    <span>获赞</span><i>{{ userInfo?.id ? userInfo?.likedCount || '0' : '-' }}</i> -->
+                </p>
+                <p class="other" v-if="userInfo?.id">
+                    <span class="account tag">账号ID: {{ userInfo?.id }}</span>
+                    <span class="gender tag">
+                        <GenderIcon :gender="userInfo?.gender"></GenderIcon>
+                        <span>{{ userInfo?.age || 20 }}岁</span>
                     </span>
 
                     <span class="location tag">
-                        {{ userInfo.location || '电子科技大学' }}</span> -->
+                        {{ userInfo?.location || '电子科技大学' }}</span>
                 </p>
-                <!-- <p class="signature" :title="userInfo.signature">{{ userInfo.signature || '这个人很懒，什么也没留下...' }}</p> -->
+                <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature || '这个人很懒，什么也没留下...' }}</p>
+                <p class="info" v-else>
+                    用户尚未登录，无法使用全部功能，如需使用，请注册/登录
+                </p>
             </div>
-            <div class="tool" v-if="userInfo.id">
+            <div class="tool" v-if="userInfo?.id">
                 <el-button @click="logout" type="danger">退出登录</el-button>
             </div>
         </header>
@@ -33,31 +36,31 @@
             <!-- 导航栏 -->
             <el-tabs v-model="activeChoice">
                 <!-- 作品: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo.id" class="video-container"
-                    :label="`项目 ${userInfo.id ? userInfo.workCount || 0 : ''}`" name="work">
+                <el-tab-pane :disabled="!userInfo?.id" class="container"
+                    :label="`项目 ${userInfo?.id ? userInfo?.workCount || 0 : ''}`" name="work">
                 </el-tab-pane>
                 <!-- 喜欢: 用户未登录时不可选中
-                <el-tab-pane :disabled="!userInfo.id" class="video-container" :label="`喜欢 ${userInfo.likeCount || ''}`"
+                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`喜欢 ${userInfo?.likeCount || ''}`"
                     name="like">
                 </el-tab-pane> -->
                 <!-- 收藏: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo.id" class="video-container"
-                    :label="`收藏 ${userInfo.collectCount || ''}`" name="collect">
+                <el-tab-pane :disabled="!userInfo?.id" class="container"
+                    :label="`收藏 ${userInfo?.collectCount || ''}`" name="collect">
                 </el-tab-pane>
                 <!-- 观看历史: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo.id" class="video-container"
-                    :label="`浏览历史 ${userInfo.historyCount || ''}`" name="history">
+                <el-tab-pane :disabled="!userInfo?.id" class="container"
+                    :label="`浏览历史 ${userInfo?.historyCount || ''}`" name="history">
                 </el-tab-pane>
             </el-tabs>
 
-            <div class="video-container">
-                <VideoBox v-for="item in videoList" :key="item.vid" v-bind="item" :ratio="4 / 3" :waterfall="false"
-                    @deleteVideo="deleteVideo" :isDelete="activeChoice === 'work'">
-                </VideoBox>
+            <div class="container">
+                <li v-for="work in workList" :key="work.id"></li>
             </div>
 
+            <el-empty v-if="!workList.length" :image-size="180" description="暂无内容"></el-empty>
+
             <!-- 用户没有登陆 -->
-            <el-empty description="点击右上角按钮进行登录" :image-size="180">
+            <el-empty v-if="!userInfo?.id" description="点击右上角按钮进行登录" :image-size="180">
             </el-empty>
         </main>
     </el-container>
@@ -67,19 +70,14 @@
 import GenderIcon from '@/icons/GenderIcon.vue'
 import { useUserStore } from '@/store/user'
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 
 const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
-console.log(userInfo);
+const workList = ref([])
 
 function logout() {
-    // 退出登录，清空用户信息
     userStore.logout()
-}
-function deleteVideo(vid) {
-    // 删除视频
-    this.videoList = this.videoList.filter(item => item.vid !== vid)
-    this.getUserInfo()
 }
 </script>
 
@@ -103,7 +101,7 @@ function deleteVideo(vid) {
         min-width: max-content;
 
         .el-avatar {
-            font-size: 28px;
+            font-size: 32px;
         }
 
         .userInfo {
@@ -116,21 +114,20 @@ function deleteVideo(vid) {
 
             .username {
                 color: $white;
-                margin-bottom: 16px;
-                font-size: 20px;
-                font-weight: 500;
+                font-size: 24px;
+                font-weight: 900;
                 line-height: 28px;
                 max-width: 300px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 margin: 0;
+                margin-bottom: 6px;
             }
 
             .list {
                 display: flex;
                 align-items: center;
-                margin-top: 4px;
                 width: 100%;
                 white-space: nowrap;
                 cursor: pointer;
@@ -149,7 +146,7 @@ function deleteVideo(vid) {
                 }
 
                 .el-divider {
-                    background-color: $gray-3;
+                    background-color: $gray-0;
                     transform: scaleX(.5);
                     margin: 0 16px;
                 }
@@ -177,7 +174,7 @@ function deleteVideo(vid) {
                     font-size: 12px;
                     height: 20px;
                     line-height: 20px;
-                    margin-right: 4px;
+                    margin-right: 8px;
                     padding: 0 8px;
                 }
             }
@@ -185,13 +182,20 @@ function deleteVideo(vid) {
             .signature {
                 font-size: 12px;
                 line-height: 20px;
-                color: $gray-1;
-                margin-top: 6px;
+                color: $gray-0;
+                margin-top: 12px;
                 margin-right: 10px;
                 white-space: nowrap;
                 max-width: 300px;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                cursor: pointer;
+            }
+
+            .info {
+                font-size: 16px;
+                line-height: 1.8;
+                color: $gray-0;
                 cursor: pointer;
             }
 
@@ -209,7 +213,8 @@ function deleteVideo(vid) {
             }
 
             .el-button--danger {
-                background: $light-color;
+                background: $white;
+                color: $dark-color;
                 padding: 0 20px;
             }
         }
@@ -225,23 +230,28 @@ function deleteVideo(vid) {
 
             :deep(.el-tabs__item) {
                 cursor: pointer;
-                color: $gray-1;
+                color: $gray-2;
                 font-size: 18px;
                 height: unset;
                 line-height: 3;
+                transition: color .3s;
 
                 &:hover {
-                    color: $gray-1;
+                    color: $gray-0;
                 }
 
                 &.is-active {
                     color: $white;
                 }
+
+                &.is-disabled {
+                    cursor: not-allowed;
+                }
             }
 
             :deep(.el-tabs__nav-wrap) {
                 &::after {
-                    background-color: $gray-3;
+                    background-color: $gray-1;
                     transform: scaleY(.5);
                     height: 1px;
                 }
@@ -253,7 +263,7 @@ function deleteVideo(vid) {
             }
         }
 
-        .video-container {
+        .container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-gap: 16px;
@@ -264,6 +274,18 @@ function deleteVideo(vid) {
 
         }
 
+        .el-empty {
+            margin-top: 64px;
+
+            :deep(.el-empty__description) {
+                p {
+                    color: $gray-0;
+                    font-size: 14px;
+                    line-height: 20px;
+                    margin: 10px;
+                }
+            }
+        }
     }
 }
 </style>./user.vue
