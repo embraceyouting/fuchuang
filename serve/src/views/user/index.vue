@@ -1,5 +1,6 @@
 <template>
     <el-container>
+        <img src="@/assets/image/bg.png" class="bg" alt="" v-if="userInfo?.id">
         <header>
             <!-- 用户信息 -->
             <el-avatar :size="120" :src="userInfo?.avatar">{{ userInfo?.username || '未登录' }}</el-avatar>
@@ -22,7 +23,8 @@
                     <span class="location tag">
                         {{ userInfo?.location || '电子科技大学' }}</span>
                 </p>
-                <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature || '这个人很懒，什么也没留下...' }}</p>
+                <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature ||
+                '这个人很懒，什么也没留下...' }}</p>
                 <p class="info" v-else>
                     用户尚未登录，无法使用全部功能，如需使用，请注册/登录
                 </p>
@@ -37,48 +39,54 @@
             <el-tabs v-model="activeChoice">
                 <!-- 作品: 用户未登录时不可选中 -->
                 <el-tab-pane :disabled="!userInfo?.id" class="container"
-                    :label="`项目 ${userInfo?.id ? userInfo?.workCount || 0 : ''}`" name="work">
+                    :label="`项目 ${userInfo?.id ? workList.length : ''}`" name="work">
                 </el-tab-pane>
                 <!-- 喜欢: 用户未登录时不可选中
                 <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`喜欢 ${userInfo?.likeCount || ''}`"
                     name="like">
                 </el-tab-pane> -->
                 <!-- 收藏: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo?.id" class="container"
-                    :label="`收藏 ${userInfo?.collectCount || ''}`" name="collect">
+                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`收藏 ${userInfo?.collectCount || ''}`"
+                    name="collect">
                 </el-tab-pane>
                 <!-- 观看历史: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo?.id" class="container"
-                    :label="`浏览历史 ${userInfo?.historyCount || ''}`" name="history">
+                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`浏览历史 ${userInfo?.historyCount || ''}`"
+                    name="history">
                 </el-tab-pane>
             </el-tabs>
 
             <div class="container">
-                <li v-for="work in workList" :key="work.id"></li>
+                <ProjectCard v-for="work in workList" :key="work.id" :time="work.time" :url="work.url" :title="work.title" :uid="work.uid" :username="work.username" :path="work.path"></ProjectCard>
             </div>
-
-            <el-empty v-if="!workList.length" :image-size="180" description="暂无内容"></el-empty>
 
             <!-- 用户没有登陆 -->
             <el-empty v-if="!userInfo?.id" description="点击右上角按钮进行登录" :image-size="180">
             </el-empty>
+            <el-empty v-else-if="!workList.length" :image-size="180" description="暂无内容"></el-empty>
         </main>
     </el-container>
 </template>
 
 <script lang="js" setup>
 import GenderIcon from '@/icons/GenderIcon.vue'
+import ProjectCard from '@/components/project/project-card.vue'
 import { useUserStore } from '@/store/user'
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
+import service from '@/service';
 
 const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
 const workList = ref([])
+const activeChoice = ref('work')
 
 function logout() {
     userStore.logout()
 }
+
+service.get("/subject").then(res=>{
+    workList.value = res.data
+})
 </script>
 
 <style lang="scss" scoped>
@@ -89,16 +97,32 @@ function logout() {
 }
 
 .el-container {
-    padding: 40px;
+    padding: 0 40px 40px;
     flex-direction: column;
     min-width: 500px;
-    max-width: 968px;
-    margin: 8px auto;
+    max-width: 898px;
+    margin: 0 auto;
+    position: relative;
+
+    .bg {
+        position: absolute;
+        height: 294px;
+        width: 60%;
+        right: 40px;
+        top: 0;
+        filter: brightness(1.2);
+        object-fit: cover;
+        z-index: -1;
+        mask-image: linear-gradient(90deg, transparent 0%, #000000af 100%, #000000af 100%);
+    }
 
     header {
         display: flex;
         align-items: center;
+        position: relative;
         min-width: max-content;
+        padding-top: 80px;
+        padding-bottom: 40px;
 
         .el-avatar {
             font-size: 32px;
@@ -203,6 +227,7 @@ function logout() {
 
         .tool {
             align-self: flex-end;
+            margin-right: 40px;
 
             .el-button {
                 background: $gray-3;
@@ -224,9 +249,8 @@ function logout() {
     main {
 
         .el-tabs {
-            margin: 11px 0;
+            margin-bottom: 0;
             box-sizing: content-box;
-            padding-top: 16px;
 
             :deep(.el-tabs__item) {
                 cursor: pointer;
@@ -246,6 +270,7 @@ function logout() {
 
                 &.is-disabled {
                     cursor: not-allowed;
+                    user-select: none
                 }
             }
 
@@ -265,11 +290,15 @@ function logout() {
 
         .container {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             grid-gap: 16px;
 
-            @media screen and (max-width: 1280px) {
-                grid-template-columns: repeat(3, 1fr);
+            @media screen and (max-width: 760px) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media screen and (max-width: 360px) {
+                grid-template-columns: repeat(1, 1fr);
             }
 
         }

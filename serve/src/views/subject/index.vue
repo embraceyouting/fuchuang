@@ -1,18 +1,5 @@
 <template>
     <div class="main">
-        <!-- <div class="side_part">
-            <div class="title">My Subject</div>
-            <div class="scoll_part">
-                <div class="name_file" v-for="(item, index) in subjects" :key="item.id" :title="item.filename">
-                    <router-link class="over" :to="`/subject/${item.filename}`">{{ item.filename }}</router-link>
-                    <div class="icon_dlt" @click="delete_json(item, index)">
-                        <el-icon class="icon">
-                            <CloseBold />
-                        </el-icon>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="middle_part">
             <div class="introduce" v-for="(info, index) in infos"
                 v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="index">
@@ -45,26 +32,13 @@
 <script setup lang="js">
 import echarts_percent from "../../components/subject/echarts_percent.vue"
 import echarts_score from "../../components/subject/echarts_score.vue"
-import { ref, toRef } from "vue"
-import axios from "axios"
-import { CloseBold } from '@element-plus/icons-vue'
-import { ElIcon } from "element-plus"
+import { ref } from "vue"
 import { toRaw } from "vue"
 
 let ispreview = ref(false);
-let delete_item = ref(null);
-const subjects = ref([]);
 let isdelete = ref(null);
 let items = ref([]);
 let propstem = ref([]);
-axios.get("http://127.0.0.1:8000/subject")
-    .then(res => {
-        subjects.value = res.data; // Assuming the response is an array of subjects
-        console.log(subjects.value)
-    })
-    .catch(error => {
-        console.error("Error fetching subjects:", error);
-    });
 
 let infos = [
     {
@@ -80,19 +54,6 @@ let infos = [
 
     }
 ]
-
-
-function delete_json(item, index) {
-    ispreview.value = true
-    delete_item.value = item.filename;
-    console.log(delete_item.value)
-    new Promise(resolve => { resolveBeforeRemove = resolve; })
-        .then(result => {
-            if (result) {
-                subjects.value.splice(index, 1);
-            }
-        });
-}
 
 function confirmDelete() {
     ispreview.value = false;

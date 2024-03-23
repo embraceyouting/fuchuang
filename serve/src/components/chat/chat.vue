@@ -13,15 +13,24 @@
             </ul>
         </div>
         <div class="content" v-else>
-            <h4>GPT 4.0</h4>
+            <h4>
+                <el-icon @click="goBack">
+                    <ArrowLeftBold />
+                </el-icon>
+                <span>GPT 4.0</span>
+            </h4>
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
                 :isDie="index !== messageList.length - 1"></ChatCard>
         </div>
-        <ElForm class="input" @submit.prevent="search">
-            <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }" v-model="key" placeholder="请输入内容"
-                resize="none" @keydown.enter="search">
+        <ElForm class="input" @submit.prevent="search"
+            :class="{ cancle: isEnter }">
+            <ElButton v-if="isEnter"
+                class="cancle" native-type="button" @click="cancle">取消对话</ElButton>
+            <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }"
+                v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
-            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || (messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
+            <ElButton native-type="submit" @click="search"
+                :disabled="!useUserStore().userInfo || isEnter || !key">
                 <ElIcon>
                     <SubmitIcon />
                 </ElIcon>
@@ -34,6 +43,7 @@
 import { ref, reactive } from 'vue';
 import ChatCard from './chat-card.vue';
 import { ElIcon } from 'element-plus';
+import { ArrowLeftBold } from '@element-plus/icons-vue';
 import SubmitIcon from '@/icons/SubmitIcon.vue';
 import LogoIcon from '@/icons/Logo.vue';
 import Assistant from './image/assistant_normal.png';
@@ -41,8 +51,10 @@ import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
 import { getToken } from '@/utils/token';
 import { useUserStore } from '@/store/user';
+import { computed } from 'vue';
 
 const messageList = ref([]);
+const isEnter = computed(() => messageList.value[messageList.value.length - 1] && !messageList.value[messageList.value.length - 1].isEnd)
 const key = ref('');
 const infos = ref([
     {
@@ -59,12 +71,14 @@ const infos = ref([
     }
 ])
 
+let source = null;
+
 function search(e) {
     if (e.ctrlKey || e.shiftKey) return
     e.preventDefault()
     if (!key.value.trim()) return
     messageList.value.push({ text: key.value, type: "user", isEnd: true })
-    const source = new EventSource(`${import.meta.env.VITE_BASE_URL}gpt?key=${key.value}&token=${getToken()}`);
+    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value}&token=${getToken()}`);
     key.value = '';
     const obj = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(obj);
@@ -82,7 +96,21 @@ function search(e) {
         source.close();
         obj.isEnd = true;
         obj.text = "出错了，请检查登录状态后重试..."
+        source.onmessage = null
+        source.onerror = null
+        source = null
     };
+}
+
+function cancle() {
+    if (!source) return
+    source.close();
+    messageList.value[messageList.value.length - 1].isEnd = true
+}
+
+function goBack() {
+    cancle()
+    messageList.value = []
 }
 </script>
 
@@ -100,6 +128,7 @@ function search(e) {
         padding-bottom: 20px;
         overflow-y: auto;
         mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        scroll-behavior: smooth;
 
         &.center {
             display: flex;
@@ -174,6 +203,18 @@ function search(e) {
             margin: 40px auto;
             text-align: center;
             font-size: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .el-icon {
+                position: absolute;
+                cursor: pointer;
+            }
+
+            span {
+                margin: auto;
+            }
         }
 
         &::-webkit-scrollbar {
@@ -188,6 +229,10 @@ function search(e) {
         align-items: flex-end;
         background-color: #fffa;
         border-radius: 12px;
+
+        &.cancle {
+            margin-top: 60px;
+        }
 
         .el-textarea {
             :deep(.el-textarea__inner) {
@@ -207,6 +252,28 @@ function search(e) {
             width: 36px;
             margin-right: 6px;
             margin-bottom: 4px;
+
+            &.cancle {
+                position: absolute;
+                top: -125%;
+                left: 50%;
+                width: fit-content;
+                box-sizing: content-box;
+                background-color: $white;
+                padding: 4px 12px;
+                margin: unset;
+                border-radius: 4px;
+                transform: translateX(-50%);
+                transition: box-shadow 0.3s;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px $color;
+                }
+
+                &:active {
+                    filter: brightness(0.9);
+                }
+            }
 
             &:disabled {
                 filter: brightness(1.4);

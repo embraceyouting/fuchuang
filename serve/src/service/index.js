@@ -3,7 +3,7 @@ import { getToken, removeToken, setToken } from "@/utils/token";
 import { ElMessage } from "element-plus";
 
 const service = axios.create({
-	baseURL: import.meta.env.VITE_BASE_URL,
+	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 5000,
 });
 
@@ -19,12 +19,12 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     (response) => {
-        if (response.data.code !== 200) {
+        if (response.data.code && response.data.code !== 200) {
             ElMessage.error(response.data.msg);
             removeToken()
             return Promise.reject(response.data);
         }
-        setToken(response.headers.authorization);
+        response.headers.authorization && setToken(response.headers.authorization);
         return response.data;
     },
     (error) => {

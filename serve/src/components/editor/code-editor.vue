@@ -33,6 +33,7 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import service from '@/service';
 
 
 const props = defineProps({
@@ -87,7 +88,7 @@ function uploadCurrent() {
         formData.append('files', files); // 将文件添加到 FormData 中
 
         // 发送 POST 请求
-        axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+        service.post("/subject", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data' // 设置请求头
             }
@@ -130,7 +131,7 @@ function uploadAll(files) {
     });
 
     // 发送 POST 请求
-    axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+    service.post("/subject", formData, {
         headers: {
             'Content-Type': 'multipart/form-data' // 设置请求头
         }

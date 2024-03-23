@@ -18,7 +18,7 @@
     </div>
 
     <div class="post_part">
-        <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost"
+        <el-upload class="upload-demo" drag :auto-upload="false"
             accept=".json" name="files" :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData"
             :file-list="file_list" :on-change="handleChange" multiple>
             <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>

@@ -10,7 +10,7 @@ export const useUserStore = defineStore("user", {
 		login(email, password) {
 			const store = this; // 保存 this 到一个变量中
 			return service
-				.post("/login", { email, password })
+				.post("/user/login", { email, password })
 				.then((response) => {
 					store.userInfo = response.data;
 					return response;
@@ -22,7 +22,7 @@ export const useUserStore = defineStore("user", {
 		},
 		register(email, username, password) {
 			const store = this;
-			return service.post("/register", {
+			return service.post("/user", {
 				email,
 				username,
 				password,

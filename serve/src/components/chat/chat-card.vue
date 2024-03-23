@@ -38,8 +38,8 @@ const username = computed(() => props.item.type === 'user' ? userStore.userInfo?
 
 onMounted(() => {
     watch(() => props.item.text, () => {
-        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'end' })
-    })
+        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+    }, { immediate: true })
 })
 </script>
 
