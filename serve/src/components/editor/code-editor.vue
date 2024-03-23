@@ -2,12 +2,17 @@
     <div class="editor-with-list">
         <div class="editor-tree" :class="{ center: !files.length }">
             <ul v-if="files.length" class="file-list">
-                <li class="file" ref="fileItem" v-for="file in files" :key="file.uid" :class="{ active: current === file }"
-                    @click="preview(file)">
+                <li class="file" ref="fileItem" v-for="file in files" :key="file.uid"
+                    :class="{ active: current === file }" @click="preview(file)">
                     <i class="icon">
                         <JsonIcon></JsonIcon>
                     </i>
                     <span class="title">{{ file.name }}</span>
+                    <i class="remove">
+                        <el-icon @click.stop="remove(file)">
+                            <delete />
+                        </el-icon>
+                    </i>
                 </li>
             </ul>
             <ElEmpty v-else :image-size="100"></ElEmpty>
@@ -17,8 +22,16 @@
             <header>
                 <h4 class="title">
                     <span>{{ current ? $t('post.isedit') + current?.name : $t('post.iffiles') }}</span>
-                    <el-button plain text bg v-if="current" @click="uploadCurrent">{{ $t('post.uploadnow') }}</el-button>
-                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall') }}</el-button>
+                    <el-icon v-if="current" @click="save(current)" title="save current file.">
+                        <DocumentCopy />
+                    </el-icon>
+                    <el-button plain text bg v-if="current" @click="uploadCurrent">{{ $t('post.uploadnow')
+                        }}</el-button>
+                    <el-icon v-if="files.length" @click="saveAll(files)" title="save all files.">
+                        <FolderOpened />
+                    </el-icon>
+                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall')
+                        }}</el-button>
                 </h4>
             </header>
             <div ref="editorRef" class="editor"></div>
@@ -27,13 +40,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick  } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
+import { Delete, DocumentCopy, FolderOpened } from '@element-plus/icons-vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import service from '@/service';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 
 
 const props = defineProps({
@@ -41,7 +57,7 @@ const props = defineProps({
 })
 const fileItems = ref([]);
 watch(() => props.files, () => {
-    nextTick(()=>{
+    nextTick(() => {
         fileItems.value = Array.from(document.querySelectorAll('.file'));
     })
 
@@ -80,10 +96,27 @@ function preview(file) {
     }
 }
 
+function remove(file) {
+    props.files.splice(props.files.indexOf(file), 1)
+}
+
+function save(file) {
+    saveAs(file.raw, file.name)
+}
+
+function saveAll(files) {
+    const zip = new JSZip();
+    files.forEach((file, index) => {
+        const item = files.find(item => item.name === file.name)
+        zip.file(item ? `${file.name.replace(/\.\w+$/, '')}_${index}.json` : file.name, file.raw)
+    })
+    zip.generateAsync({ type: 'blob' }).then((content) => saveAs(content, 'files.zip'))
+}
+
 function uploadCurrent() {
     // 获取当前文件对象
     if (current.value) {
-        const files = current.value.raw; 
+        const files = current.value.raw;
         const formData = new FormData();
         formData.append('files', files); // 将文件添加到 FormData 中
 
@@ -93,15 +126,15 @@ function uploadCurrent() {
                 'Content-Type': 'multipart/form-data' // 设置请求头
             }
         })
-        .then((res)=>{
-            // 处理上传成功的响应
-            ElMessage.success('上传成功')
-            console.log(res.data);
-        })
-        .catch((err)=>{
-            // 处理上传失败的错误
-            console.log(err);
-        });
+            .then((res) => {
+                // 处理上传成功的响应
+                ElMessage.success('上传成功')
+                console.log(res.data);
+            })
+            .catch((err) => {
+                // 处理上传失败的错误
+                console.log(err);
+            });
     }
 }
 
@@ -113,7 +146,7 @@ function uploadAll(files) {
 
     // 创建 FormData 对象
     const formData = new FormData();
-    
+
     // 将所有文件添加到 FormData 对象中
     allFiles.forEach(file => {
         if (file.raw) {
@@ -121,12 +154,12 @@ function uploadAll(files) {
         } else {
             // 如果文件未编辑过，则从文件系统中读取文件并添加到 FormData 对象中
             fetch(file.url)
-            .then(response => response.blob())
-            .then(blob => {
-                const newFile = new File([blob], file.name, { type: 'application/json' });
-                formData.append('files', newFile);
-            })
-            .catch(error => console.error('Error fetching file:', error));
+                .then(response => response.blob())
+                .then(blob => {
+                    const newFile = new File([blob], file.name, { type: 'application/json' });
+                    formData.append('files', newFile);
+                })
+                .catch(error => console.error('Error fetching file:', error));
         }
     });
 
@@ -136,15 +169,15 @@ function uploadAll(files) {
             'Content-Type': 'multipart/form-data' // 设置请求头
         }
     })
-    .then((res)=>{
-        // 处理上传成功的响应
-        ElMessage.success('上传成功')
-        console.log(res.data);
-    })
-    .catch((err)=>{
-        // 处理上传失败的错误
-        console.log(err);
-    });
+        .then((res) => {
+            // 处理上传成功的响应
+            ElMessage.success('上传成功')
+            console.log(res.data);
+        })
+        .catch((err) => {
+            // 处理上传失败的错误
+            console.log(err);
+        });
 }
 
 
@@ -164,6 +197,7 @@ onMounted(() => {
         language: 'json',
         readOnly: false,
         theme: 'vs',
+        wordWrap: 'on',
         selectOnLineNumbers: true, // select the line number's of the code
         roundedSelection: true, // rounded selection
         cursorStyle: 'line', // line, block, 'line-thin', 'block-outline', 'underline', 'underline-thin'
@@ -237,6 +271,10 @@ onBeforeUnmount(() => {
 
                 &:hover {
                     background-color: #f0f0f0;
+
+                    .remove {
+                        display: block;
+                    }
                 }
 
                 &.active {
@@ -252,6 +290,10 @@ onBeforeUnmount(() => {
                     flex: 1;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                }
+
+                .remove {
+                    display: none;
                 }
             }
         }
@@ -275,6 +317,22 @@ onBeforeUnmount(() => {
                 display: flex;
                 align-items: center;
                 margin: 0 12px 0 18px;
+
+                .el-icon {
+                    margin: 0 4px;
+                    font-size: 18px;
+                    color: $color;
+                    cursor: pointer;
+                    transition: .1s;
+
+                    &:hover {
+                        color: $dark-color;
+                    }
+
+                    &:active {
+                        filter: brightness(0.8);
+                    }
+                }
 
                 span {
                     flex: 1;
