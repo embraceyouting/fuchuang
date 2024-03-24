@@ -124,7 +124,7 @@ onUnmounted(() => {
                             position: absolute;
                             inset: 0px;
                             border-radius: inherit;
-                            background-color: #b4c9ff66;
+                            background-color: #d8e3ff66;
                         }
                     }
 

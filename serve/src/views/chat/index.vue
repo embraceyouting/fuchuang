@@ -10,6 +10,6 @@ import Chat from '@/components/chat/chat.vue'
 
 <style scoped lang="scss">
 main {
-    height: calc(100vh - 55px);
+    height: calc(100vh - 60px);
 }
 </style>
