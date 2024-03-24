@@ -18,10 +18,7 @@
             </div>
         </div>
     </div>
-
-
-
-    <div class="post_part">
+    <!-- <div class="post_part">
         <el-upload class="upload-demo" drag :auto-upload="false"
             accept=".json" name="files" :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData"
             :file-list="file_list" :on-change="handleChange" multiple>
@@ -39,7 +36,7 @@
 
     <div class="editor-container">
         <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
-    </div>
+    </div> -->
 
     <div class="info">
         <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
@@ -86,25 +83,25 @@ onMounted(() => {
         theme: 'modern',
         steps: [
             {
-                element: document.querySelector('.el-upload-dragger'),
+                element: document.querySelector('.bar_right').children[1],
                 intro: '点击上传文件',
                 title: "第一步"
             },
-            {
-                element: childComponent.value.$el.querySelector('.editor-tree'),
-                intro: '选择json文件',
-                title: "第二步"
-            },
-            {
-                element: childComponent.value.$el.querySelector('.editor'),
-                intro: '查看/修改json文件',
-                title: "第三步"
-            },
-            {
-                element: childComponent.value.$el.querySelector('.title'),
-                intro: '上传json文件',
-                title: "第四步"
-            }
+            // {
+            //     element: childComponent.value.$el.querySelector('.editor-tree'),
+            //     intro: '选择json文件',
+            //     title: "第二步"
+            // },
+            // {
+            //     element: childComponent.value.$el.querySelector('.editor'),
+            //     intro: '查看/修改json文件',
+            //     title: "第三步"
+            // },
+            // {
+            //     element: childComponent.value.$el.querySelector('.title'),
+            //     intro: '上传json文件',
+            //     title: "第四步"
+            // }
         ],
         totalSteps: 2
     });
@@ -394,13 +391,11 @@ const cardList = computed(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 80px;
     margin-bottom: 80px;
     margin-left: auto;
     margin-right: auto;
     max-width: 820px;
     width: 90%;
-
     .card {
         width: 100%;
         display: flex;

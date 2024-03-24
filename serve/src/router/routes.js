@@ -37,6 +37,16 @@ export default [
 		]
 	},
 	{
+		path: "/submit",
+		name: "submit",
+		component: () => import("../views/submit/index.vue"),
+		meta: {
+			isNavItem: true,
+            isNav: true,
+			title: "navbar.submit"
+		},
+	},
+	{
 		path: "/user",
 		name: "user",
 		component: () => import("../views/user/index.vue"),

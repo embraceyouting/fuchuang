@@ -5,7 +5,8 @@ export default {
       mine:'我的',
       login:'登录',
       lang:"EN",
-      chat: "AI 问答"
+      chat: "AI 问答",
+      submit:'上传'
     },
     text:{
       one:'一个有效、快捷、方便、准确的网站体验助手',

@@ -21,6 +21,7 @@
     "monaco-editor": "^0.47.0",
     "nanoid": "^5.0.6",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "router-view": "^1.1.7",
     "swiper": "^8.4.7",
     "vue": "^3.3.11",
