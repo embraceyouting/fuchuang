@@ -62,7 +62,7 @@ const chooseLang = (languagevalue) => {
         width: 80%;
         max-width: 950px;
         padding: 0 20px;
-        min-width: fit-content;
+        min-width: 582px;
         height: 100%;
         margin: auto;
         display: flex;
@@ -104,7 +104,8 @@ const chooseLang = (languagevalue) => {
         }
 
         .language {
-            padding: 0 4px;
+            padding: 8px 10px;
+            margin-right: 10px;
 
             &,
             &:hover,

@@ -1,11 +1,12 @@
 export default {
     navbar:{
         title:'FlyView',
-        subject:'Subject',
+        visualization:'Visualization',
         mine:'Me',
         login:'Login',
         lang:'中文',
-        chat: "GPT"
+        chat: "GPT",
+        submit:'Submit',
     },
     text:{
         one:'An effective, fast, convenient and accurate website experience assistant',
