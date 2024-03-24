@@ -20,19 +20,19 @@ export default [
 		},
 	},
 	{
-		path: "/subject",
-		name: "subject",
-		component: () => import("../views/subject/index.vue"),
+		path: "/visualization",
+		name: "visualization",
+		component: () => import("../views/visualization/index.vue"),
 		meta: {
 			isNavItem: true,
             isNav: true,
-			title: "navbar.subject"
+			title: "navbar.visualization"
 		},
 		children:[
 			{
 				path:":name",
 				name:"subject-file",
-				component: () => import("../views/subject/index.vue"), //根据具体file来变化，need change
+				component: () => import("../views/visualization/index.vue"), //根据具体file来变化，need change
 			}
 		]
 	},

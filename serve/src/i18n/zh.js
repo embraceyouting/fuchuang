@@ -1,7 +1,7 @@
 export default {
     navbar:{
       title:'飞阅',
-      subject:'项目',
+      visualization:'可视化',
       mine:'我的',
       login:'登录',
       lang:"EN",

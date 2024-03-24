@@ -1,15 +1,20 @@
 <template>
     <section class="card">
+        <ElIcon class="delete" @click="remove">
+            <Delete />
+        </ElIcon>
         <div class="cover">
             <img :src="cover" alt="">
         </div>
         <div class="info">
             <h4 class="title">{{ title }}</h4>
             <p class="url">
+                <a :href="url" target="_blank"><span class="tag"><el-icon>
+                            <Monitor />
+                        </el-icon>访问该体验网站</span></a>
                 <span class="tag"><el-icon>
-                        <Monitor />
-                    </el-icon>Website</span>
-                <a :href="url" target="_blank">{{ url }}</a>
+                        <DocumentChecked />
+                    </el-icon>{{ score || 90 }}分</span>
             </p>
             <p class="user">
                 <router-link :to="`/user/${uid}`">@{{ username }}</router-link>
@@ -17,7 +22,14 @@
                 {{ formatTime(time) }}
             </p>
             <p class="tools">
-                <ElButton @click="download" type="primary" plain size="large">下载</ElButton>
+                <ElButton type="primary" class="pdf" size="large">评分体验报告<el-icon>
+                        <Document />
+                    </el-icon></ElButton>
+                <ElButton @click="download" type="primary" plain size="large" class="json">
+                    <el-icon :size="20">
+                        <JsonIcon></JsonIcon>
+                    </el-icon>
+                </ElButton>
             </p>
         </div>
     </section>
@@ -25,11 +37,14 @@
 
 <script setup>
 import service from '@/service';
-import { Monitor } from '@element-plus/icons-vue';
+import { Monitor, Delete, DocumentChecked, Document } from '@element-plus/icons-vue';
 import NotFound from "@/assets/image/404.png";
+import JsonIcon from '@/icons/JsonIcon.vue';
 import { formatTime } from "@/utils/time";
 import { ref } from 'vue';
 import { saveAs } from 'file-saver';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { useUserStore } from '@/store/user';
 
 const props = defineProps({
     id: Number,
@@ -38,7 +53,8 @@ const props = defineProps({
     time: String,
     uid: Number,
     username: String,
-    path: String
+    path: String,
+    score: Number
 })
 
 const cover = ref(NotFound);
@@ -50,6 +66,18 @@ function download() {
     const path = import.meta.env.VITE_BASE_URL + props.path
     saveAs(path, props.title)
 }
+
+function remove() {
+    ElMessageBox.confirm('确定要删除该项目吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        useUserStore().removeSubject(props.id).then(res => {
+            res.code === 200 && ElMessage.success(res.msg)
+        })
+    }).catch(() => { })
+}
 </script>
 
 <style scoped lang="scss">
@@ -58,10 +86,20 @@ function download() {
     height: 360px;
     background-color: #ffffff33;
     border-radius: 15px;
-    padding-bottom: 4px;
     overflow: hidden;
     display: flex;
+    position: relative;
     flex-direction: column;
+
+    .delete {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        color: white;
+        cursor: pointer;
+        mix-blend-mode: difference;
+    }
 
     .tag {
         font-size: 12px;
@@ -94,7 +132,7 @@ function download() {
 
     .info {
         flex: 1;
-        padding: 12px 18px;
+        padding: 12px 16px 16px;
         display: flex;
         flex-direction: column;
         gap: 4px;
@@ -123,7 +161,10 @@ function download() {
                 color: #202020;
 
                 &:hover {
-                    text-decoration: underline;
+                    &,
+                    &>span {
+                        text-decoration: underline;
+                    }
                 }
             }
 
@@ -134,10 +175,22 @@ function download() {
             &.tools {
                 height: 36px;
                 margin-top: auto;
+                display: flex;
 
                 .el-button {
                     height: 100%;
-                    width: 100%;
+                    flex: 1;
+
+                    &.json {
+                        flex: 0;
+                        padding: 10px;
+                        width: min-content;
+                    }
+
+                    &.is-plain:hover,
+                    &.is-plain:active {
+                        background-color: $white;
+                    }
                 }
             }
         }

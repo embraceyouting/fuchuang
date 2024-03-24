@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 import service from "@/service";
-import { removeToken } from "@/utils/token";
+import { getToken, removeToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", {
   state: () => ({

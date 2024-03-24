@@ -1,5 +1,7 @@
-#app {
-	.el-avatar {
-		background: linear-gradient(-45deg, #6d6d6d, #dedede);
-	}
+.el-avatar {
+	background: linear-gradient(-45deg, #6d6d6d, #dedede);
+}
+
+.el-message-box {
+	padding-left: calc(1.5 * var(--el-messagebox-padding-primary));
 }

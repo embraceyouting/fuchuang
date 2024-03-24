@@ -18,25 +18,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="post_part">
-        <el-upload class="upload-demo" drag :auto-upload="false"
-            accept=".json" name="files" :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData"
-            :file-list="file_list" :on-change="handleChange" multiple>
-            <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
-            <div class="el-upload__text">
-                Drop file here or <em>click to upload</em>
-            </div>
-            <template #tip>
-                <div class="el-upload__tip">
-                    <em>only json files are allowed</em>
-                </div>
-            </template>
-        </el-upload>
-    </div>
-
-    <div class="editor-container">
-        <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
-    </div> -->
 
     <div class="info">
         <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
@@ -45,17 +26,6 @@
             <div class="content">
                 <h4>{{ card.title }}</h4>
                 <p>{{ card.content }}</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="delete_part" v-if="ispreview_delete">
-        <div class="model_background"></div>
-        <div class="choose_delete">
-            <p>Cancel the transfer of <a @click.prevent>{{ delete_item }}</a> ?</p>
-            <div class="delete_btns">
-                <button @click="cancelDelete">Cancel</button>
-                <button @click="confirmDelete">OK</button>
             </div>
         </div>
     </div>
@@ -75,84 +45,39 @@ import { getCurrentInstance } from 'vue'
 import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
+import { onUnmounted } from "vue";
 
 const intro = introJs()
 const childComponent = ref(null);
 onMounted(() => {
-    intro.setOptions({
-        theme: 'modern',
-        steps: [
-            {
-                element: document.querySelector('.bar_right').children[1],
-                intro: '点击上传文件',
-                title: "第一步"
-            },
-            // {
-            //     element: childComponent.value.$el.querySelector('.editor-tree'),
-            //     intro: '选择json文件',
-            //     title: "第二步"
-            // },
-            // {
-            //     element: childComponent.value.$el.querySelector('.editor'),
-            //     intro: '查看/修改json文件',
-            //     title: "第三步"
-            // },
-            // {
-            //     element: childComponent.value.$el.querySelector('.title'),
-            //     intro: '上传json文件',
-            //     title: "第四步"
-            // }
-        ],
-        totalSteps: 2
-    });
+    setTimeout(() => {
+        intro.setOptions({
+            theme: 'modern',
+            steps: [
+                {
+                    element: document.querySelector('.bar_right').children[1],
+                    intro: '点击上传文件',
+                    title: "第一步"
+                },
+            ],
+            totalSteps: 2
+        });
+    }, 1000)
 })
 
+//有问题，无法选中
 function handleClick() {
     intro.start();
+    setTimeout(() => {
+        document.querySelector('.bar_right').children[1].click();
+    }, 1000)
 }
+
+onUnmounted(() => {
+    intro.exit();
+})
 
 const { $t } = getCurrentInstance().proxy
-let ispreview_delete = ref(false);
-let file_list = ref([]);
-let delete_item = ref(null);
-let isdelete = ref(false);
-let resolveBeforeRemove;
-
-// 获取email，可以从任何适当的地方获取
-let email = getCookie("email");
-// 上传时发送的额外数据，包括用户名
-const uploadData = ref({
-    email: useUserStore().userInfo?.email
-});
-
-function beforeRemove(file, fileList) {
-    const fileName = file.name;
-    delete_item.value = fileName;
-    ispreview_delete.value = true;
-    return new Promise(resolve => {
-        resolveBeforeRemove = resolve;
-    });
-}
-
-function confirmDelete() {
-    isdelete.value = true;
-    ispreview_delete.value = false;
-    resolveBeforeRemove(isdelete.value);
-}
-
-function cancelDelete() {
-    isdelete.value = false;
-    ispreview_delete.value = false;
-    resolveBeforeRemove(isdelete.value);
-}
-
-function handleChange(file, fileList) {
-    file_list.value = Array.from(fileList);
-}
-
-function onPreview(file, fileList) {
-    console.log('preview', file);
-}
 
 const cardList = computed(() => {
     return [
@@ -188,7 +113,7 @@ const cardList = computed(() => {
     margin: auto;
 
     .text {
-        font-size: 110px;
+        font-size: 120px;
         font-weight: 800;
         background-image: linear-gradient(to right, white, #88b5fd);
         /* Set the gradient colors */
@@ -210,7 +135,7 @@ const cardList = computed(() => {
         p {
             margin: 0;
             text-align: center;
-            font-size: 22px;
+            font-size: 23px;
             font-family: "Paytone One", "PingFangSC", sans-serif;
             color: #212121b0;
             letter-spacing: 1px;
@@ -222,7 +147,7 @@ const cardList = computed(() => {
 
         .intro_a {
             text-decoration: none;
-            font-size: 22px;
+            font-size: 23px;
             color: aliceblue;
             padding: 8px 16px;
             background-color: #ffffff33;
@@ -396,6 +321,7 @@ const cardList = computed(() => {
     margin-right: auto;
     max-width: 820px;
     width: 90%;
+
     .card {
         width: 100%;
         display: flex;

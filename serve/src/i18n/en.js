@@ -1,7 +1,7 @@
 export default {
     navbar:{
         title:'FlyView',
-        subject:'Subject',
+        visualization:'Visualization',
         mine:'Me',
         login:'Login',
         lang:'中文',

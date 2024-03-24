@@ -11,9 +11,19 @@
             <div class="bar_right">
                 <router-link v-for="(item, index) in nav" :key="index" :to="`${item.path}`" active-class="active">{{
                         $t(item.meta.title) }}</router-link>
-                <a href="::javascript" @click.prevent="chooseLang(language)">{{ $t('navbar.lang') }}</a>
-                <router-link to="/login" v-if="!userStore.userInfo">{{ $t('navbar.login') }}</router-link>
-                <ElAvatar :src="userStore.userInfo?.avatar" :size="32" v-else>{{ userStore.userInfo?.username }}</ElAvatar>
+                <a href="::javascript" @click.prevent="chooseLang(language)" class="language">
+                    <ElIcon :size="26">
+                        <LanguageIcon :language="locale"></LanguageIcon>
+                    </ElIcon>
+                </a>
+                <router-link class="login" to="/login" v-if="!userStore.userInfo">
+                    <ElIcon>
+                        <UserIcon></UserIcon>
+                    </ElIcon>
+                    {{ $t('navbar.login') }}
+                </router-link>
+                <ElAvatar :src="userStore.userInfo?.avatar" :size="32" v-else>{{ userStore.userInfo?.username }}
+                </ElAvatar>
             </div>
         </div>
     </nav>
@@ -22,6 +32,8 @@
 <script setup>
 import { ref } from "vue"
 import Logo from '@/icons/Logo.vue';
+import UserIcon from '@/icons/UserIcon.vue';
+import LanguageIcon from '@/icons/LanguageIcon.vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 const userStore = useUserStore()
@@ -50,7 +62,7 @@ const chooseLang = (languagevalue) => {
         width: 80%;
         max-width: 950px;
         padding: 0 20px;
-        min-width: fit-content;
+        min-width: 582px;
         height: 100%;
         margin: auto;
         display: flex;
@@ -58,23 +70,11 @@ const chooseLang = (languagevalue) => {
         justify-content: space-between;
     }
 
-    .language {
-        width: fit-content;
-        border: none;
-        outline: none;
-        background-color: transparent;
-        box-shadow: 0px 0px 0px 0px; //去除阴影
-        text-align: center;
-        font-family: "Paytone One", "PingFangSC", sans-serif;
-        color: rgba(28, 94, 237, 0.5);
-        transform: translateY(2px);
-    }
-
     .bar_left,
     .bar_right {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 12px;
         height: 100%;
 
         a {
@@ -100,6 +100,38 @@ const chooseLang = (languagevalue) => {
             &.active {
                 background-color: #ffffff33;
                 color: #fff;
+            }
+        }
+
+        .language {
+            padding: 8px 10px;
+            margin-right: 10px;
+
+            &,
+            &:hover,
+            &:active {
+                background-color: unset;
+            }
+        }
+
+        .login {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 92px;
+            font-family: 'PingFangSC';
+            font-size: unset;
+            color: $white;
+            background-color: $light-color;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: $color;
+            }
+
+            &:active {
+                background-color: $dark-color;
             }
         }
     }

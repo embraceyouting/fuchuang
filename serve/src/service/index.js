@@ -30,9 +30,8 @@ service.interceptors.response.use(
     (error) => {
         if (error.response.status === 401) {
             removeToken()
-        } else {
-            ElMessage.error(error.response.data.msg);
         }
+        ElMessage.error(error.response.data.msg);
         return Promise.reject(error.response);
     }
 );

@@ -1,27 +1,36 @@
 <template>
-    <div class="post_part">
-        <el-upload class="upload-demo" drag :auto-upload="false"
-            accept=".json" name="files" :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData"
-            :file-list="file_list" :on-change="handleChange" multiple>
-            <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
-            <div class="el-upload__text">
-                Drop file here or <em>click to upload</em>
+    <div class="main">
+        <div class="left_part">
+            <div class="post_part">
+                <el-upload class="upload-demo" drag :auto-upload="false" accept=".json" name="files"
+                    :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"
+                    :show-file-list="false" :on-change="handleChange" multiple>
+                    <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
+                    <div class="el-upload__text">
+                        Drop JSON files here or <em>click to upload</em>
+                    </div>
+                    <template #tip>
+                        <div class="el-upload__tip">
+                            <em>Only JSON files are allowed</em>
+                        </div>
+                    </template>
+                </el-upload>
             </div>
-            <template #tip>
-                <div class="el-upload__tip">
-                    <em>only json files are allowed</em>
-                </div>
-            </template>
-        </el-upload>
-    </div>
 
-    <div class="editor-container">
-        <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
+            <div class="intro">
+                <h2>Welcome to the Fly View Code-Editor!</h2>
+                <p>Upload your JSON files here to analyze and modify the data.</p>
+                <p>Follow the steps on the right side to get started.</p>
+            </div>
+        </div>
+        <div class="editor-container">
+            <CodeEditor :files="file_list" ref="childComponent"></CodeEditor>
+        </div>
     </div>
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted, nextTick, watch, toRef, watchEffect } from "vue";
+import { reactive, ref, computed, onMounted, nextTick, watch, toRef, watchEffect, onUnmounted } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -32,236 +41,159 @@ import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 
+const isfirst = ref(true);
 const intro = introJs()
 const childComponent = ref(null);
 onMounted(() => {
-    intro.setOptions({
-        theme: 'modern',
-        steps: [
-            {
-                element: document.querySelector('.el-upload-dragger'),
-                intro: '点击上传文件',
-                title: "第一步"
-            },
-            {
-                element: childComponent.value.$el.querySelector('.editor-tree'),
-                intro: '选择json文件',
-                title: "第二步"
-            },
-            {
-                element: childComponent.value.$el.querySelector('.editor'),
-                intro: '查看/修改json文件',
-                title: "第三步"
-            },
-            {
-                element: childComponent.value.$el.querySelector('.title'),
-                intro: '上传json文件',
-                title: "第四步"
-            }
-        ],
-        totalSteps: 2
-    });
+    setTimeout(() => {
+        intro.setOptions({
+            theme: 'modern',
+            steps: [
+                {
+                    element: document.querySelector('.el-upload-dragger'),
+                    intro: '点击上传文件',
+                    title: "第二步"
+                },
+                {
+                    element: childComponent.value.$el.querySelector('.editor-tree'),
+                    intro: '选择json文件',
+                    title: "第三步"
+                },
+                {
+                    element: childComponent.value.$el.querySelector('.editor'),
+                    intro: '查看/修改json文件',
+                    title: "第四步"
+                },
+                {
+                    element: childComponent.value.$el.querySelector('.title'),
+                    intro: '上传json文件',
+                    title: "第五步"
+                }
+            ],
+        }).start();
+    }, 500);
 })
+
 const { $t } = getCurrentInstance().proxy
 let file_list = ref([]);
-// 获取email，可以从任何适当的地方获取
-let email = getCookie("email");
-// 上传时发送的额外数据，包括用户名
-const uploadData = ref({
-    email: useUserStore().userInfo?.email
-});
 
 function handleChange(file, fileList) {
     file_list.value = Array.from(fileList);
+    if (isfirst.value) {
+        setTimeout(() => {
+            intro.nextStep();
+        }, 300)
+
+    }
+    isfirst.value = false
 }
+
+onUnmounted(() => {
+    intro.exit();
+})
 
 </script>
 
 <style scoped lang="scss">
 @import 'intro.js/introjs.css';
 
-.post_part {
-    min-width: 300px;
-    width: 80%;
-    max-width: 720px;
-    margin: 20px auto;
-    margin-top: 40px;
-
-    .upload-demo {
-
-        :deep(.el-upload) {
-
-            .el-upload-dragger {
-                transition: .3s;
-                background-color: transparent;
-                height: 280px;
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: center;
-                border-width: 0px;
-                position: relative;
-
-                &:hover {
-                    border-width: 4px;
-                }
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    inset: 0px;
-                    border-radius: inherit;
-                    background-color: #fff9;
-                }
-            }
-
-            .el-upload__text {
-                color: white;
-                margin-top: 4px;
-
-                em {
-                    color: #0048ff;
-                }
-            }
-        }
-
-        :deep(.el-upload__tip) {
-            text-align: center;
-            color: white;
-            font-size: 14px;
-        }
-    }
-
-
-}
-
-.delete_part {
-    position: fixed;
-    top: 0;
-    left: 0;
+.main {
+    display: flex;
+    justify-content: space-between;
+    height: calc(100vh - 60px);
     width: 100%;
-    height: 100%;
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    .model_background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        background-color: rgba(185, 185, 185, 0.5);
-    }
-
-    .choose_delete {
-        z-index: 10;
-        padding: 20px;
-        background-color: rgb(255, 255, 255);
-        border-radius: 5px;
-        text-align: center;
-
-
-        p {
-            color: rgb(95, 95, 95);
-            font-family: "Paytone One", "PingFangSC", sans-serif;
-            font-weight: 200;
-            font-style: normal;
-
-            a {
-                color: rgb(98, 208, 255);
-                text-decoration-color: rgb(98, 208, 255);
-            }
-        }
-
-        .delete_btns {
-            display: float;
-            float: right;
-
-            button {
-                padding: 8px 15px;
-                color: white;
-                border-radius: 5px;
-                border: 0.5px solid #a5a6a7;
-                background-color: #409eff;
-                font-family: "Paytone One", "PingFangSC", sans-serif;
-                font-weight: 200;
-                font-style: normal;
-                cursor: pointer;
-
-                &:first-child {
-                    margin-right: 20px;
-                    color: #7c7c7c;
-                    background-color: #ffff;
-                    border: 0.5px solid #cccecf;
-                }
-            }
-        }
-    }
-}
-
-.editor-container {
-    height: 400px;
-    width: 80%;
-    max-width: 720px;
-    margin: 100px auto;
-}
-
-.info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 80px;
-    margin-bottom: 80px;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 820px;
-    width: 90%;
-
-    .card {
-        width: 100%;
+    .left_part {
         display: flex;
+        flex-direction: column;
+        justify-content: space-around;
         align-items: center;
-        gap: 30px;
+        width: 40%;
+        padding: 20px;
 
-        svg {
-            width: 400px;
-            height: 400px;
-        }
+        .intro {
+            transform: rotate(-15deg);
+            /* 初始旋转角度，可根据需要调整 */
+            transition: transform 0.3s;
+            /* 添加过渡效果 */
 
-        .content {
-            flex: 1;
+            & h2 {
+                color: aliceblue;
+                opacity: 0.8;
+                font-size: 25px;
+                letter-spacing: 2px;
+                font-family: "Paytone One", "PingFangSC", sans-serif;
+            }
 
-            h4 {
-                margin-top: 0;
-                margin-bottom: 20px;
-                font-size: 20px;
+            & p {
+                /* 设置文字颜色为透明，以便显示渐变背景 */
+                color: transparent;
+                /* 设置渐变背景，可以根据需要自定义渐变颜色和方向 */
+                background-image: linear-gradient(to right, rgb(218, 86, 137), rgb(226, 212, 250));
+                /* 设置背景剪裁方式为文字，使渐变背景应用到文字上 */
+                -webkit-background-clip: text;
+                font-size: 17px;
+                font-family: "Paytone One", "PingFangSC", sans-serif;
             }
         }
 
-        &:nth-child(even) {
-            flex-direction: row-reverse;
-        }
+        .post_part {
+            width: 100%;
 
-        @media screen and (max-width: 768px) {
-            flex-direction: column;
-            gap: 0;
+            .upload-demo {
+                :deep(.el-upload) {
 
-            .content {
-                width: 80%;
+                    .el-upload-dragger {
+                        transition: .3s;
+                        background-color: transparent;
+                        height: 280px;
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                        justify-content: center;
+                        border-width: 0px;
+                        position: relative;
 
-                h4 {
+                        &:hover {
+                            border-width: 4px;
+                        }
+
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            inset: 0px;
+                            border-radius: inherit;
+                            background-color: #fff9;
+                        }
+                    }
+
+                    .el-upload__text {
+                        color: white;
+                        margin-top: 4px;
+
+                        em {
+                            color: #0048ff;
+                        }
+                    }
+                }
+
+                :deep(.el-upload__tip) {
                     text-align: center;
+                    color: white;
+                    font-size: 14px;
                 }
             }
-
-            &:nth-child(even) {
-                flex-direction: column;
-            }
         }
+    }
+
+    &:hover .intro {
+        transform: rotate(0deg);
+        /* 鼠标悬停时取消旋转 */
+    }
+
+    .editor-container {
+        width: 60%;
+        margin: 30px 20px;
     }
 }
 </style>

@@ -1,3 +1,10 @@
+import { debounce } from "@/utils/debounce";
+
+let innerWidth = window.innerWidth;
+window.addEventListener("resize", debounce(() => {
+	innerWidth = window.innerWidth;
+}))
+
 export default {
 	mounted(el, binding) {
 		let options = {
@@ -33,7 +40,7 @@ export default {
 					: "+"
 			}${
 				binding.value?.offset ||
-				(window.innerWidth - el.getBoundingClientRect().width) / 2 - 20
+				(innerWidth - el.getBoundingClientRect().width) / 2 - 20
 			}px)`;
 			el.style.opacity = 0;
 			observer.observe(el);

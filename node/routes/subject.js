@@ -53,29 +53,23 @@ router.get("/", (req, res) => {
 	});
 });
 
-router.delete("/", (req, res) => {
-	// 从请求的查询参数中获取文件名
-	const { filename } = req.query;
-	console.log(filename);
-	// 检查filename是否提供
-	if (!filename) {
+router.delete("/:id", (req, res) => {
+	const { id } = req.params;
+	if (!id) {
 		return res.status(400).send(createMessage(400, "未提供文件名。"));
 	}
-	// 构建用于删除记录的SQL查询
-	const sql = "DELETE FROM files WHERE filename = ?";
-	// 执行查询，使用文件名作为参数
-	db.query(sql, [filename], (err, result) => {
+	const sql = "DELETE FROM files WHERE id = ?";
+	db.query(sql, [id], (err, result) => {
 		if (err) {
 			console.error("删除数据库记录时出错:", err);
 			return res
 				.status(500)
 				.send(createMessage(500, "删除数据库记录时出错。"));
 		}
-		// 判断是否成功删除数据
 		if (result.affectedRows === 0) {
 			return res.status(404).send(createMessage(404, "文件不存在。"));
 		} else {
-			res.send(createMessage(200, "文件删除成功。"));
+			res.send(createMessage(200, "项目删除成功"));
 		}
 	});
 });
