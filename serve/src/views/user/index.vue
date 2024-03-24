@@ -58,7 +58,7 @@
             <div class="container">
                 <TransitionGroup name="list">
                     <ProjectCard v-for="sub in subjectList" :key="sub.id" :time="sub.time" :url="sub.url"
-                        :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path" :id="sub.id">
+                        :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path" :score="sub.score" :id="sub.id">
                     </ProjectCard>
                 </TransitionGroup>
             </div>

@@ -53,7 +53,8 @@ const props = defineProps({
     time: String,
     uid: Number,
     username: String,
-    path: String
+    path: String,
+    score: Number
 })
 
 const cover = ref(NotFound);

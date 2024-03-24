@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import service from "@/service";
-import { removeToken } from "@/utils/token";
+import { getToken, removeToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", {
 	state: () => ({
@@ -9,11 +9,10 @@ export const useUserStore = defineStore("user", {
 	}),
 	actions: {
 		login(email, password) {
-			const store = this; // 保存 this 到一个变量中
 			return service
 				.post("/user/login", { email, password })
 				.then((response) => {
-					store.userInfo = response.data;
+					this.userInfo = response.data;
 					return response;
 				});
 		},
@@ -23,18 +22,17 @@ export const useUserStore = defineStore("user", {
 			this.subjectList = []
 		},
 		register(email, username, password) {
-			const store = this;
 			return service.post("/user", {
 				email,
 				username,
 				password,
 			}).then((response) => {
-				store.userInfo = response.data;
+				this.userInfo = response.data;
 				return response;
 			});
 		},
 		getUserInfo() {
-			service.get("/user").then((res) => {
+			getToken() && service.get("/user").then((res) => {
 				this.userInfo = res.data;
 			});
 		},
