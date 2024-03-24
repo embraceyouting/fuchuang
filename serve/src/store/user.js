@@ -43,6 +43,12 @@ export const useUserStore = defineStore("user", {
 				this.subjectList = res.data;
 			});
 		},
+		removeSubject(id) {
+			return service.delete(`/subject/${id}`).then(res=>{
+				this.subjectList = this.subjectList.filter(item => item.id !== id)
+				return res
+			})
+		}
 	},
 	getters: {},
 });

@@ -24,7 +24,7 @@
                         {{ userInfo?.location || '电子科技大学' }}</span>
                 </p>
                 <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature ||
-                '这个人很懒，什么也没留下...' }}</p>
+            '这个人很懒，什么也没留下...' }}</p>
                 <p class="info" v-else>
                     用户尚未登录，无法使用全部功能，如需使用，请注册/登录
                 </p>
@@ -56,7 +56,11 @@
             </el-tabs>
 
             <div class="container">
-                <ProjectCard v-for="sub in subjectList" :key="sub.id" :time="sub.time" :url="sub.url" :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path"></ProjectCard>
+                <TransitionGroup name="list">
+                    <ProjectCard v-for="sub in subjectList" :key="sub.id" :time="sub.time" :url="sub.url"
+                        :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path" :id="sub.id">
+                    </ProjectCard>
+                </TransitionGroup>
             </div>
 
             <!-- 用户没有登陆 -->
@@ -298,6 +302,22 @@ userStore.getSubjectList()
                 grid-template-columns: repeat(1, 1fr);
             }
 
+            .list-move,
+            .list-enter-active,
+            .list-leave-active {
+                transition: transform 0.5s, opacity 0.3s;
+            }
+
+            .list-enter-from,
+            .list-leave-to {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            .list-leave-active {
+                position: absolute;
+                width: min-content;
+            }
         }
 
         .el-empty {
