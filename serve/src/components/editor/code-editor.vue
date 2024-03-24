@@ -1,6 +1,7 @@
 <template>
     <div class="editor-with-list">
         <div class="editor-tree" :class="{ center: !files.length }">
+            <slot></slot>
             <ul v-if="files.length" class="file-list">
                 <li class="file" ref="fileItem" v-for="file in files" :key="file.uid"
                     :class="{ active: current === file }" @click="preview(file)">
@@ -240,20 +241,32 @@ onBeforeUnmount(() => {
         background-color: #f5f5f5;
         padding: 10px;
         overflow: auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
         border-radius: 4px 0 0 4px;
 
         &.center {
             display: flex;
             align-items: center;
             justify-content: center;
+
+            .el-empty {
+                flex: 1;
+            }
         }
 
-
         .file-list {
-
+            flex: 1;
             margin: 0;
             padding: 0;
             list-style: none;
+            min-height: 0;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
 
             .file {
                 padding: 5px 12px;
