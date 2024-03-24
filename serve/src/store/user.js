@@ -35,7 +35,7 @@ export const useUserStore = defineStore("user", {
         });
     },
     getUserInfo() {
-      service.get("/user").then((res) => {
+      getToken() && service.get("/user").then((res) => {
         this.userInfo = res.data;
       });
     },
@@ -44,6 +44,12 @@ export const useUserStore = defineStore("user", {
         this.subjectList = res.data;
       });
     },
+    removeSubject(id) {
+      service.delete(`/subject/${id}`).then((res) => {
+        this.getSubjectList();
+        return res
+      });
+    }
   },
   plugins: [createPersistedState()],
 });
