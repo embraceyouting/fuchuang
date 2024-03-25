@@ -31,7 +31,7 @@
                     <el-icon v-if="files.length" @click="saveAll(files)" title="save all files.">
                         <FolderOpened />
                     </el-icon>
-                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall')
+                    <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall')
                         }}</el-button>
                 </h4>
             </header>
@@ -270,7 +270,6 @@ onBeforeUnmount(() => {
 
             .file {
                 padding: 5px 12px;
-                line-height: 1;
                 cursor: pointer;
                 display: flex;
                 width: 100%;

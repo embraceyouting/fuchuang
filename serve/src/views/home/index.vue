@@ -46,6 +46,7 @@ import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import { onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 
 const intro = introJs()
 const childComponent = ref(null);
@@ -60,17 +61,18 @@ onMounted(() => {
                     title: "第一步"
                 },
             ],
-            totalSteps: 2
+            totalSteps: 2,
+            doneLabel: 'Next'
         });
     }, 1000)
 })
+const router = useRouter()
 
-//有问题，无法选中
 function handleClick() {
     intro.start();
-    setTimeout(() => {
-        document.querySelector('.bar_right').children[1].click();
-    }, 1000)
+    intro.oncomplete(() => {
+        router.push('/submit?intro=1')
+    })
 }
 
 onUnmounted(() => {

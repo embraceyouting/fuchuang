@@ -5,3 +5,9 @@
 .el-message-box {
 	padding-left: calc(1.5 * var(--el-messagebox-padding-primary));
 }
+
+.el-message {
+	&.error-message {
+		z-index: 9999999 !important;
+	}
+}
