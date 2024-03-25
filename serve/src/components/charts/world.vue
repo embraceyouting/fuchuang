@@ -111,9 +111,6 @@ onMounted(() => {
 .world {
     width: 100%;
     height: 100%;
-    margin-top: 10vh;
-    min-height: 80vh;
-    max-width: 90vw;
     position: relative;
 
     .chart {

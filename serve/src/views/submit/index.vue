@@ -71,7 +71,6 @@ function handleChange(file, fileList) {
         setTimeout(() => {
             intro.nextStep();
         }, 300)
-
     }
     isfirst.value = false
 }
