@@ -1,5 +1,5 @@
 <template>
-    <div class="world">
+    <div class="world" ref="world">
         <div ref="chart" class="chart"></div>
         <div class="title">
             <span>网站服务器来源</span>
@@ -10,6 +10,17 @@
         </div>
         <div class="icon">
             WebSite & BigData
+            <div class="fullscreen">
+                <el-icon :size="32" @click="fullscreen">
+                    <FullScreen v-if="!isFullScreen" />
+                    <Close v-else />
+                </el-icon>
+                <div class="text">
+                    <span>
+                        {{ isFullScreen ? 'Exit' : 'Enter' }} </span>
+                    <span>Full Screen</span>
+                </div>
+            </div>
         </div>
         <div class="desc bottom">
             数据展示了全球网站请求的来源和目标，每条线代表一个网站请求，线条越多，意味着更多的请求。数据基于大数据、数据集推理得出，反映了最新的网站流量预测情况。过量的并发请求会对网站体验带来网络影响。
@@ -26,8 +37,12 @@ import RoutesJson from './data/routes.json';
 import Bar from './bar.vue';
 import 'echarts-gl';
 import { debounce } from '@/utils/debounce';
+import { ElIcon } from 'element-plus';
+import { FullScreen, Close } from '@element-plus/icons-vue';
 
 const chart = ref(null);
+const world = ref(null);
+const isFullScreen = ref(!!document.fullscreenElement);
 let myChart = null;
 
 function getAirportCoord(idx) {
@@ -105,6 +120,14 @@ onMounted(() => {
     })
 })
 
+function fullscreen() {
+    if (!isFullScreen.value) {
+        world.value?.requestFullscreen();
+    } else {
+        document.exitFullscreen();
+    }
+    isFullScreen.value = !isFullScreen.value
+}
 </script>
 
 <style scoped lang="scss">
@@ -189,6 +212,25 @@ onMounted(() => {
         color: white;
         font-family: "Paytone One", "PingFangSC", sans-serif;
         font-weight: 200;
+
+        .fullscreen {
+            margin-top: 12px;
+            display: flex;
+
+            .text {
+                display: flex;
+                flex-direction: column;
+                margin-left: 8px;
+                font-size: 14px;
+                line-height: 1.2;
+                width: fit-content;
+
+                span {
+                    white-space: nowrap;
+                    font-family: "Paytone One", "PingFangSC", sans-serif;
+                }
+            }
+        }
     }
 }
 </style>
