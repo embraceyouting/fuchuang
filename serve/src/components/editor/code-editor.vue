@@ -127,15 +127,15 @@ function uploadCurrent() {
                 'Content-Type': 'multipart/form-data' // 设置请求头
             }
         })
-            .then((res) => {
-                // 处理上传成功的响应
-                ElMessage.success('上传成功')
-                console.log(res.data);
-            })
-            .catch((err) => {
-                // 处理上传失败的错误
-                console.log(err);
-            });
+        .then((res) => {
+            // 处理上传成功的响应
+            ElMessage.success('上传成功')
+            console.log(res.data);
+        })
+        .catch((err) => {
+            // 处理上传失败的错误
+            console.log(err);
+        });
     }
 }
 

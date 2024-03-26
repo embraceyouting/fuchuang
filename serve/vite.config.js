@@ -25,4 +25,8 @@ export default defineConfig({
 	optimizeDeps: {
 		include: [`monaco-editor/esm/vs/language/json/json.worker`],
 	},
+	esbuild: {
+		// 启用对顶级的 await 的支持
+		target: 'es2020'
+	}
 });

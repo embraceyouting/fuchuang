@@ -70,7 +70,7 @@ function handleChange(file, fileList) {
     if (isfirst.value) {
         setTimeout(() => {
             intro.nextStep();
-        }, 300)
+        }, 0)
     }
     isfirst.value = false
 }

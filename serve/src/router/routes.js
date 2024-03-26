@@ -72,6 +72,11 @@ export default [
 		component: () => import("../views/test/index.vue"),
 	},
 	{
+		path: '/project/:id',
+		name: 'project',
+		component: () => import("../views/project/index.vue"),
+	},
+	{
 		path: "/",
 		redirect: "/home",
 	},
