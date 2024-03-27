@@ -42,6 +42,12 @@ const debouncedResize = debounce(handleResize, 100);
 </script>
 
 <style scoped lang="scss">
+
+*,html,body {
+  margin: 0;
+  padding: 0;
+}
+
 #bg {
     position: fixed;
     inset: 0;

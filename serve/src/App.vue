@@ -21,7 +21,7 @@ useUserStore().getUserInfo();   // 每次刷新就会重置token，不方便调�
 
 <style scoped lang="scss">
 
-* {
+*,html,body {
   margin: 0;
   padding: 0;
 }
