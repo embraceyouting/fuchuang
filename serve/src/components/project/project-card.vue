@@ -22,7 +22,7 @@
                 {{ formatTime(time) }}
             </p>
             <p class="tools">
-                <ElButton type="primary" class="pdf" size="large">评分体验报告<el-icon>
+                <ElButton type="primary" class="pdf" size="large" @click="router.push(`/project/${id}`)">评分体验报告<el-icon>
                         <Document />
                     </el-icon></ElButton>
                 <ElButton @click="download" type="primary" plain size="large" class="json">
@@ -45,6 +45,9 @@ import { ref } from 'vue';
 import { saveAs } from 'file-saver';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useUserStore } from '@/store/user';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
     id: Number,
