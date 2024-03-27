@@ -2,28 +2,36 @@
     <div class="chat">
         <div v-if="!messageList.length" class="content center">
             <LogoIcon></LogoIcon>
-            <h2><em>Fly View</em> 小助手</h2>
+            <h2><em>Fly View</em> {{ $t('gpt.assistant') }}</h2>
             <ul class="list">
                 <li v-for="info in infos" class="card">
                     <div>
                         <img :src="info.img" alt="">
                     </div>
-                    <span>{{ info.text }}</span>
+                    <span>{{ $t(info.text) }}</span>
                 </li>
             </ul>
         </div>
         <div class="content" v-else>
-            <h4>GPT 4.0</h4>
+            <h4>
+                <el-icon @click="goBack">
+                    <ArrowLeftBold />
+                </el-icon>
+                <span>GPT 4.0</span>
+            </h4>
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
                 :isDie="index !== messageList.length - 1"></ChatCard>
         </div>
-        <ElForm class="input" @submit.prevent="search">
-            <ElInput type="textarea" :autosize="{ minRows: 1, maxRows: 6 }" v-model="key" placeholder="请输入内容"
-                resize="none" @keydown.enter="search">
+        <ElForm class="input" @submit.prevent="search"
+            :class="{ cancle: isEnter }">
+            <ElButton v-if="isEnter"
+                class="cancle" native-type="button" @click="cancle">取消对话</ElButton>
+            <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }"
+                v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
-            <ElButton native-type="submit">
-                <ElIcon @click="search"
-                    :disabled="(messageList[messageList.length - 1] && !messageList[messageList.length - 1].isEnd) || !key">
+            <ElButton native-type="submit" @click="search"
+                :disabled="!useUserStore().userInfo || isEnter || !key">
+                <ElIcon>
                     <SubmitIcon />
                 </ElIcon>
             </ElButton>
@@ -35,34 +43,42 @@
 import { ref, reactive } from 'vue';
 import ChatCard from './chat-card.vue';
 import { ElIcon } from 'element-plus';
+import { ArrowLeftBold } from '@element-plus/icons-vue';
 import SubmitIcon from '@/icons/SubmitIcon.vue';
 import LogoIcon from '@/icons/Logo.vue';
 import Assistant from './image/assistant_normal.png';
 import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
+import { getToken } from '@/utils/token';
+import { useUserStore } from '@/store/user';
+import { computed } from 'vue';
+
 const messageList = ref([]);
+const isEnter = computed(() => messageList.value[messageList.value.length - 1] && !messageList.value[messageList.value.length - 1].isEnd)
 const key = ref('');
 const infos = ref([
     {
-        text: "欢迎使用 FlyView，输入框内输入你想要的内容，点击发送即可。",
+        text: "gpt.text1",
         img: AssistantDie
     },
     {
-        text: "看不懂的 JSON 文件格式，让小助手帮你解析内容。",
+        text: "gpt.text2",
         img: AssistantLoading
     },
     {
-        text: "想知道 FlyView 的功能，输入 [help] 即可查看。",
+        text: "gpt.text3",
         img: Assistant
     }
 ])
 
+let source = null;
+
 function search(e) {
-    if(e.ctrlKey || e.shiftKey) return
+    if (e.ctrlKey || e.shiftKey) return
     e.preventDefault()
     if (!key.value.trim()) return
     messageList.value.push({ text: key.value, type: "user", isEnd: true })
-    const source = new EventSource("http://127.0.0.1:8000/gpt?key=" + key.value);
+    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value}&token=${getToken()}`);
     key.value = '';
     const obj = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(obj);
@@ -79,8 +95,22 @@ function search(e) {
     source.onerror = (event) => {
         source.close();
         obj.isEnd = true;
-        obj.text = "出错了，请重试..."
+        obj.text = "出错了，请检查登录状态后重试..."
+        source.onmessage = null
+        source.onerror = null
+        source = null
     };
+}
+
+function cancle() {
+    if (!source) return
+    source.close();
+    messageList.value[messageList.value.length - 1].isEnd = true
+}
+
+function goBack() {
+    cancle()
+    messageList.value = []
 }
 </script>
 
@@ -91,13 +121,14 @@ function search(e) {
     flex-direction: column;
     margin: 0 auto;
     width: 90%;
-    max-width: 720px;
+    max-width: 740px;
 
     .content {
         flex: 1;
         padding-bottom: 20px;
         overflow-y: auto;
         mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        scroll-behavior: smooth;
 
         &.center {
             display: flex;
@@ -127,7 +158,7 @@ function search(e) {
                 display: flex;
                 margin-top: 30px;
                 align-items: flex-start;
-                padding: 0 60px;
+                padding: 0 50px;
                 width: 100%;
                 list-style: none;
                 cursor: pointer;
@@ -172,6 +203,18 @@ function search(e) {
             margin: 40px auto;
             text-align: center;
             font-size: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .el-icon {
+                position: absolute;
+                cursor: pointer;
+            }
+
+            span {
+                margin: auto;
+            }
         }
 
         &::-webkit-scrollbar {
@@ -182,12 +225,23 @@ function search(e) {
     .input {
         position: relative;
         margin-bottom: 24px;
+        display: flex;
+        align-items: flex-end;
+        background-color: #fffa;
+        border-radius: 12px;
+
+        &.cancle {
+            margin-top: 60px;
+        }
 
         .el-textarea {
             :deep(.el-textarea__inner) {
-                background-color: #fffa;
-                border-radius: 12px;
-                padding: 12px 48px 12px 14px;
+                background-color: unset;
+                border-radius: unset;
+                border: unset;
+                outline: unset;
+                box-shadow: unset;
+                padding: 12px 14px 12px 14px;
                 line-height: 1.5;
             }
         }
@@ -195,10 +249,35 @@ function search(e) {
         .el-button {
             all: unset;
             height: 36px;
-            position: absolute;
-            right: 4px;
-            bottom: 6px;
             width: 36px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+
+            &.cancle {
+                position: absolute;
+                top: -125%;
+                left: 50%;
+                width: fit-content;
+                box-sizing: content-box;
+                background-color: $white;
+                padding: 4px 12px;
+                margin: unset;
+                border-radius: 4px;
+                transform: translateX(-50%);
+                transition: box-shadow 0.3s;
+
+                &:hover {
+                    box-shadow: 0 0 0 2px $color;
+                }
+
+                &:active {
+                    filter: brightness(0.9);
+                }
+            }
+
+            &:disabled {
+                filter: brightness(1.4);
+            }
 
             .el-icon {
                 height: 100%;

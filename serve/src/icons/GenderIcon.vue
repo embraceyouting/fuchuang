@@ -3,20 +3,13 @@
     <FemaleIcon v-else></FemaleIcon>
 </template>
 
-<script>
+<script lang="js" setup>
 import MaleIcon from '@/icons/MaleIcon';
 import FemaleIcon from '@/icons/FemaleIcon';
-export default {
-    name: "GenderIcon",
-    components: {
-        MaleIcon,
-        FemaleIcon,
-    },
-    props: {
-        gender: {
-            type: Number,
-            default: 0
-        }
+defineProps({
+    gender: {
+        type: Number,
+        default: 1
     }
-}
+})
 </script>

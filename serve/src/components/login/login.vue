@@ -65,6 +65,7 @@ import RegisterIcon from '@/icons/RegisterIcon.vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/store/user';
+import axios from 'axios';
 
 const router = useRouter()
 
@@ -82,11 +83,12 @@ const register = reactive({
 
 const check = () => {
     const obj = isLogin.value ? login : register
-    const emailRegex = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-    if (!emailRegex.test(obj.email)) {
-        ElMessage.error('邮箱格式不正确')
-        return false
+    const mailReg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+    if (!mailReg.test(obj.email)) {
+        ElMessage.error('邮箱格式不正确');
+        return false;
     }
+
     if (obj.confirmPassword && obj.password !== obj.confirmPassword) {
         ElMessage.error('两次密码不一致')
         return false
@@ -98,8 +100,10 @@ const registerFn = () => {
     if (!check()) {
         return
     }
-    ElMessage.success('注册成功')
-    router.push('/home')
+    useUserStore().register(register.email, register.username, register.password).then((res) => {
+        ElMessage.success(res.msg)
+        router.push('/home')
+    })
 }
 
 const loginFn = () => {
@@ -107,7 +111,7 @@ const loginFn = () => {
         return
     }
     useUserStore().login(login.email, login.password).then(res => {
-        ElMessage.success('登录成功')
+        ElMessage.success(res.msg)
         router.push('/home')
     })
 }

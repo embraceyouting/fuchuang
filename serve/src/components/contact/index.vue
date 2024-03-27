@@ -30,7 +30,7 @@ import Contact from '@/icons/Contact.vue';
     position: relative;
     height: 360px;
     padding: 10px 40px;
-    max-width: 640px;
+    max-width: 800px;
     width: 80%;
     margin: auto;
     background-color: #fff6;

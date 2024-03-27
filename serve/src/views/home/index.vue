@@ -1,29 +1,22 @@
 <template>
-    <div class="text_title">
-        <div class="text">Fly View</div>
-        <div class="sub_text">
-            <p>{{ $t('text.one') }}</p>
-            <p>{{ $t('text.two') }}</p>
-        </div>
-    </div>
-
-    <div class="post_part">
-        <el-upload class="upload-demo" drag :auto-upload="false" action="http://127.0.0.1:8000/submit_jsonpost" accept=".json" name="files"
-            :before-remove="beforeRemove" :on-preview="onPreview" :data="uploadData" :file-list="file_list"  :on-change="handleChange" multiple>
-            <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
-            <div class="el-upload__text">
-                Drop file here or <em>click to upload</em>
+    <div style="height: calc(100vh - 55px);display: flex;align-items: center;justify-content: center;">
+        <div class="text_title">
+            <div class="text">Fly View</div>
+            <div class="sub_text">
+                <p>{{ $t('text.one') }}</p>
+                <p>{{ $t('text.two') }}</p>
             </div>
-            <template #tip>
-                <div class="el-upload__tip">
-                    <em>only json files are allowed</em>
+            <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
+                <div class="intro_div">
+                    <a href="#" class="intro_a" @click="handleClick">
+                        {{ $t('text.intro') }}
+                        <svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-dianji"></use>
+                        </svg>
+                    </a>
                 </div>
-            </template>
-        </el-upload>
-    </div>
-
-    <div class="editor-container">
-        <CodeEditor :files="file_list"></CodeEditor>
+            </div>
+        </div>
     </div>
 
     <div class="info">
@@ -37,22 +30,11 @@
         </div>
     </div>
 
-    <div class="delete_part" v-if="ispreview_delete">
-        <div class="model_background"></div>
-        <div class="choose_delete">
-            <p>Cancel the transfer of <a @click.prevent>{{ delete_item }}</a> ?</p>
-            <div class="delete_btns">
-                <button @click="cancelDelete">Cancel</button>
-                <button @click="confirmDelete">OK</button>
-            </div>
-        </div>
-    </div>
-
     <Contact v-animate="{ direction: 'bottom' }"></Contact>
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref, computed, onMounted, nextTick, watch, toRef, watchEffect } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
@@ -63,70 +45,41 @@ import { getCurrentInstance } from 'vue'
 import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
-onMounted(()=>{
-    introJs().setOptions({
-        theme:'modern',
-        steps: [
-            {
-                element: document.querySelector('.el-upload-dragger'),
-                intro: '点击上传文件',
-                title:"第一步"
-            },
-            {
-                element: document.querySelector('.editor-container'),
-                intro: '修改json文件并上传',
-                title:"第二步"
-            },
+import { onUnmounted } from "vue";
+import { useRouter } from "vue-router";
 
-        ]
-    }).start();
+const intro = introJs()
+const childComponent = ref(null);
+onMounted(() => {
+    setTimeout(() => {
+        intro.setOptions({
+            theme: 'modern',
+            steps: [
+                {
+                    element: document.querySelector('.bar_right').children[1],
+                    intro: '点击上传文件',
+                    title: "第一步"
+                },
+            ],
+            totalSteps: 2,
+            doneLabel: 'Next'
+        });
+    }, 1000)
+})
+const router = useRouter()
+
+function handleClick() {
+    intro.start();
+    intro.oncomplete(() => {
+        router.push('/submit?intro=1')
+    })
+}
+
+onUnmounted(() => {
+    intro.exit();
 })
 
-
 const { $t } = getCurrentInstance().proxy
-console.log($t('card.title1'))
-
-let ispreview_delete = ref(false);
-let file_list = ref([]);
-let delete_item = ref(null);
-let isdelete = ref(false);
-let resolveBeforeRemove;
-
-// 获取email，可以从任何适当的地方获取
-let email = getCookie("email");
-// 上传时发送的额外数据，包括用户名
-const uploadData = ref({
-    email: useUserStore().userInfo?.email
-});
-
-function beforeRemove(file, fileList) {
-    const fileName = file.name;
-    delete_item.value = fileName;
-    ispreview_delete.value = true;
-    return new Promise(resolve => {
-        resolveBeforeRemove = resolve;
-    });
-}
-
-function confirmDelete() {
-    isdelete.value = true;
-    ispreview_delete.value = false;
-    resolveBeforeRemove(isdelete.value);
-}
-
-function cancelDelete() {
-    isdelete.value = false;
-    ispreview_delete.value = false;
-    resolveBeforeRemove(isdelete.value);
-}
-
-function handleChange(file, fileList) {
-    file_list.value = Array.from(fileList);
-}
-
-function onPreview(file, fileList) {
-    console.log('preview', file);
-}
 
 const cardList = computed(() => {
     return [
@@ -153,16 +106,17 @@ const cardList = computed(() => {
 
 <style scoped lang="scss">
 @import 'intro.js/introjs.css';
+
 .text_title {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    justify-content: center;
+    margin: auto;
 
     .text {
-        font-size: 100px;
+        font-size: 120px;
         font-weight: 800;
-        margin: auto;
         background-image: linear-gradient(to right, white, #88b5fd);
         /* Set the gradient colors */
         background-clip: text;
@@ -174,6 +128,7 @@ const cardList = computed(() => {
         /* Apply the animation */
         font-family: "Paytone One", "PingFangSC", sans-serif;
         user-select: none;
+        letter-spacing: 6px;
     }
 
     .sub_text {
@@ -182,10 +137,38 @@ const cardList = computed(() => {
         p {
             margin: 0;
             text-align: center;
-            font-size: 20px;
+            font-size: 23px;
             font-family: "Paytone One", "PingFangSC", sans-serif;
-            color: #323232b0;
+            color: #212121b0;
+            letter-spacing: 1px;
         }
+    }
+
+    .intro_div {
+        transition: all 0.5s ease;
+
+        .intro_a {
+            text-decoration: none;
+            font-size: 23px;
+            color: aliceblue;
+            padding: 8px 16px;
+            background-color: #ffffff33;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                box-shadow: 5px 5px 10px -2px rgb(255, 255, 255);
+            }
+
+            .icon {
+                width: 0.9em;
+                height: 0.9em;
+                vertical-align: -0.12em;
+                fill: currentColor;
+                overflow: hidden;
+            }
+        }
+
     }
 
     @keyframes gradientAnimation {
@@ -206,6 +189,7 @@ const cardList = computed(() => {
     width: 80%;
     max-width: 720px;
     margin: 20px auto;
+    margin-top: 40px;
 
     .upload-demo {
 
@@ -334,18 +318,17 @@ const cardList = computed(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 80px;
     margin-bottom: 80px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 720px;
+    max-width: 820px;
     width: 90%;
 
     .card {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 40px;
+        gap: 30px;
 
         svg {
             width: 400px;

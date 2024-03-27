@@ -1,13 +1,19 @@
 <template>
     <div class="editor-with-list">
         <div class="editor-tree" :class="{ center: !files.length }">
+            <slot></slot>
             <ul v-if="files.length" class="file-list">
-                <li class="file" v-for="file in files" :key="file.uid" :class="{ active: current === file }"
-                    @click="preview(file)">
+                <li class="file" ref="fileItem" v-for="file in files" :key="file.uid"
+                    :class="{ active: current === file }" @click="preview(file)">
                     <i class="icon">
                         <JsonIcon></JsonIcon>
                     </i>
                     <span class="title">{{ file.name }}</span>
+                    <i class="remove">
+                        <el-icon @click.stop="remove(file)">
+                            <delete />
+                        </el-icon>
+                    </i>
                 </li>
             </ul>
             <ElEmpty v-else :image-size="100"></ElEmpty>
@@ -16,9 +22,17 @@
         <section class="editor-section">
             <header>
                 <h4 class="title">
-                    <span>{{ current ? '正在编辑：' + current?.name : '尚未打开任何文件' }}</span>
-                    <el-button plain text bg v-if="current" @click="uploadCurrent">上传当前</el-button>
-                    <el-button type="primary" v-if="files.length" @click="uploadAll(files)">上传全部</el-button>
+                    <span>{{ current ? $t('post.isedit') + current?.name : $t('post.iffiles') }}</span>
+                    <el-icon v-if="current" @click="save(current)" title="save current file.">
+                        <DocumentCopy />
+                    </el-icon>
+                    <el-button plain text bg v-if="current" @click="uploadCurrent">{{ $t('post.uploadnow')
+                        }}</el-button>
+                    <el-icon v-if="files.length" @click="saveAll(files)" title="save all files.">
+                        <FolderOpened />
+                    </el-icon>
+                    <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall')
+                        }}</el-button>
                 </h4>
             </header>
             <div ref="editorRef" class="editor"></div>
@@ -27,14 +41,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
+import { Delete, DocumentCopy, FolderOpened } from '@element-plus/icons-vue';
 import axios from 'axios';
+import { ElMessage } from 'element-plus';
+import service from '@/service';
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+
 
 const props = defineProps({
     files: Array,
+})
+const fileItems = ref([]);
+watch(() => props.files, () => {
+    nextTick(() => {
+        fileItems.value = Array.from(document.querySelectorAll('.file'));
+    })
+
+}, { deep: true });
+
+defineExpose({
+    fileItems
 })
 
 watch(() => props.files, () => {
@@ -66,27 +97,45 @@ function preview(file) {
     }
 }
 
+function remove(file) {
+    props.files.splice(props.files.indexOf(file), 1)
+}
+
+function save(file) {
+    saveAs(file.raw, file.name)
+}
+
+function saveAll(files) {
+    const zip = new JSZip();
+    files.forEach((file, index) => {
+        const item = files.find(item => item.name === file.name)
+        zip.file(item ? `${file.name.replace(/\.\w+$/, '')}_${index}.json` : file.name, file.raw)
+    })
+    zip.generateAsync({ type: 'blob' }).then((content) => saveAs(content, 'files.zip'))
+}
+
 function uploadCurrent() {
     // 获取当前文件对象
     if (current.value) {
-        const files = current.value.raw; 
+        const files = current.value.raw;
         const formData = new FormData();
         formData.append('files', files); // 将文件添加到 FormData 中
 
         // 发送 POST 请求
-        axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+        service.post("/subject", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data' // 设置请求头
             }
         })
-        .then((res)=>{
-            // 处理上传成功的响应
-            console.log(res.data);
-        })
-        .catch((err)=>{
-            // 处理上传失败的错误
-            console.log(err);
-        });
+            .then((res) => {
+                // 处理上传成功的响应
+                ElMessage.success('上传成功')
+                console.log(res.data);
+            })
+            .catch((err) => {
+                // 处理上传失败的错误
+                console.log(err);
+            });
     }
 }
 
@@ -98,7 +147,7 @@ function uploadAll(files) {
 
     // 创建 FormData 对象
     const formData = new FormData();
-    
+
     // 将所有文件添加到 FormData 对象中
     allFiles.forEach(file => {
         if (file.raw) {
@@ -106,29 +155,30 @@ function uploadAll(files) {
         } else {
             // 如果文件未编辑过，则从文件系统中读取文件并添加到 FormData 对象中
             fetch(file.url)
-            .then(response => response.blob())
-            .then(blob => {
-                const newFile = new File([blob], file.name, { type: 'application/json' });
-                formData.append('files', newFile);
-            })
-            .catch(error => console.error('Error fetching file:', error));
+                .then(response => response.blob())
+                .then(blob => {
+                    const newFile = new File([blob], file.name, { type: 'application/json' });
+                    formData.append('files', newFile);
+                })
+                .catch(error => console.error('Error fetching file:', error));
         }
     });
 
     // 发送 POST 请求
-    axios.post("http://127.0.0.1:8000/submit_jsonpost", formData, {
+    service.post("/subject", formData, {
         headers: {
             'Content-Type': 'multipart/form-data' // 设置请求头
         }
     })
-    .then((res)=>{
-        // 处理上传成功的响应
-        console.log(res.data);
-    })
-    .catch((err)=>{
-        // 处理上传失败的错误
-        console.log(err);
-    });
+        .then((res) => {
+            // 处理上传成功的响应
+            ElMessage.success('上传成功')
+            console.log(res.data);
+        })
+        .catch((err) => {
+            // 处理上传失败的错误
+            console.log(err);
+        });
 }
 
 
@@ -148,6 +198,7 @@ onMounted(() => {
         language: 'json',
         readOnly: false,
         theme: 'vs',
+        wordWrap: 'on',
         selectOnLineNumbers: true, // select the line number's of the code
         roundedSelection: true, // rounded selection
         cursorStyle: 'line', // line, block, 'line-thin', 'block-outline', 'underline', 'underline-thin'
@@ -190,24 +241,35 @@ onBeforeUnmount(() => {
         background-color: #f5f5f5;
         padding: 10px;
         overflow: auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
         border-radius: 4px 0 0 4px;
 
         &.center {
             display: flex;
             align-items: center;
             justify-content: center;
+
+            .el-empty {
+                flex: 1;
+            }
         }
 
-
         .file-list {
-
+            flex: 1;
             margin: 0;
             padding: 0;
             list-style: none;
+            min-height: 0;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
 
             .file {
                 padding: 5px 12px;
-                line-height: 1;
                 cursor: pointer;
                 display: flex;
                 width: 100%;
@@ -221,6 +283,10 @@ onBeforeUnmount(() => {
 
                 &:hover {
                     background-color: #f0f0f0;
+
+                    .remove {
+                        display: block;
+                    }
                 }
 
                 &.active {
@@ -236,6 +302,10 @@ onBeforeUnmount(() => {
                     flex: 1;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                }
+
+                .remove {
+                    display: none;
                 }
             }
         }
@@ -259,6 +329,22 @@ onBeforeUnmount(() => {
                 display: flex;
                 align-items: center;
                 margin: 0 12px 0 18px;
+
+                .el-icon {
+                    margin: 0 4px;
+                    font-size: 18px;
+                    color: $color;
+                    cursor: pointer;
+                    transition: .1s;
+
+                    &:hover {
+                        color: $dark-color;
+                    }
+
+                    &:active {
+                        filter: brightness(0.8);
+                    }
+                }
 
                 span {
                     flex: 1;

@@ -1,23 +1,55 @@
 import { defineStore } from "pinia";
-import { nanoid } from "nanoid";
-import { encrypt, setToken } from "@/utils/token";
+import { createPersistedState } from "pinia-plugin-persistedstate";
+import service from "@/service";
+import { getToken, removeToken } from "@/utils/token";
 
 export const useUserStore = defineStore("user", {
-	state: () => ({
-		userInfo: null,
-        token: null
-	}),
-	actions: {
-        async login(email, password){
-            const res = await Promise.resolve({
-                id: nanoid(),
-                email,
-                password
-            })
-            this.userInfo = res
-            this.token = encrypt(res)
-            setToken(this.token)
-        }
+  state: () => ({
+    userInfo: null,
+    subjectList: [],
+  }),
+  actions: {
+    login(email, password) {
+      return service
+        .post("/user/login", { email, password })
+        .then((response) => {
+          this.userInfo = response.data;
+          return response;
+        });
     },
-	getters: {},
+    logout() {
+      removeToken();
+      this.userInfo = null;
+      this.subjectList = [];
+    },
+    register(email, username, password) {
+      return service
+        .post("/user", {
+          email,
+          username,
+          password,
+        })
+        .then((response) => {
+          this.userInfo = response.data;
+          return response;
+        });
+    },
+    getUserInfo() {
+      getToken() && service.get("/user").then((res) => {
+        this.userInfo = res.data;
+      });
+    },
+    getSubjectList() {
+      service.get("/subject").then((res) => {
+        this.subjectList = res.data;
+      });
+    },
+    removeSubject(id) {
+      service.delete(`/subject/${id}`).then((res) => {
+        this.getSubjectList();
+        return res
+      });
+    }
+  },
+  plugins: [createPersistedState()],
 });

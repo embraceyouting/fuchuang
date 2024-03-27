@@ -1,10 +1,10 @@
 <template>
     <section class="chat-card" :class="{ 'user': isUser }">
         <div class="avatar">
-            <img :src="imgSrc" />
+            <el-avatar :src="imgSrc" :class="{nobg: !isUser}">{{ username }}</el-avatar>
         </div>
         <div class="content" :class="{ 'user': isUser }">
-            <span class="name">{{ item.type }}</span>
+            <span class="name">{{ username }}</span>
             <span class="text" ref="textRef" :class="{ 'enter': !item.isEnd }" v-html="html"></span>
         </div>
     </section>
@@ -16,6 +16,9 @@ import Assistant from './image/assistant_normal.png';
 import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
 import { marked } from 'marked'
+import { useUserStore } from '@/store/user';
+
+const userStore = useUserStore()
 
 const textRef = ref(null)
 
@@ -27,15 +30,16 @@ const isUser = computed(() => props.item.type === 'user')
 const html = computed(() => isUser.value ? props.item.text : marked(props.item.text))
 const imgSrc = computed(() => {
     if (isUser.value)
-        return 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png'
+        return userStore.userInfo?.avatar
 
     return !props.item.isEnd ? AssistantLoading : props.isDie ? AssistantDie : Assistant
 })
+const username = computed(() => props.item.type === 'user' ? userStore.userInfo?.username || '访客' : '小助手')
 
 onMounted(() => {
     watch(() => props.item.text, () => {
-        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'end' })
-    })
+        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+    }, { immediate: true })
 })
 </script>
 
@@ -56,6 +60,10 @@ onMounted(() => {
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
+
+        .nobg {
+            background: unset !important;
+        }
 
         img {
             width: 100%;
@@ -87,7 +95,7 @@ onMounted(() => {
         .text {
             font-size: 14px;
             line-height: 1.4;
-            width: fit-content;
+            max-width: 100%;
             color: #111111;
 
             &.enter {
