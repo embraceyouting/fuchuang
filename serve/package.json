@@ -17,6 +17,7 @@
     "file-saver": "^2.0.5",
     "intro.js": "^7.2.0",
     "json-editor-vue3": "^1.0.9",
+    "jspdf": "^2.5.1",
     "jszip": "^3.10.1",
     "marked": "^12.0.1",
     "monaco-editor": "^0.47.0",

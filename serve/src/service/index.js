@@ -20,7 +20,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response) => {
         if (response.data.code && response.data.code !== 200) {
-            ElMessage.error(response.data.msg);
+            ElMessage.error({
+                message: response.data.msg,
+                grouping: true,
+            });
             removeToken()
             return Promise.reject(response.data);
         }

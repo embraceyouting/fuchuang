@@ -1,109 +1,178 @@
 <template>
-  <div id="pdfContent" v-if="finish">
-    <div class="page1-box pdfRef">
-      <div class="content">
-        <div class="project_name">Log4.json</div>
-        <div v-for="report in reports" class="one_problem">
-          <div class="problem">{{ report.problem }}</div>
-          <div class="description">{{ report.description }}</div>
-          <div class="solution">{{ report.solution }}</div>
-          <div class="score">得分: {{ report.score }}</div>
-          <div class="reason">{{ report.reason }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="width: 100%;height:100vh;overflow: hidden" v-else>
-    <iframe :src="src" style="width:100%; height:100%;border:none;"></iframe>
+  <div>
+    <header>
+      <button class="span prev" :disabled="current <= 0" @click="current--">
+        <el-icon>
+          <ArrowLeftBold />
+        </el-icon>
+        <em>上一篇</em>
+      </button>
+      <p>
+        <span class="pagation">{{ current + 1 }}/{{ projectIdList.length }}</span>
+        <b>{{ currentProject?.title }}</b>
+        <button @click="goBack">返回</button>
+      </p>
+      <button class="span next" :disabled="current >= projectList.length - 1" @click="current++">
+        <em>下一篇</em>
+        <el-icon>
+          <ArrowRightBold />
+        </el-icon>
+      </button>
+    </header>
+    <ElEmpty v-if="!finish" description="生成评分报告中..."></ElEmpty>
+    <iframe v-else :src="currentProject?.src" frameborder="0"></iframe>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { htmlPdf } from "@/utils/htmlToPDF.js";
-import { UploadPdf } from "@/utils/UploadPdf.js";
+import { useRoute, useRouter } from 'vue-router';
 import service from '@/service';
+import { ElEmpty } from 'element-plus';
+import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import { computed, watch } from 'vue';
 
 const route = useRoute();
-const reports = ref([]);
-const finish = ref(true)
-const src = ref (null)
+const router = useRouter();
+const projectIdList = route.params.id;
+const finish = ref(false)
+const projectList = ref([])
+const current = ref(0)
+const currentProject = computed(() => projectList.value[current.value])
 
-onMounted(() => {
-  const projectId = route.params.id;
-  console.log(projectId);
-  service.get(`/project/${projectId}`)
-    .then(res => {
-      reports.value = res.data;
-      if(reports.value.length > 1){
-        //如果返回的json数据的数组，表示第一次进入
-        setTimeout(()=>{
-          const fileName = '网站体验得分报告';
-          const fileList = document.getElementsByClassName('pdfRef');
-          htmlPdf(fileName, document.querySelector('#pdfContent'), fileList).then(res => {
-            UploadPdf(res,projectId).then(res => {
-              finish.value = false;
-              src.value=`http://localhost:8000/pdf/${res.data}`
-            });
-          })
-        },0)
+// iframe 跳转会导致路由也改变 用这个方法来跳转
+let goCount = 0
+watch(() => current.value, () => {
+  goCount--
+}, { immediate: true })
+function goBack() {
+  router.go(goCount)
+}
+
+const getPdf = (id) => {
+  return service.get(`/subject/${id}`)
+    .then(async res => {
+      if (!res.data.path_pdf) {
+        return await new Promise(resolve => setTimeout(() => {
+          const info = getPdf(id)
+          info && resolve(info)
+        }, 1000))
       }
-      else{
-        //返回的是已经保存好了的pdf文件路径
-        finish.value = false;
-        src.value=`http://localhost:8000/pdf/${reports.value.path_pdf}`
+      return {
+        src: import.meta.env.VITE_BASE_URL + res.data.path_pdf,
+        title: res.data.title,
+        url: res.data.url
       }
     })
+}
+
+onMounted(() => {
+  Promise.all(projectIdList.map(id => getPdf(id))).then(res => {
+    projectList.value = res
+    finish.value = true
+  })
 });
 </script>
 
 <style scoped lang="scss">
-*,html,body {
-  margin: 0;
-  padding: 0;
-}
+html,
+body {
+  overflow: hidden;
 
-#pdfContent {
-  margin: auto;
-  width: 210mm;
-  height: 279mm;
-  padding: 17mm;
-  background-color: #ffffff;
+  div {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 
-  .pdfRef {
-    margin: auto;
+    header {
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      background-color: #ffffffcc;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
 
-    .one_problem {
-      margin-top: 20px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 20px;
-
-      .problem {
-        font-weight: bold;
-        margin-bottom: 5px;
+      @media (prefers-color-scheme: dark) {
+        background-color: #3b3b3baa;
+        color: $white;
       }
 
-      .description,
-      .solution,
-      .score,
-      .reason {
-        margin-bottom: 10px;
+      .span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        line-height: 1;
+        font-size: 14px;
+        cursor: pointer;
+        background-color: unset;
+        border: unset;
+        padding: 0;
+        color: inherit;
+
+        &:disabled {
+          cursor: not-allowed;
+          filter: brightness(0.5);
+        }
+
+        em {
+          font-style: normal;
+        }
       }
 
-      .score {
-        font-weight: bold;
+      p {
+        margin: auto;
+        color: inherit;
+
+        .pagation {
+          margin-right: 8px;
+        }
+
+        b {
+          margin: 0 12px;
+          color: inherit;
+          background-color: #1113;
+          padding: 6px 16px;
+          line-height: 1;
+          border-radius: 4px;
+          font-weight: 400;
+        }
+
+        button {
+          border: none;
+          background-color: unset;
+          color: inherit;
+
+          &:hover {
+            color: $color;
+          }
+        }
       }
     }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+    }
+
+    .el-empty {
+
+      :deep(.el-empty__description) {
+        p {
+          margin-top: 20px;
+          color: white;
+        }
+      }
+
+    }
   }
-}
 
-h1 {
-  text-align: center;
-}
 
-.primary-btn {
-  margin: 20px auto;
-  display: block;
 }
 </style>

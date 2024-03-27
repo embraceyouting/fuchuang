@@ -68,6 +68,8 @@ defineExpose({
     fileItems
 })
 
+const emit = defineEmits(['uploaded'])
+
 watch(() => props.files, () => {
     if (props.files.includes(current.value)) return
     current.value = null
@@ -130,7 +132,7 @@ function uploadCurrent() {
         .then((res) => {
             // 处理上传成功的响应
             ElMessage.success('上传成功')
-            console.log(res.data);
+            emit('uploaded', res.data)
         })
         .catch((err) => {
             // 处理上传失败的错误
@@ -173,7 +175,7 @@ function uploadAll(files) {
         .then((res) => {
             // 处理上传成功的响应
             ElMessage.success('上传成功')
-            console.log(res.data);
+            emit('uploaded', res.data)
         })
         .catch((err) => {
             // 处理上传失败的错误

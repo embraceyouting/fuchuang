@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <div class="editor-container">
-            <CodeEditor :files="file_list" ref="childComponent">
+            <CodeEditor :files="file_list" ref="childComponent" @uploaded="goToView">
                 <ElButton @click="start" type="primary" plain class="start"><el-icon>
                         <Pointer />
                     </el-icon> 新手引导</ElButton>
@@ -26,7 +26,7 @@ import CodeEditor from "@/components/editor/code-editor.vue";
 import { getCurrentInstance } from 'vue'
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { nextTick } from "vue";
 import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
@@ -34,6 +34,7 @@ import { ElMessage } from "element-plus";
 const intro = introJs()
 const childComponent = ref(null);
 const route = useRoute();
+const router = useRouter();
 onMounted(() => {
     intro.setOptions({
         theme: 'modern',
@@ -102,6 +103,10 @@ function handleChange(file, fileList) {
             intro.goToStep(2);
         })
     }
+}
+
+function goToView(list) {
+    router.push(`/project/${list.map(item=>item.id).join("/")}`);
 }
 
 onUnmounted(() => {
