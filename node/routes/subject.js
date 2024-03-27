@@ -3,7 +3,12 @@ const router = express.Router();
 const upload = require("../utils/upload.js");
 const db = require("../utils/db");
 const { createMessage } = require("../utils/message");
-const { readFileSync } = require("fs");
+const { readFileSync, readFile } = require("fs");
+const { generatePDF } = require("../utils/pdf.js");
+
+async function getReport(json) {
+	return `# hello\n aa\n - 1 \n -2 \n - 3`;
+}
 
 router.post("/", function (req, res) {
 	upload(req, res, function (err) {
@@ -16,15 +21,8 @@ router.post("/", function (req, res) {
 			const filename = Buffer.from(file.originalname, "latin1").toString(
 				"utf-8"
 			);
-			const website = Object.entries(
-				JSON.parse(readFileSync(file.path, "utf-8"))
-					.data.map((item) => item.pageAttr.url.value)
-					.reduce((p, c) => ((p[c] = p[c] ? p[c] + 1 : 1), p), {})
-			)
-				.sort(([k1, v1], [k2, v2]) => v1 - v2)
-				.pop()[0];
 			const sql =
-				"INSERT INTO files (uid, path, filename, website) VALUES (?, ?, ?, ?)";
+				"INSERT INTO files (uid, path, filename) VALUES (?, ?, ?)";
 			db.query(
 				sql,
 				[uid, jsonPath, filename, website],
@@ -37,6 +35,34 @@ router.post("/", function (req, res) {
 					file.id = result.insertId;
 				}
 			);
+
+			readFile(file.path, "utf-8", (err, data) => {
+				if (err) {
+					return res
+						.status(500)
+						.send(createMessage(500, "读取文件时出错。"));
+				}
+				const json = JSON.parse(data);
+				const website = Object.entries(
+					json.data.map((item) => item.pageAttr.url.value).reduce((p, c) => ((p[c] = p[c] ? p[c] + 1 : 1), p), {})
+				)
+					.sort(([k1, v1], [k2, v2]) => v1 - v2)
+					.pop()[0];
+				getReport(json)
+					.then((res) => generatePDF(res.data))
+					.then((path) => {
+						const sql = "UPDATE files SET url = ?, website = ? WHERE id = ?";
+						db.query(sql, [path, website, file.id], (err, result) => {
+							if (err) {
+								return res
+									.status(500)
+									.send(
+										createMessage(500, "更新文件时出错。")
+									);
+							}
+						});
+					});
+			});
 		});
 		res.status(200).send(createMessage(200, "文件上传成功。", req.files));
 	});
