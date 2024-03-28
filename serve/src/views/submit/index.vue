@@ -85,8 +85,8 @@ onMounted(() => {
 
     setTimeout(() => {
         const step = parseInt(route.query['intro'] || 0)
-        step > 0 && intro.start().then(()=>intro.goToStep(step))
-    },300)
+        step > 0 && intro.start().then(() => intro.goToStep(step))
+    }, 300)
 })
 
 const { $t } = getCurrentInstance().proxy
@@ -106,7 +106,9 @@ function handleChange(file, fileList) {
 }
 
 function goToView(list) {
-    router.push(`/project/${list.map(item=>item.id).join("/")}`);
+    setTimeout(() => {
+        router.push(`/project/${list.map(item => item.id).join("/")}`);
+    }, 1000)
 }
 
 onUnmounted(() => {
