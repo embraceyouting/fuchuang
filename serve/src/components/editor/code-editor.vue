@@ -2,7 +2,7 @@
     <div class="editor-with-list">
         <div class="editor-tree" :class="{ center: !files.length }">
             <slot></slot>
-            <ul v-if="files.length" class="file-list">
+            <TransitionGroup name="list" v-if="files.length" class="file-list" tag="ul">
                 <li class="file" ref="fileItem" v-for="file in files" :key="file.uid"
                     :class="{ active: current === file }" @click="preview(file)">
                     <i class="icon">
@@ -15,7 +15,7 @@
                         </el-icon>
                     </i>
                 </li>
-            </ul>
+            </TransitionGroup>
             <ElEmpty v-else :image-size="100"></ElEmpty>
         </div>
 
@@ -31,7 +31,8 @@
                     <el-icon v-if="files.length" @click="saveAll(files)" title="save all files.">
                         <FolderOpened />
                     </el-icon>
-                    <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{ $t('post.uploadall')
+                    <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{
+            $t('post.uploadall')
                         }}</el-button>
                 </h4>
             </header>
@@ -129,15 +130,16 @@ function uploadCurrent() {
                 'Content-Type': 'multipart/form-data' // 设置请求头
             }
         })
-        .then((res) => {
-            // 处理上传成功的响应
-            ElMessage.success('上传成功')
-            emit('uploaded', res.data)
-        })
-        .catch((err) => {
-            // 处理上传失败的错误
-            console.log(err);
-        });
+            .then((res) => {
+                // 处理上传成功的响应
+                ElMessage.success('上传成功')
+                remove(current.value)
+                emit('uploaded', res.data)
+            })
+            .catch((err) => {
+                // 处理上传失败的错误
+                console.log(err);
+            });
     }
 }
 
@@ -175,6 +177,7 @@ function uploadAll(files) {
         .then((res) => {
             // 处理上传成功的响应
             ElMessage.success('上传成功')
+            props.files.splice(0, props.files.length)
             emit('uploaded', res.data)
         })
         .catch((err) => {
@@ -309,8 +312,27 @@ onBeforeUnmount(() => {
                 .remove {
                     display: none;
                 }
+
+
+                &.list-move,
+                &.list-enter-active,
+                &.list-leave-active {
+                    transition: 0.5s;
+                }
+
+                &.list-enter-from,
+                &.list-leave-to {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+
+                &.list-leave-active {
+                    position: absolute;
+                    width: calc(100% - 24px);
+                }
             }
         }
+
     }
 
 

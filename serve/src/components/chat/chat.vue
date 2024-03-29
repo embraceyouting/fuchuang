@@ -20,17 +20,17 @@
                 <span>GPT 4.0</span>
             </h4>
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
-                :isDie="index !== messageList.length - 1"></ChatCard>
+                :isDie="index !== messageList.length - 1">
+                <template #footer>
+                    <ElButton v-if="isEnter && index === messageList.length - 1" class="cancle" native-type="button" @click="cancle">取消对话</ElButton>
+                </template>
+            </ChatCard>
         </div>
-        <ElForm class="input" @submit.prevent="search"
-            :class="{ cancle: isEnter }">
-            <ElButton v-if="isEnter"
-                class="cancle" native-type="button" @click="cancle">取消对话</ElButton>
+        <ElForm class="input" @submit.prevent="search" :class="{ cancle: isEnter }">
             <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }"
                 v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
-            <ElButton native-type="submit" @click="search"
-                :disabled="!useUserStore().userInfo || isEnter || !key">
+            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || isEnter || !key">
                 <ElIcon>
                     <SubmitIcon />
                 </ElIcon>
@@ -129,6 +129,10 @@ function goBack() {
         overflow-y: auto;
         mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
         scroll-behavior: smooth;
+
+        .cancle {
+            margin-top: 12px;
+        }
 
         &.center {
             display: flex;
@@ -230,10 +234,6 @@ function goBack() {
         background-color: #fffa;
         border-radius: 12px;
 
-        &.cancle {
-            margin-top: 60px;
-        }
-
         .el-textarea {
             :deep(.el-textarea__inner) {
                 background-color: unset;
@@ -252,28 +252,6 @@ function goBack() {
             width: 36px;
             margin-right: 6px;
             margin-bottom: 4px;
-
-            &.cancle {
-                position: absolute;
-                top: -125%;
-                left: 50%;
-                width: fit-content;
-                box-sizing: content-box;
-                background-color: $white;
-                padding: 4px 12px;
-                margin: unset;
-                border-radius: 4px;
-                transform: translateX(-50%);
-                transition: box-shadow 0.3s;
-
-                &:hover {
-                    box-shadow: 0 0 0 2px $color;
-                }
-
-                &:active {
-                    filter: brightness(0.9);
-                }
-            }
 
             &:disabled {
                 filter: brightness(1.4);

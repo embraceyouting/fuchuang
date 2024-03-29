@@ -88,7 +88,7 @@ onMounted(() => {
         if (entries[0].isIntersecting) {
             service.get(`/cover?url=${props.url}`).then(res => {
                 cover.value = res.data;
-                ob.unobserve(card.value)
+                card.value && ob.unobserve(card.value)
             })
         }
     })

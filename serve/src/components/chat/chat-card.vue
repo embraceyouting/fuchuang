@@ -1,11 +1,12 @@
 <template>
-    <section class="chat-card" :class="{ 'user': isUser }">
+    <section class="chat-card" :class="{ 'user': isUser }"  ref="textRef">
         <div class="avatar">
-            <el-avatar :src="imgSrc" :class="{nobg: !isUser}">{{ username }}</el-avatar>
+            <el-avatar :src="imgSrc" :class="{ nobg: !isUser }">{{ username }}</el-avatar>
         </div>
         <div class="content" :class="{ 'user': isUser }">
             <span class="name">{{ username }}</span>
-            <span class="text" ref="textRef" :class="{ 'enter': !item.isEnd }" v-html="html"></span>
+            <span class="text" :class="{ 'enter': !item.isEnd }" v-html="html"></span>
+            <slot name="footer"></slot>
         </div>
     </section>
 </template>
@@ -38,7 +39,7 @@ const username = computed(() => props.item.type === 'user' ? userStore.userInfo?
 
 onMounted(() => {
     watch(() => props.item.text, () => {
-        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+        textRef.value.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' })
     }, { immediate: true })
 })
 </script>
@@ -47,7 +48,7 @@ onMounted(() => {
 .chat-card {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 20px;
+    padding-bottom: 20px;
 
     &.user {
         flex-direction: row-reverse;

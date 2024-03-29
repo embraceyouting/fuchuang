@@ -31,6 +31,10 @@ import { nextTick } from "vue";
 import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
 
+defineOptions({
+    name: 'Submit'
+})
+
 const intro = introJs()
 const childComponent = ref(null);
 const route = useRoute();
