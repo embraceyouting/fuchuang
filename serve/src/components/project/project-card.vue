@@ -1,5 +1,5 @@
 <template>
-    <section class="card">
+    <section class="card" ref="card">
         <ElIcon class="delete" @click="remove">
             <Delete />
         </ElIcon>
@@ -46,6 +46,7 @@ import { saveAs } from 'file-saver';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
+import { onMounted, onBeforeUnmount } from 'vue';
 
 const router = useRouter();
 
@@ -61,9 +62,7 @@ const props = defineProps({
 })
 
 const cover = ref(NotFound);
-service.get(`/cover?url=${props.url}`).then(res => {
-    cover.value = res.data;
-})
+const card = ref(null);
 
 function download() {
     const path = import.meta.env.VITE_BASE_URL + props.path
@@ -81,6 +80,24 @@ function remove() {
         })
     }).catch(() => { })
 }
+
+let ob;
+
+onMounted(() => {
+    ob = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            service.get(`/cover?url=${props.url}`).then(res => {
+                cover.value = res.data;
+                ob.unobserve(card.value)
+            })
+        }
+    })
+    ob.observe(card.value)
+})
+
+onBeforeUnmount(() => {
+    ob && ob.unobserve(card.value)
+})
 </script>
 
 <style scoped lang="scss">
@@ -164,6 +181,7 @@ function remove() {
                 color: #202020;
 
                 &:hover {
+
                     &,
                     &>span {
                         text-decoration: underline;

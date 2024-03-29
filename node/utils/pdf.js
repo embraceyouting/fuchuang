@@ -3,14 +3,15 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 const fs = require("fs");
 
-async function generatePDF(html) {
-	fs.existsSync(path.resolve(__dirname, "../public/pdf")) || fs.mkdirSync(path.resolve(__dirname, "../public/pdf"), { recursive: true });
+fs.existsSync(path.resolve(__dirname, "../public/pdf")) || fs.mkdirSync(path.resolve(__dirname, "../public/pdf"), { recursive: true });
 
+const style = `<style>${fs.readFileSync(path.resolve(__dirname, "../assets/css/base.css"), "utf-8")}</style>`
+
+async function generatePDF(html) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 
-	html += `<style>${fs.readFileSync(path.resolve(__dirname, "../assets/css/base.css"), "utf-8")}</style>`;
-
+	html += style;
 	await page.setContent(html);
 
 	const pdfPath = `pdf/${uuid()}.pdf`;
