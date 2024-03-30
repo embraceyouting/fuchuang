@@ -32,7 +32,7 @@ import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
 
 defineOptions({
-    name: 'Submit'
+    name: 'submit'
 })
 
 const intro = introJs()

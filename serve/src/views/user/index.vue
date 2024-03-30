@@ -6,13 +6,6 @@
             <el-avatar :size="120" :src="userInfo?.avatar">{{ userInfo?.username || '未登录' }}</el-avatar>
             <div class="userInfo">
                 <h1 class="username">{{ userInfo?.username || '访客' }}</h1>
-                <p class="list" @click="isShowFollowList = true">
-                    <!-- <span>关注</span><i>{{ userInfo?.id ? userInfo?.followCount || '0' : '-' }}</i>
-                    <el-divider direction="vertical"></el-divider>
-                    <span>粉丝</span><i>{{ userInfo?.id ? userInfo?.fanCount || '0' : '-' }}</i>
-                    <el-divider direction="vertical"></el-divider>
-                    <span>获赞</span><i>{{ userInfo?.id ? userInfo?.likedCount || '0' : '-' }}</i> -->
-                </p>
                 <p class="other" v-if="userInfo?.id">
                     <span class="account tag">账号ID: {{ userInfo?.id }}</span>
                     <span class="gender tag">
@@ -35,38 +28,30 @@
         </header>
 
         <main>
-            <!-- 导航栏 -->
             <el-tabs v-model="activeChoice">
-                <!-- 作品: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo?.id" class="container"
-                    :label="`项目 ${userInfo?.id ? subjectList.length : ''}`" name="work">
-                </el-tab-pane>
-                <!-- 喜欢: 用户未登录时不可选中
-                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`喜欢 ${userInfo?.likeCount || ''}`"
-                    name="like">
-                </el-tab-pane> -->
-                <!-- 收藏: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`收藏 ${userInfo?.collectCount || ''}`"
-                    name="collect">
-                </el-tab-pane>
-                <!-- 观看历史: 用户未登录时不可选中 -->
-                <el-tab-pane :disabled="!userInfo?.id" class="container" :label="`浏览历史 ${userInfo?.historyCount || ''}`"
-                    name="history">
+                <el-tab-pane :disabled="!userInfo?.id" :label="`项目 ${userInfo?.id ? filteredList.length : ''}`"
+                    name="work">
+                    <div class="tool">
+                        <ElButton :icon="Filter" @click="toggleAll">{{ activeList.length ? '取消选中' : '全选' }}</ElButton>
+                        <ElButton v-for="url in subjectUrlList" @click="toggleSelect(url)"
+                            :class="{ active: activeList.includes(url) }">{{ url }}</ElButton>
+                    </div>
+                    <div class="container">
+                        <TransitionGroup name="list">
+                            <div class="item" v-for="sub in filteredList" :key="sub.id">
+                                <ProjectCard :time="sub.time" :url="sub.url" :title="sub.title" :uid="sub.uid"
+                                    :username="sub.username" :path="sub.path" :score="sub.score" :id="sub.id">
+                                </ProjectCard>
+                            </div>
+                        </TransitionGroup>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
-
-            <div class="container">
-                <TransitionGroup name="list">
-                    <ProjectCard v-for="sub in subjectList" :key="sub.id" :time="sub.time" :url="sub.url"
-                        :title="sub.title" :uid="sub.uid" :username="sub.username" :path="sub.path" :score="sub.score" :id="sub.id">
-                    </ProjectCard>
-                </TransitionGroup>
-            </div>
 
             <!-- 用户没有登陆 -->
             <el-empty v-if="!userInfo?.id" description="点击右上角按钮进行登录" :image-size="180">
             </el-empty>
-            <el-empty v-else-if="!subjectList.length" :image-size="180" description="暂无内容"></el-empty>
+            <el-empty v-else-if="!filteredList.length" :image-size="180" description="暂无内容"></el-empty>
         </main>
     </el-container>
 </template>
@@ -77,17 +62,38 @@ import ProjectCard from '@/components/project/project-card.vue'
 import { useUserStore } from '@/store/user'
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import service from '@/service';
+import { Filter } from '@element-plus/icons-vue';
+import { computed } from 'vue';
 
 const userStore = useUserStore()
-const { userInfo, subjectList } = storeToRefs(userStore)
+const { userInfo, subjectList, subjectUrlList } = storeToRefs(userStore)
 const activeChoice = ref('work')
+const activeList = ref([])
+const filteredList = computed(() => subjectList.value.filter(item => activeList.value.includes(item.url)))
 
 function logout() {
     userStore.logout()
 }
 
-userStore.getSubjectList()
+function toggleSelect(url) {
+    if (activeList.value.includes(url)) {
+        activeList.value = activeList.value.filter(item => item !== url)
+    } else {
+        activeList.value.push(url)
+    }
+}
+
+function toggleAll() {
+    if (activeList.value.length) {
+        activeList.value = []
+    } else {
+        activeList.value = subjectUrlList.value
+    }
+}
+
+userStore.getSubjectList().then(() => {
+    activeList.value = subjectUrlList.value
+})
 </script>
 
 <style lang="scss" scoped>
@@ -287,36 +293,63 @@ userStore.getSubjectList()
                 display: none;
                 background-color: $white;
             }
-        }
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 16px;
+            .tool {
 
-            @media screen and (max-width: 760px) {
-                grid-template-columns: repeat(2, 1fr);
+                .el-button {
+                    background: $color;
+                    margin-bottom: 10px;
+                    margin-left: unset;
+                    margin-right: 10px;
+                    color: $white;
+                    font-size: 13px;
+                    border: 2px solid transparent;
+                    outline: unset;
+                    font-weight: 400;
+                    padding: 0 12px;
+
+                    &.active {
+                        border-color: $black;
+                    }
+
+                    &:hover {
+                        background: $color;
+                    }
+                }
             }
 
-            @media screen and (max-width: 360px) {
-                grid-template-columns: repeat(1, 1fr);
-            }
+            .container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-gap: 16px;
 
-            .list-move,
-            .list-enter-active,
-            .list-leave-active {
-                transition: transform 0.5s, opacity 0.3s;
-            }
+                .item {
+                    position: relative;
+                }
 
-            .list-enter-from,
-            .list-leave-to {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
+                @media screen and (max-width: 760px) {
+                    grid-template-columns: repeat(2, 1fr);
+                }
 
-            .list-leave-active {
-                position: absolute;
-                width: min-content;
+                @media screen and (max-width: 360px) {
+                    grid-template-columns: repeat(1, 1fr);
+                }
+
+                .list-move,
+                .list-enter-active,
+                .list-leave-active {
+                    transition: transform 0.5s, opacity 0.1s;
+                }
+
+                .list-enter-from,
+                .list-leave-to {
+                    opacity: 0;
+                    transform: translateX(-30px) scale(0.9);
+                }
+
+                .list-leave-active {
+                    position: absolute;
+                }
             }
         }
 

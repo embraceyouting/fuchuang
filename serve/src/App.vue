@@ -5,7 +5,7 @@
   </Transition>
   <router-view v-slot="{ Component, route }">
     <Transition name="fade" mode="out-in">
-      <keep-alive include="Submit">
+      <keep-alive :include="keepAliveRoutes">
         <component :is="Component" :key="route.fullPath"></component>
       </keep-alive>
     </Transition>
@@ -15,10 +15,12 @@
 <script setup>
 import Navbar from "@/components/navbar/navbar.vue"
 import Backdrop from "@/components/backdrop/backdrop.vue"
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "./store/user";
 const route = useRoute();
-useUserStore().getUserInfo();   // 每次刷新就会重置token，不方便调试
+const router = useRouter();
+const keepAliveRoutes = router.getRoutes().filter(item => item.meta.isKeepAlive).map(item => item.name)
+useUserStore().getUserInfo();
 </script>
 
 <style scoped lang="scss">

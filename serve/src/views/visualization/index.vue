@@ -32,6 +32,9 @@ import 'swiper/css/pagination'
 import echarts_percent from "../../components/visualization/echarts_percent.vue";
 import echarts_score from "../../components/visualization/echarts_score.vue";
 
+defineOptions({
+  name: "visualization"
+})
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 let subjects = [];

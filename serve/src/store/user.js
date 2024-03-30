@@ -40,15 +40,20 @@ export const useUserStore = defineStore("user", {
       });
     },
     getSubjectList() {
-      service.get("/subject").then((res) => {
+      return service.get("/subject").then((res) => {
         this.subjectList = res.data;
       });
     },
     removeSubject(id) {
-      service.delete(`/subject/${id}`).then((res) => {
+      return service.delete(`/subject/${id}`).then((res) => {
         this.getSubjectList();
         return res
       });
+    }
+  },
+  getters: {
+    subjectUrlList: (state) => {
+      return Array.from(new Set(state.subjectList.map((item) => item.url)));
     }
   },
   plugins: [createPersistedState()],

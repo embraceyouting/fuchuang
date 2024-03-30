@@ -1,55 +1,53 @@
 <template>
-    <div style="height: calc(100vh - 55px);display: flex;align-items: center;justify-content: center;">
-        <div class="text_title">
-            <div class="text">Fly View</div>
-            <div class="sub_text">
-                <p>{{ $t('text.one') }}</p>
-                <p>{{ $t('text.two') }}</p>
-            </div>
-            <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
-                <div class="intro_div">
-                    <a href="#" class="intro_a" @click="handleClick">
-                        {{ $t('text.intro') }}
-                        <svg class="icon" aria-hidden="true">
-                            <use xlink:href="#icon-dianji"></use>
-                        </svg>
-                    </a>
+    <main>
+        <div class="title" v-animate="{ direction: 'top', offset: 40 }">
+            <div class="text_title">
+                <div class="text">Fly View</div>
+                <div class="sub_text">
+                    <p>{{ $t('text.one') }}</p>
+                    <p>{{ $t('text.two') }}</p>
+                </div>
+                <div >
+                    <div class="intro_div">
+                        <a href="#" class="intro_a" @click="handleClick">
+                            {{ $t('text.intro') }}
+                            <svg class="icon" aria-hidden="true">
+                                <use xlink:href="#icon-dianji"></use>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="info">
-        <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }" :key="card.icon"
-            class="card">
-            <component :is="card.icon" class="icon"></component>
-            <div class="content">
-                <h4>{{ card.title }}</h4>
-                <p>{{ card.content }}</p>
+        <div class="info">
+            <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }"
+                :key="card.icon" class="card">
+                <component :is="card.icon" class="icon"></component>
+                <div class="content">
+                    <h4>{{ card.title }}</h4>
+                    <p>{{ card.content }}</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <Contact v-animate="{ direction: 'bottom' }"></Contact>
+        <Contact v-animate="{ direction: 'bottom', offset: 40 }"></Contact>
+    </main>
 </template>
 
 <script setup lang="js">
-import { reactive, ref, computed, onMounted, nextTick, watch, toRef, watchEffect } from "vue";
-import { UploadFilled } from '@element-plus/icons-vue';
+import { ref, computed, onMounted } from "vue";
 import WebSite from "@/icons/WebSite.vue";
 import BigData from "@/icons/BigData.vue";
 import SelectApp from "@/icons/SelectApp.vue";
 import Contact from "@/components/contact/index.vue";
-import CodeEditor from "@/components/editor/code-editor.vue";
 import { getCurrentInstance } from 'vue'
-import { useUserStore } from "@/store/user";
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import { onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 
 const intro = introJs()
-const childComponent = ref(null);
 onMounted(() => {
     setTimeout(() => {
         intro.setOptions({
@@ -86,17 +84,17 @@ const cardList = computed(() => {
         {
             title: $t('card.title1'),
             icon: WebSite,
-            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+            content: $t('card.content1')
         },
         {
             title: $t('card.title2'),
             icon: BigData,
-            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+            content: $t('card.content2')
         },
         {
             title: $t('card.title3'),
             icon: SelectApp,
-            content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
+            content: $t('card.content3')
         }
     ]
 })
@@ -107,79 +105,83 @@ const cardList = computed(() => {
 <style scoped lang="scss">
 @import 'intro.js/introjs.css';
 
-.text_title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
+.title {
 
-    .text {
-        font-size: 120px;
-        font-weight: 800;
-        background-image: linear-gradient(to right, white, #88b5fd);
-        /* Set the gradient colors */
-        background-clip: text;
-        color: transparent;
-        background-size: 200% auto;
-        background-position: left;
-        /* Initial position to start from the left */
-        animation: gradientAnimation 4s linear infinite alternate;
-        /* Apply the animation */
-        font-family: "Paytone One", "PingFangSC", sans-serif;
-        user-select: none;
-        letter-spacing: 6px;
-    }
+    .text_title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 25vh auto;
 
-    .sub_text {
-        margin: 40px 100px;
-
-        p {
-            margin: 0;
-            text-align: center;
-            font-size: 23px;
-            font-family: "Paytone One", "PingFangSC", sans-serif;
-            color: #212121b0;
-            letter-spacing: 1px;
-        }
-    }
-
-    .intro_div {
-        transition: all 0.5s ease;
-
-        .intro_a {
-            text-decoration: none;
-            font-size: 23px;
-            color: aliceblue;
-            padding: 8px 16px;
-            background-color: #ffffff33;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-
-            &:hover {
-                box-shadow: 5px 5px 10px -2px rgb(255, 255, 255);
-            }
-
-            .icon {
-                width: 0.9em;
-                height: 0.9em;
-                vertical-align: -0.12em;
-                fill: currentColor;
-                overflow: hidden;
-            }
-        }
-
-    }
-
-    @keyframes gradientAnimation {
-        0% {
+        .text {
+            font-size: 120px;
+            font-weight: 800;
+            background-image: linear-gradient(to right, white, #88b5fd);
+            /* Set the gradient colors */
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
             background-position: left;
-            /* Start from the left */
+            /* Initial position to start from the left */
+            animation: gradientAnimation 4s linear infinite alternate;
+            /* Apply the animation */
+            font-family: "Paytone One", "PingFangSC", sans-serif;
+            user-select: none;
+            letter-spacing: 6px;
         }
 
-        100% {
-            background-position: right;
-            /* Move to the right */
+        .sub_text {
+            margin: 40px 100px;
+
+            p {
+                margin: 0;
+                text-align: center;
+                font-size: 23px;
+                font-family: "Paytone One", "PingFangSC", sans-serif;
+                color: #212121b0;
+                letter-spacing: 1px;
+            }
+        }
+
+        .intro_div {
+            transition: all 0.5s ease;
+            margin-top: 20px;
+
+            .intro_a {
+                text-decoration: none;
+                font-size: 23px;
+                color: aliceblue;
+                padding: 8px 16px;
+                background-color: #ffffff33;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    box-shadow: 5px 5px 10px -2px rgb(255, 255, 255);
+                }
+
+                .icon {
+                    width: 0.9em;
+                    height: 0.9em;
+                    vertical-align: -0.12em;
+                    fill: currentColor;
+                    overflow: hidden;
+                }
+            }
+
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: left;
+                /* Start from the left */
+            }
+
+            100% {
+                background-position: right;
+                /* Move to the right */
+            }
         }
     }
 }
@@ -328,7 +330,6 @@ const cardList = computed(() => {
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 30px;
 
         svg {
             width: 400px;
@@ -337,11 +338,14 @@ const cardList = computed(() => {
 
         .content {
             flex: 1;
+            line-height: 1.5;
+            margin: 0 30px;
 
             h4 {
                 margin-top: 0;
                 margin-bottom: 20px;
                 font-size: 20px;
+                text-indent: 0;
             }
         }
 
