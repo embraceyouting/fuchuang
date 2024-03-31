@@ -29,8 +29,8 @@ const bgY = ref(0);
 function handleMouseMove(event) {
     const mouseX = event.pageX;
     const mouseY = event.pageY;
-    bgX.value = mouseX / innerWidth * 5;
-    bgY.value = mouseY / innerHeight * 5;
+    bgX.value = mouseX / innerWidth * 1;
+    bgY.value = mouseY / innerHeight * 1;
 }
 
 function handleResize() {

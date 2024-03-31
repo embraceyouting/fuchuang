@@ -1,23 +1,24 @@
 <template>
   <div class="main">
     <div class="swiper-container">
-      <swiper :modules="modules" :simulateTouch="false" :navigation="true" :pagination="{ clickable: true }"
-        class="inswiper">
-        <swiper-slide v-for="(info, index) in infos" :key="index">
-          <div class="content">
-            <keep-alive>
-              <component :is="info.echart" class="echart"></component>
-            </keep-alive>
-            <div class="text">
-              <h4>{{ $t(info.title) }}</h4>
-              <p>{{ info.content }}</p>
-            </div>
+      <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
+        <loading></loading>
+      </div>
+      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :pagination="{ clickable: true }">
+        <swiper-slide>
+          <div class="nightingale">
+            <nightingale></nightingale>
           </div>
         </swiper-slide>
-        <!-- <swiper-slide>
+        <swiper-slide>
+          <div class="radar">
+            <radar></radar>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
           <keep-alive></keep-alive>
           <World></World>
-        </swiper-slide> -->
+        </swiper-slide>
       </swiper>
     </div>
   </div>
@@ -25,28 +26,20 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { ref } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import echarts_percent from "../../components/visualization/echarts_percent.vue";
-import echarts_score from "../../components/visualization/echarts_score.vue";
-
+import nightingale from "../../components/visualization/nightingale.vue";
+import loading from "../../components/visualization/loading.vue";
+import World from '@/components/charts/world.vue'
+import radar from "../../components/visualization/radar.vue"
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
-let subjects = [];
-let infos = [
-  {
-    title: "sub.proportion",
-    echart: echarts_percent,
-    content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
-  },
-  {
-    title: "sub.score",
-    echart: echarts_score,
-    content: "测试乱文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque sequi unde facere dolore non, vero consectetur iure reprehenderit, rerum, numquam esse alias blanditiis. Explicabo autem quo, ipsa distinctio enim dolorum."
-  }
-];
+const isloading = ref(true)
+
+setTimeout(() => isloading.value = false, 2000)
 </script>
 
 <style scoped lang="scss">
@@ -64,12 +57,22 @@ let infos = [
     border: 1px solid #ccc;
     border-radius: 8px;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .isloading {
+      animation: isloadinganimation 0.5s ease-in-out;
+    }
+
+
 
     .swiper {
       height: 100%;
       width: 100%;
       display: flex;
       align-items: center;
+      justify-content: center;
       --swiper-navigation-color: white;
       --swiper-pagination-color: white;
       position: initial;
@@ -77,37 +80,58 @@ let infos = [
       .swiper-slide {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 40px;
 
-        .content {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          cursor: pointer;
+        .nightingale {
+          width: 400px;
+          height: 400px;
         }
 
-        .text {
-          flex: 1;
-
-          h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 20px;
-          }
-
-          p {
-            margin-top: 0;
-            margin-bottom: 0;
-          }
+        .radar {
+          width: 400px;
+          height: 400px;
         }
       }
     }
   }
 }
+
 :deep(.swiper-button-next) {
   transform: translateX(80px)
 }
+
 :deep(.swiper-button-prev) {
   transform: translateX(-80px)
+}
+
+:deep(.swiper-pagination-bullet) {
+  width: 10%;
+  height: 5px;
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  width: 18%;
+  height: 5px;
+  border-radius: 5px;
+}
+
+@keyframes isloadinganimation {
+  0% {
+    opacity: 0;
+    /* Start with opacity 0 */
+  }
+
+  50% {
+    opacity: 1;
+    /* Fade in to full opacity */
+  }
+
+  100% {
+    opacity: 0;
+    /* Fade out to opacity 0 */
+  }
 }
 </style>

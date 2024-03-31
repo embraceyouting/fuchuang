@@ -135,7 +135,8 @@ function fullscreen() {
     width: 100%;
     height: 100%;
     position: relative;
-
+    border-radius: 10px;
+    overflow: hidden;
     .chart {
         position: absolute;
         height: 100%;
@@ -216,6 +217,10 @@ function fullscreen() {
         .fullscreen {
             margin-top: 12px;
             display: flex;
+
+            .el-icon{
+                cursor: pointer;
+            }
 
             .text {
                 display: flex;

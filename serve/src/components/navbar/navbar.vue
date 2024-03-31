@@ -62,7 +62,7 @@ const chooseLang = (languagevalue) => {
         width: 80%;
         max-width: 950px;
         padding: 0 20px;
-        min-width: 582px;
+        min-width: 595px;
         height: 100%;
         margin: auto;
         display: flex;
@@ -145,7 +145,7 @@ const chooseLang = (languagevalue) => {
             display: flex;
             align-items: center;
             margin-left: 12px;
-            gap: 4px;
+            gap: 6px;
 
             span {
                 font-family: "Paytone One", "PingFangSC", sans-serif;

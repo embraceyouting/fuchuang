@@ -7,8 +7,8 @@
                 <p>{{ $t('text.two') }}</p>
             </div>
             <div style="margin: auto;display: flex;justify-content: center;margin-top: 20px;">
-                <div class="intro_div">
-                    <a href="#" class="intro_a" @click="handleClick">
+                <div class="intro_div ">
+                    <a href="#" class="intro_a glowing-border" @click="handleClick">
                         {{ $t('text.intro') }}
                         <svg class="icon" aria-hidden="true">
                             <use xlink:href="#icon-dianji"></use>
@@ -129,6 +129,7 @@ const cardList = computed(() => {
         font-family: "Paytone One", "PingFangSC", sans-serif;
         user-select: none;
         letter-spacing: 6px;
+        text-align: center;
     }
 
     .sub_text {
@@ -152,7 +153,7 @@ const cardList = computed(() => {
             font-size: 23px;
             color: aliceblue;
             padding: 8px 16px;
-            background-color: #ffffff33;
+            background-color: rgba(255, 255, 255, 0.233);
             border-radius: 4px;
             transition: all 0.2s ease;
 
@@ -366,5 +367,28 @@ const cardList = computed(() => {
             }
         }
     }
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px rgb(225, 214, 201), 0 0 10px rgb(225, 214, 201), 0 0 15px rgb(225, 214, 201);
+    }
+
+    50% {
+        box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+    }
+
+    100% {
+        box-shadow: 0 0 15px rgb(108, 127, 219), 0 0 30px rgb(108, 127, 219), 0 0 45px rgb(108, 127, 219);
+    }
+}
+
+.glowing-border {
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.glowing-border:hover {
+    animation: glowing 4s linear infinite alternate;
 }
 </style>
