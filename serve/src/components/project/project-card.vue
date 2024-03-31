@@ -99,7 +99,7 @@ function remove() {
 let ob;
 
 function getCover() {
-    service.get(`/cover?url=${props.url}`).then(res => {
+    return service.get(`/cover?url=${props.url}`).then(res => {
         const image = new Image();
         image.src = res.data;
         image.onload = () => {
@@ -109,7 +109,7 @@ function getCover() {
             paddingTop.value = redio * 100
             emit('loaded')
         }
-        card.value && ob.unobserve(card.value)
+        return res
     })
 }
 
@@ -120,7 +120,9 @@ onMounted(() => {
     }
     ob = new IntersectionObserver(entries => {
         if (entries[0].isIntersecting) {
-            getCover()
+            getCover().then(() => {
+                ob && ob.unobserve(card.value)
+            })
         }
     })
     ob.observe(card.value)

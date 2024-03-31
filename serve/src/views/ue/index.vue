@@ -13,9 +13,11 @@
 
         <h1>最佳创意</h1>
         <div class="waterfall" ref="waterfall">
-            <ProjectCard v-for="item in list2.slice(0, end)" :key="item.url" v-bind="item" in-cover auto-height
-                @loaded="layout" is-mask>
-            </ProjectCard>
+            <TransitionGroup name="list">
+                <ProjectCard v-for="item in list2.slice(0, end)" :key="item.url" v-bind="item" in-cover auto-height
+                    @loaded="layout" is-mask>
+                </ProjectCard>
+            </TransitionGroup>
         </div>
 
         <DataStatus @more="getMore" :isDataEnd :length="list2.length"></DataStatus>
@@ -126,10 +128,6 @@ const list2 = [
         title: "【网站设计】WEB3数字区块链NFT网站"
     },
     {
-        url: "https://www.zcool.com.cn/work/ZNjIzNjY2MDQ=.html",
-        title: "UX/UE/UI设计作品集-Google UX设计"
-    },
-    {
         title: "ofo小黄车是如何打造情感化设计的？",
         url: "https://www.zcool.com.cn/work/ZMjYzNjc5MzY=.html"
     },
@@ -225,6 +223,20 @@ main {
                 grid-area: 4/3/6/4;
             }
         }
+    }
+
+    .waterfall {
+        .list-enter-active,
+        .list-leave-active {
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
+
+        .list-enter-from,
+        .list-leave-to {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+        
     }
 }
 </style>
