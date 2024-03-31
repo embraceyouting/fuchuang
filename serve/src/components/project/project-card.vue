@@ -220,10 +220,12 @@ onBeforeUnmount(() => {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        background-color: #fff3;
 
         &.in-cover {
             position: absolute;
             bottom: 0;
+            background-color: unset;
 
             .title {
                 color: $white;
