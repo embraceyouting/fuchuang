@@ -112,8 +112,9 @@ function getCover() {
 }
 
 onMounted(() => {
-    if (!props.autoHeight) {
+    if (props.autoHeight) {
         getCover()
+        return
     }
     ob = new IntersectionObserver(entries => {
         if (entries[0].isIntersecting) {

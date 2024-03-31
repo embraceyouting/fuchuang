@@ -31,7 +31,7 @@
             <el-tabs v-model="activeChoice">
                 <el-tab-pane :disabled="!userInfo?.id" :label="`项目 ${userInfo?.id ? filteredList.length : ''}`"
                     name="work">
-                    <div class="tool">
+                    <div class="tool" v-if="subjectUrlList.length">
                         <ElButton :icon="Filter" @click="toggleAll">{{ activeList.length ? '取消选中' : '全选' }}</ElButton>
                         <ElButton v-for="url in subjectUrlList" @click="toggleSelect(url)"
                             :class="{ active: activeList.includes(url) }">{{ url }}</ElButton>
