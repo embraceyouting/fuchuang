@@ -6,6 +6,7 @@
         <div class="content" :class="{ 'user': isUser }">
             <span class="name">{{ username }}</span>
             <span class="text" :class="{ 'enter': !item.isEnd }" v-html="html"></span>
+            <ChatFiles v-if="item.files && item.files.length" class="files" :files="item.files"></ChatFiles>
             <slot name="footer"></slot>
         </div>
     </section>
@@ -18,6 +19,7 @@ import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
 import { marked } from 'marked'
 import { useUserStore } from '@/store/user';
+import ChatFiles from './chat-files.vue';
 
 const userStore = useUserStore()
 
@@ -85,6 +87,10 @@ onMounted(() => {
 
         &.user {
             align-items: flex-end;
+
+            .files {
+                flex-direction: row-reverse;
+            }
         }
 
         .name {
@@ -131,6 +137,10 @@ onMounted(() => {
                     }
                 }
             }
+        }
+
+        .files {
+            margin-top: 12px;
         }
     }
 }

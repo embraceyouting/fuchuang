@@ -22,7 +22,8 @@
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
                 :isDie="index !== messageList.length - 1">
                 <template #footer>
-                    <ElButton v-if="isEnter && index === messageList.length - 1" class="cancle" native-type="button" @click="cancle">取消对话</ElButton>
+                    <ElButton v-if="isEnter && index === messageList.length - 1" class="cancle" native-type="button"
+                        @click="cancle">取消对话</ElButton>
                 </template>
             </ChatCard>
         </div>
@@ -30,19 +31,25 @@
             <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }"
                 v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
-            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || isEnter || !key">
-                <ElIcon>
+            <ElButton native-type="button" @click="addFile" :disabled="!useUserStore().userInfo || isEnter">
+                <el-icon size="24">
+                    <DocumentAdd />
+                </el-icon>
+            </ElButton>
+            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || isEnter || !key && !fileList.length">
+                <ElIcon size="32">
                     <SubmitIcon />
                 </ElIcon>
             </ElButton>
         </ElForm>
+        <ChatFiles :files="fileList" is-remove></ChatFiles>
     </div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
 import ChatCard from './chat-card.vue';
-import { ElIcon } from 'element-plus';
+import { ElIcon, ElMessage } from 'element-plus';
 import { ArrowLeftBold } from '@element-plus/icons-vue';
 import SubmitIcon from '@/icons/SubmitIcon.vue';
 import LogoIcon from '@/icons/Logo.vue';
@@ -52,10 +59,32 @@ import AssistantDie from './image/assistant_die.png'
 import { getToken } from '@/utils/token';
 import { useUserStore } from '@/store/user';
 import { computed } from 'vue';
+import { DocumentAdd } from '@element-plus/icons-vue';
+import ChatFiles from './chat-files.vue';
+import * as PDFJS from 'pdfjs-dist';
+import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
+
+PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+async function readPdfText(fileUrl) {
+    const pdf = await PDFJS.getDocument(fileUrl).promise;
+    let textContent = '';
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const text = await page.getTextContent();
+        for (let item of text.items) {
+            textContent += item.str;
+        }
+    }
+
+    return textContent;
+}
 
 const messageList = ref([]);
 const isEnter = computed(() => messageList.value[messageList.value.length - 1] && !messageList.value[messageList.value.length - 1].isEnd)
 const key = ref('');
+const fileList = ref([]);
 const infos = ref([
     {
         text: "gpt.text1",
@@ -73,13 +102,38 @@ const infos = ref([
 
 let source = null;
 
-function search(e) {
+async function search(e) {
     if (e.ctrlKey || e.shiftKey) return
     e.preventDefault()
-    if (!key.value.trim()) return
-    messageList.value.push({ text: key.value, type: "user", isEnd: true })
-    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value}&token=${getToken()}`);
+    if (!key.value.trim() && !fileList.value.length) return
+    messageList.value.push({ text: key.value, type: "user", isEnd: true, files: fileList.value })
+    let result = await new Promise((resolve) => {
+        let result = new Array(fileList.value.length);
+        let count = 0;
+        if (fileList.value.length === 0) {
+            resolve(result);
+        }
+        fileList.value.forEach((file, index) => {
+            if (file.type === 'application/pdf') {
+                readPdfText(file).then(text => {
+                    count++;
+                    result[index] = text;
+                    if (count === fileList.value.length) resolve(result);
+                })
+            } else {
+                const fileReader = new FileReader();
+                fileReader.readAsText(file);
+                fileReader.onload = () => {
+                    count++;
+                    result[index] = fileReader.result;
+                    if (count === fileList.value.length) resolve(result);
+                }
+            }
+        })
+    })
+    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value},files:${result.join("[FILE SEPARATOR]").slice(0, 6666)}&token=${getToken()}`);
     key.value = '';
+    fileList.value = []
     const obj = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(obj);
     source.onmessage = (event) => {
@@ -111,6 +165,30 @@ function cancle() {
 function goBack() {
     cancle()
     messageList.value = []
+}
+
+function addFile() {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json, .txt, .md, .pdf'
+    input.multiple = true
+    input.click()
+    input.onchange = (e) => {
+        const files = Array.from(e.target.files).map(file => (file.id = Date.now(), file.url = URL.createObjectURL(file), file))
+        const types = ['application/json', 'text/plain', 'text/markdown', 'application/pdf']
+        files.forEach(file => {
+            if (file.type && !types.includes(file.type)) {
+                ElMessage.warning(`文件 ${file.name} 格式暂不支持...`)
+                return
+            }
+            if (fileList.value.length >= 3) {
+                ElMessage.warning(`最多上传 3 个文件...`)
+                return
+            }
+            fileList.value.push(file)
+        })
+        input.remove()
+    }
 }
 </script>
 
@@ -249,7 +327,6 @@ function goBack() {
         .el-button {
             all: unset;
             height: 36px;
-            width: 36px;
             margin-right: 6px;
             margin-bottom: 4px;
 
@@ -261,15 +338,10 @@ function goBack() {
                 height: 100%;
                 width: 100%;
                 border-radius: 50%;
-                color: white;
+                color: $color;
                 display: flex;
                 cursor: pointer;
                 align-items: center;
-
-                svg {
-                    height: 100%;
-                    width: 100%;
-                }
             }
         }
     }
