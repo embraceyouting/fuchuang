@@ -13,9 +13,16 @@ router.get("/", async (req, res) => {
 			$("meta[property='og:image']").attr("content") ||
 			$("meta[name='twitter:image']").attr("content") ||
 			$("meta[name='image']").attr("content") ||
-			$("link[rel='image_src']").attr("href");
+			$("meta[itemprop='image']").attr("content") ||
+			$("meta[name='og:image']").attr("content") ||
+			$("meta[itemprop='thumbnailUrl']").attr("content") ||
+			$("link[rel='image_src']").attr("href") ||
+			$("img").attr("src") ||
+			$("link[rel='icon']").attr("href") ||
+			$("link[rel='apple-touch-icon']").attr("href") ||
+			$("link[rel='shortcut icon']").attr("href");
 		if (!cover) {
-			return res.status(400).send(createMessage(400, "未获取到封面"));
+			return res.status(400).send(createMessage(400));
 		}
 		res.send(createMessage(200, "获取封面成功", cover));
 	} catch (error) {

@@ -59,8 +59,7 @@ const chooseLang = (languagevalue) => {
     z-index: 999;
 
     .navbar_center {
-        width: 80%;
-        max-width: 950px;
+        max-width: 980px;
         padding: 0 20px;
         min-width: 595px;
         height: 100%;
@@ -89,6 +88,7 @@ const chooseLang = (languagevalue) => {
             border-radius: 4px;
             padding: 8px 12px;
             transition: all .2s;
+            white-space: nowrap;
             line-height: 1;
             font-family: "Paytone One", "PingFangSC", sans-serif;
 

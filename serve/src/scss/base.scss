@@ -2,17 +2,7 @@
 	box-sizing: border-box;
 
 	&::-webkit-scrollbar {
-		width: 4px;
-		height: 0;
-
-		&-thumb {
-			background-color: #ffffff;
-			border-radius: 0.5rem;
-		}
-
-		&-track {
-			background-color: $color;
-		}
+		display: none;
 	}
 }
 
@@ -27,4 +17,19 @@ body {
 	margin: 0;
 	padding: 0;
 	scroll-behavior: smooth;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+		display: block;
+		height: 0;
+
+		&-thumb {
+			border-radius: 0.5rem;
+			background-color: $dark-color;
+		}
+
+		&-track {
+			background-color: #ffffff;
+		}
+	}
 }

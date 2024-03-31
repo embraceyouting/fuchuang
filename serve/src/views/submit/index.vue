@@ -31,6 +31,10 @@ import { nextTick } from "vue";
 import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
 
+defineOptions({
+    name: 'submit'
+})
+
 const intro = introJs()
 const childComponent = ref(null);
 const route = useRoute();
@@ -79,14 +83,15 @@ onMounted(() => {
                 intro._introItems[1].position = 'right';
                 intro._introItems[3].element = childComponent.value.$el.querySelector('.title .all');
                 intro._introItems[3].position = 'bottom';
+                childComponent.value.$el.querySelector('.editor-tree .file-list .file').addEventListener('click',()=> intro.nextStep())
             })
         }
     })
 
     setTimeout(() => {
         const step = parseInt(route.query['intro'] || 0)
-        step > 0 && intro.start().then(()=>intro.goToStep(step))
-    },300)
+        step > 0 && intro.start().then(() => intro.goToStep(step))
+    }, 300)
 })
 
 const { $t } = getCurrentInstance().proxy
@@ -106,7 +111,9 @@ function handleChange(file, fileList) {
 }
 
 function goToView(list) {
-    router.push(`/project/${list.map(item=>item.id).join("/")}`);
+    setTimeout(() => {
+        router.push(`/project/${list.map(item => item.id).join("/")}`);
+    }, 1000)
 }
 
 onUnmounted(() => {

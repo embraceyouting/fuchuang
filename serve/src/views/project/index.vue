@@ -8,18 +8,24 @@
         <em>上一篇</em>
       </button>
       <p>
-        <span class="pagation">{{ current + 1 }}/{{ projectIdList.length }}</span>
+        <span class="pagation">{{ current + 1 }}
+          <small>/ {{ projectIdList.length }}</small>
+        </span>
         <b>{{ currentProject?.title }}</b>
         <button @click="goBack">返回</button>
       </p>
-      <button class="span next" :disabled="current >= projectList.length - 1" @click="current++">
+      <button class="span next" :disabled="current >= projectIdList.length - 1" @click="current++">
         <em>下一篇</em>
         <el-icon>
           <ArrowRightBold />
         </el-icon>
       </button>
     </header>
-    <ElEmpty v-if="!finish" description="生成评分报告中..."></ElEmpty>
+    <ElEmpty v-if="!currentProject?.src" description="生成评分报告中...">
+      <template #image>
+        <LoadingIcon />
+      </template>
+    </ElEmpty>
     <iframe v-else :src="currentProject?.src" frameborder="0"></iframe>
   </div>
 </template>
@@ -30,13 +36,13 @@ import { useRoute, useRouter } from 'vue-router';
 import service from '@/service';
 import { ElEmpty } from 'element-plus';
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import LoadingIcon from '@/icons/LoadingIcon.vue';
 import { computed, watch } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
 const projectIdList = route.params.id;
-const finish = ref(false)
-const projectList = ref([])
+const projectList = ref(new Array(projectIdList.length).fill(null).map((_, index) => ({ id: projectIdList[index] })));
 const current = ref(0)
 const currentProject = computed(() => projectList.value[current.value])
 
@@ -49,27 +55,26 @@ function goBack() {
   router.go(goCount)
 }
 
-const getPdf = (id) => {
-  return service.get(`/subject/${id}`)
+const getPdf = (cur) => {
+  return service.get(`/subject/${cur.id}`)
     .then(async res => {
       if (!res.data.path_pdf) {
-        return await new Promise(resolve => setTimeout(() => {
-          const info = getPdf(id)
-          info && resolve(info)
-        }, 1000))
+        setTimeout(() => {
+          getPdf(cur)
+        }, 1000)
+      } else {
+        cur.src = import.meta.env.VITE_BASE_URL + res.data.path_pdf
       }
-      return {
-        src: import.meta.env.VITE_BASE_URL + res.data.path_pdf,
-        title: res.data.title,
-        url: res.data.url
-      }
+      cur.url = res.data.url
+      cur.title = res.data.title
+    }).catch(err => {
+      console.log(err)
     })
 }
 
 onMounted(() => {
-  Promise.all(projectIdList.map(id => getPdf(id))).then(res => {
-    projectList.value = res
-    finish.value = true
+  projectList.value.map(item => {
+    getPdf(item)
   })
 });
 </script>
@@ -132,6 +137,12 @@ body {
 
         .pagation {
           margin-right: 8px;
+
+          small {
+            font-size: 12px;
+            margin-left: 4px;
+            color: #eee;
+          }
         }
 
         b {

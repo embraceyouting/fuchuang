@@ -1,27 +1,32 @@
 <template>
-    <section class="card">
-        <ElIcon class="delete" @click="remove">
+    <section class="card" ref="card">
+        <ElIcon class="delete" @click="remove" v-if="id">
             <Delete />
         </ElIcon>
-        <div class="cover">
-            <img :src="cover" alt="">
+        <div class="cover" :class="{ 'mask': isMask }" :style="{
+            paddingTop: paddingTop + '%',
+            height: autoHeight && !height ? '0' : height
+        }" @click="open">
+            <img v-if="!autoHeight" class="bg" :src="cover" alt="">
+            <img :class="{ 'center': autoHeight }" :src="cover" alt="">
         </div>
-        <div class="info">
-            <h4 class="title">{{ title }}</h4>
-            <p class="url">
+        <div class="info" :class="{ 'in-cover': inCover }">
+            <h4 class="title" :title="title" v-if="id">{{ title }}</h4>
+            <a class="title url" :title="title" v-else :href="url" target="_blank">{{ title }}</a>
+            <p class="url" v-if="score">
                 <a :href="url" target="_blank"><span class="tag"><el-icon>
                             <Monitor />
-                        </el-icon>访问该体验网站</span></a>
+                        </el-icon>访问该网站</span></a>
                 <span class="tag"><el-icon>
                         <DocumentChecked />
                     </el-icon>{{ score || 90 }}分</span>
             </p>
-            <p class="user">
+            <p class="user" v-if="uid">
                 <router-link :to="`/user/${uid}`">@{{ username }}</router-link>
                 <span class="dot">·</span>
                 {{ formatTime(time) }}
             </p>
-            <p class="tools">
+            <p class="tools" v-if="id">
                 <ElButton type="primary" class="pdf" size="large" @click="router.push(`/project/${id}`)">评分体验报告<el-icon>
                         <Document />
                     </el-icon></ElButton>
@@ -46,6 +51,7 @@ import { saveAs } from 'file-saver';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
+import { onMounted, onBeforeUnmount } from 'vue';
 
 const router = useRouter();
 
@@ -57,13 +63,21 @@ const props = defineProps({
     uid: Number,
     username: String,
     path: String,
-    score: Number
+    score: Number,
+    autoHeight: Boolean,
+    height: String,
+    inCover: Boolean,
+    isMask: Boolean
 })
 
 const cover = ref(NotFound);
-service.get(`/cover?url=${props.url}`).then(res => {
-    cover.value = res.data;
-})
+const card = ref(null);
+const paddingTop = ref(0);
+const emit = defineEmits(['loaded']);
+
+function open() {
+    window.open(props.url)
+}
 
 function download() {
     const path = import.meta.env.VITE_BASE_URL + props.path
@@ -81,13 +95,45 @@ function remove() {
         })
     }).catch(() => { })
 }
+
+let ob;
+
+function getCover() {
+    service.get(`/cover?url=${props.url}`).then(res => {
+        const image = new Image();
+        image.src = res.data;
+        image.onload = () => {
+            cover.value = image.src
+            if (!props.autoHeight) return
+            const redio = image.height / image.width
+            paddingTop.value = redio * 100
+            emit('loaded')
+        }
+        card.value && ob.unobserve(card.value)
+    })
+}
+
+onMounted(() => {
+    if (props.autoHeight) {
+        getCover()
+        return
+    }
+    ob = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            getCover()
+        }
+    })
+    ob.observe(card.value)
+})
+
+onBeforeUnmount(() => {
+    ob && ob.unobserve(card.value)
+})
 </script>
 
 <style scoped lang="scss">
 .card {
     width: 100%;
-    height: 360px;
-    background-color: #ffffff33;
     border-radius: 15px;
     overflow: hidden;
     display: flex;
@@ -101,6 +147,7 @@ function remove() {
         font-size: 20px;
         color: white;
         cursor: pointer;
+        z-index: 99;
         mix-blend-mode: difference;
     }
 
@@ -124,12 +171,44 @@ function remove() {
     .cover {
         width: 100%;
         height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
+        position: relative;
+
+        &.mask {
+
+            &::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, transparent 20%, #000 100%);
+            }
+        }
 
         img {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
             object-fit: cover;
+            z-index: -99;
+            box-shadow: 0 0 20px -2px #0003;
+
+            &.bg {
+                position: absolute;
+                inset: 0;
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                filter: blur(16px) brightness(1.2);
+            }
+
+            &.center {
+                position: absolute;
+                inset: 0;
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
         }
     }
 
@@ -140,14 +219,37 @@ function remove() {
         flex-direction: column;
         gap: 4px;
 
-        h4 {
+        &.in-cover {
+            position: absolute;
+            bottom: 0;
+
+            .title {
+                color: $white;
+            }
+        }
+
+        .title {
             margin: 0;
             font-size: 18px;
             font-weight: 900;
+            color: #202020;
+            text-decoration: none;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            margin-bottom: 6px;
+
+            &.url {
+                font-weight: normal;
+                display: -webkit-box;
+                white-space: pre-line;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
 
         p {
@@ -164,11 +266,16 @@ function remove() {
                 color: #202020;
 
                 &:hover {
+
                     &,
                     &>span {
                         text-decoration: underline;
                     }
                 }
+            }
+
+            &.url {
+                margin-top: 6px;
             }
 
             &.user {
@@ -179,6 +286,7 @@ function remove() {
                 height: 36px;
                 margin-top: auto;
                 display: flex;
+                margin-top: 6px;
 
                 .el-button {
                     height: 100%;

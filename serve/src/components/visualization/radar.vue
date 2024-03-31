@@ -1,11 +1,10 @@
 <template>
-  <div class="chart" id="myChart" ref="myChart" style="height: 100%; width: 100%;">
+  <div class="chart" id="myChart" style="height: 100%; width: 100%;">
   </div>
 </template>
 
 <script setup>
 import { getCurrentInstance, onMounted } from 'vue';
-
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
@@ -14,17 +13,25 @@ onMounted(() => {
   const option = {
     label: 'outer',
     legend: {
-      data: ['average']
+      top: 30,
+      data: ['average'],
+      textStyle: {
+        color: 'white'
+      }
+    },
+    textStyle: {
+      color: '#7884FF',
+      fontweight: 'bold'
     },
     radar: {
       radius: ["0%", "50%"],
       indicator: [
-        { name: 'Sales', max: 6500 },
-        { name: 'Administration', max: 16000 },
-        { name: 'Information', max: 30000 },
-        { name: 'Customer', max: 38000 },
-        { name: 'Development', max: 52000 },
-        { name: 'Marketing', max: 25000 }
+        { name: 'Sales', max: 7000 }, // 调整最大值
+        { name: 'Administration', max: 17000 }, // 调整最大值
+        { name: 'Information', max: 32000 }, // 调整最大值
+        { name: 'Customer', max: 40000 }, // 调整最大值
+        { name: 'Development', max: 54000 }, // 调整最大值
+        { name: 'Marketing', max: 26000 } // 调整最大值
       ]
     },
     series: [

@@ -11,7 +11,10 @@ const fs = require("fs");
 const defaultPdf = fs.readFileSync("./assets/pdf/index.md", "utf-8");
 
 async function getReport(json) {
-	return defaultPdf;
+	return {
+		report: defaultPdf,
+		score: Math.floor(Math.random() * 40 + 60),
+	};
 }
 
 router.post("/", function (req, res) {
@@ -62,7 +65,12 @@ router.post("/", function (req, res) {
 				db.query(sql, [website, file.id], (err, result) => {});
 
 				getReport(json)
-					.then((text) => generatePDF(marked(text)))
+					.then(({score, report}) => {
+						const sql =
+							"UPDATE files SET score = ? WHERE id = ?";
+						db.query(sql, [score, file.id], (err, result) => {});
+						return generatePDF(marked(report))
+					})
 					.then((path) => {
 						const sql =
 							"UPDATE files SET path_pdf = ? WHERE id = ?";
@@ -77,8 +85,8 @@ router.post("/", function (req, res) {
 router.get("/:id?", (req, res) => {
 	const { id } = req.params;
 	const sql = id
-		? "SELECT filename as title,path,id,time,website as url,path_pdf FROM files WHERE id = ?"
-		: "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,f.path_pdf,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id WHERE f.uid = ? ORDER BY f.id DESC";
+		? "SELECT filename as title,path,id,time,website as url,path_pdf,score FROM files WHERE id = ?"
+		: "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,f.path_pdf,f.score,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id WHERE f.uid = ? ORDER BY f.id DESC";
 	db.query(sql, [id || req.user.id], (err, results) => {
 		if (err) {
 			return res.status(500).send(createMessage(500, "获取数据时出错"));

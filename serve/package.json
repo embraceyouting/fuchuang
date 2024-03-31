@@ -14,7 +14,7 @@
     "axios": "^1.6.8",
     "echarts": "^5.5.0",
     "echarts-gl": "^2.0.9",
-    "element-plus": "^2.6.2",
+    "element-plus": "^2.6.3",
     "file-saver": "^2.0.5",
     "intro.js": "^7.2.0",
     "json-editor-vue3": "^1.0.9",

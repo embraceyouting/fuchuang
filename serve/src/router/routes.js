@@ -26,6 +26,7 @@ export default [
 		meta: {
 			isNavItem: true,
             isNav: true,
+			isKeepAlive: true,
 			title: "navbar.visualization"
 		},
 		children:[
@@ -43,6 +44,7 @@ export default [
 		meta: {
 			isNavItem: true,
             isNav: true,
+			isKeepAlive: true,
 			title: "navbar.submit"
 		},
 	},
@@ -65,6 +67,17 @@ export default [
             isNav: true,
 			title: "navbar.chat"
 		},
+	},
+	{
+		path: '/ue',
+		name: 'ue',
+		component: () => import("../views/ue/index.vue"),
+		meta: {
+			isNav: true,
+			isKeepAlive: true,
+			isNavItem: true,
+			title: "navbar.ue"
+		}
 	},
 	{
 		path: '/test',

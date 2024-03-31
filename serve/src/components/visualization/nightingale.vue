@@ -1,5 +1,5 @@
 <template>
-    <div class="chart" id="myChart2" ref="myChart2" style="height: 100%; width: 100%;"></div>
+    <div class="chart" id="myChart2" style="height: 100%; width: 100%;"></div>
 </template>
 
 <script setup>
@@ -11,10 +11,9 @@ let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
     const dom = document.getElementById('myChart2');
     const myChart = echarts.init(dom);
-
     const option = {
         legend: {
-            top: 'bottom'
+            bottom: 20
         },
         toolbox: {
             show: true,
@@ -26,22 +25,26 @@ onMounted(() => {
             name: 'Nightingale Chart',
             type: 'pie',
             radius: ["10%", "60%"],
-            center: ['50%', '50%'],
+            center: ['50%', '42%'],
             roseType: 'area',
             itemStyle: {
                 borderRadius: 8
             },
             data: [
-                { value: 40, name: 'rose 1' },
+                { value: 45, name: 'rose 1' },
                 { value: 38, name: 'rose 2' },
                 { value: 32, name: 'rose 3' },
                 { value: 30, name: 'rose 4' },
-                { value: 28, name: 'rose 5' },
-                { value: 26, name: 'rose 6' },
-                { value: 22, name: 'rose 7' },
-                { value: 18, name: 'rose 8' }
+                { value: 25, name: 'rose 5' },
+                { value: 16, name: 'rose 6' },
             ],
             label: {
+                normal: {
+                    show: true,
+                    position: 'outer',
+                    alignTo: "edge",
+                    margin: 0
+                },
                 rich: {
                     label: {
                         overflow: 'breakAll'
@@ -50,7 +53,6 @@ onMounted(() => {
             }
         }]
     };
-
     myChart.setOption(option);
 });
 </script>

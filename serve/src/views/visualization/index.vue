@@ -6,13 +6,15 @@
       </div>
       <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :pagination="{ clickable: true }">
         <swiper-slide>
-          <div class="nightingale">
-            <nightingale></nightingale>
-          </div>
-        </swiper-slide>
-        <swiper-slide>
-          <div class="radar">
-            <radar></radar>
+          <div class="charts">
+            <div v-for="(chart, index) in chartList" v-animate="{ direction: index % 2 ? 'top' : 'bottom' }"
+              :key="chart.chart" class="chart">
+              <component :is="chart.chart" class="chart" :style="style(index)"></component>
+              <div class="content">
+                <h4>{{ chart.title }}</h4>
+                <p>{{ chart.content }}</p>
+              </div>
+            </div>
           </div>
         </swiper-slide>
         <swiper-slide>
@@ -33,13 +35,50 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import nightingale from "../../components/visualization/nightingale.vue";
 import loading from "../../components/visualization/loading.vue";
-import World from '@/components/charts/world.vue'
+import thermal from "../../components/visualization/thermal.vue";
 import radar from "../../components/visualization/radar.vue"
+import World from '@/components/charts/world.vue'
+import service from '@/service'
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
-
 setTimeout(() => isloading.value = false, 2000)
+
+service.get("/visual").then((res) => [
+  console.log(res)
+])
+  .catch((err) => {
+
+  })
+
+function style(index) {
+  if (index == 1) {
+    return "width: 420px;height: 420px;"
+  }
+  else {
+    return "width: 350px;height: 350px;"
+  }
+}
+const chartList = [
+  {
+    title: '111',
+    chart: nightingale,
+    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
+  },
+  {
+    title: '222',
+    chart: thermal,
+    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
+  },
+  {
+    title: '333',
+    chart: radar,
+    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
+  }
+]
+
+
+
 </script>
 
 <style scoped lang="scss">
@@ -50,8 +89,8 @@ setTimeout(() => isloading.value = false, 2000)
   height: calc(100vh - 60px);
 
   .swiper-container {
-    width: 80%;
-    height: 92%;
+    width: 85%;
+    height: 94%;
     backdrop-filter: blur(10px) brightness(0.8);
     background-color: rgba(255, 255, 255, 0.103);
     border: 1px solid #ccc;
@@ -64,8 +103,6 @@ setTimeout(() => isloading.value = false, 2000)
     .isloading {
       animation: isloadinganimation 0.5s ease-in-out;
     }
-
-
 
     .swiper {
       height: 100%;
@@ -80,17 +117,32 @@ setTimeout(() => isloading.value = false, 2000)
       .swiper-slide {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 40px;
 
-        .nightingale {
-          width: 400px;
-          height: 400px;
-        }
+        .charts {
+          display: flex;
+          height: 100%;
 
-        .radar {
-          width: 400px;
-          height: 400px;
+          .left .right .center {
+            height: 100%;
+          }
+
+          .center {}
+
+          .nightingale {
+            width: 350px;
+            height: 350px;
+          }
+
+          .radar {
+            width: 350px;
+            height: 350px;
+          }
+
+          .thermal {
+            width: 630px;
+            height: 480px;
+          }
         }
       }
     }
@@ -133,5 +185,15 @@ setTimeout(() => isloading.value = false, 2000)
     opacity: 0;
     /* Fade out to opacity 0 */
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

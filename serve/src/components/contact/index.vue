@@ -7,15 +7,12 @@
         <div class="float"></div>
         <p>
             <span class="info">
-                <em>Fly View</em> is produced by the members of Zeqi Studio of School of Information and Software
-                Engineering (SISE),
-                University of Electronic Science and Technology of China (UESTC), Leng Rui, Zeng Di,
-                Zhang Haoxiang, and Tu Guobin.
+                <em>{{ $t('navbar.title') }}</em> {{ $t('contact.info') }}
             </span>
             <span class="email">
-                If you have any questions about this project, Please contact us by Email:
+                {{ $t('contact.email') }}
                 <a href="mailto:uestc_zeqistudio@163.com">uestc_zeqistudio@163.com</a>
-                .
+                {{ $t('contact.dot') }}
             </span>
         </p>
     </section>

@@ -42,16 +42,17 @@ const debouncedResize = debounce(handleResize, 100);
 </script>
 
 <style scoped lang="scss">
-
-*,html,body {
-  margin: 0;
-  padding: 0;
+*,
+html,
+body {
+    margin: 0;
+    padding: 0;
 }
 
 #bg {
     position: fixed;
     inset: 0;
-    filter: blur(32px);
+    filter: blur(35px);
     background: linear-gradient(45deg, #d4e7ff, #5e74f4);
     background-image: url('@/assets/image/back.jpg');
     background-size: 200% 200%;
@@ -68,7 +69,7 @@ const debouncedResize = debounce(handleResize, 100);
     background: linear-gradient(45deg, #d4e7ff, #5e74f4);
     background-image: url('@/assets/image/back.jpg');
     opacity: 0.1;
-    filter: blur(32px);
+    filter: blur(35px);
     background-size: 200% 200%;
 }
 
