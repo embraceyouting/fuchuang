@@ -3,9 +3,9 @@
         <ElIcon class="delete" @click="remove" v-if="id">
             <Delete />
         </ElIcon>
-        <div class="cover" :class="{ 'in-cover': inCover }" :style="{
+        <div class="cover" :class="{ 'mask': isMask }" :style="{
             paddingTop: paddingTop + '%',
-            height: autoHeight && '0'
+            height: autoHeight && !height ? '0' : height
         }" @click="open">
             <img v-if="!autoHeight" class="bg" :src="cover" alt="">
             <img :class="{ 'center': autoHeight }" :src="cover" alt="">
@@ -65,7 +65,9 @@ const props = defineProps({
     path: String,
     score: Number,
     autoHeight: Boolean,
-    inCover: Boolean
+    height: String,
+    inCover: Boolean,
+    isMask: Boolean
 })
 
 const cover = ref(NotFound);
@@ -132,7 +134,6 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .card {
     width: 100%;
-    background-color: #ffffff33;
     border-radius: 15px;
     overflow: hidden;
     display: flex;
@@ -176,7 +177,7 @@ onBeforeUnmount(() => {
         overflow: hidden;
         position: relative;
 
-        &.in-cover {
+        &.mask {
 
             &::after {
                 content: "";

@@ -13,12 +13,14 @@ router.get("/", async (req, res) => {
 			$("meta[property='og:image']").attr("content") ||
 			$("meta[name='twitter:image']").attr("content") ||
 			$("meta[name='image']").attr("content") ||
+			$("meta[itemprop='image']").attr("content") ||
+			$("meta[name='og:image']").attr("content") ||
+			$("meta[itemprop='thumbnailUrl']").attr("content") ||
 			$("link[rel='image_src']").attr("href") ||
-			$("link[rel='icon']").attr("href") || 
-			$("link[rel='apple-touch-icon']").attr("href") || 
-			$("link[rel='shortcut icon']").attr("href") ||
-			$("img").attr("src");
-
+			$("img").attr("src") ||
+			$("link[rel='icon']").attr("href") ||
+			$("link[rel='apple-touch-icon']").attr("href") ||
+			$("link[rel='shortcut icon']").attr("href");
 		if (!cover) {
 			return res.status(400).send(createMessage(400));
 		}
