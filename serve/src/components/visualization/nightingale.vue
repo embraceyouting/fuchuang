@@ -4,7 +4,6 @@
 
 <script setup>
 import { getCurrentInstance, onMounted } from 'vue';
-
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 
@@ -39,17 +38,11 @@ onMounted(() => {
                 { value: 16, name: 'rose 6' },
             ],
             label: {
-                normal: {
-                    show: true,
-                    position: 'outer',
-                    alignTo: "edge",
-                    margin: 0
-                },
-                rich: {
-                    label: {
-                        overflow: 'breakAll'
-                    }
-                }
+                show: true,
+                // position: 'outer',
+                // alignTo: "edge",
+                edgeDistance : 0,
+                overflow: 'breakAll'
             }
         }]
     };

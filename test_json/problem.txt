@@ -1,0 +1,9 @@
+'click_no_response': []
+'high_bounce_rate': {'count': 0}
+'repeat_click': []
+'slow_page_toad': []
+'slow_network_feedback': []
+'click_error': []
+'page_load_error': []
+'white_screen': []
+'multiple_issues'

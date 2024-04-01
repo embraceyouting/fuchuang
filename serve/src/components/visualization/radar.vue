@@ -26,12 +26,12 @@ onMounted(() => {
     radar: {
       radius: ["0%", "50%"],
       indicator: [
-        { name: 'Sales', max: 7000 }, // 调整最大值
-        { name: 'Administration', max: 17000 }, // 调整最大值
-        { name: 'Information', max: 32000 }, // 调整最大值
-        { name: 'Customer', max: 40000 }, // 调整最大值
-        { name: 'Development', max: 54000 }, // 调整最大值
-        { name: 'Marketing', max: 26000 } // 调整最大值
+        { name: 'Sales', max: 100 }, // 调整最大值
+        { name: 'Administration', max: 100 }, // 调整最大值
+        { name: 'Information', max: 100 }, // 调整最大值
+        { name: 'Customer', max: 100 }, // 调整最大值
+        { name: 'Development', max: 100 }, // 调整最大值
+        { name: 'Marketing', max: 100 } // 调整最大值
       ]
     },
     series: [
@@ -39,7 +39,7 @@ onMounted(() => {
         type: 'radar',
         data: [
           {
-            value: [4200, 3000, 20000, 35000, 50000, 18000],
+            value: [82, 30, 70, 35, 50, 68],
             name: 'average'
           },
         ]

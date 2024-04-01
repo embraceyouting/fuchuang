@@ -324,7 +324,7 @@
                 "problemid": 1,
                 "description": "Slow Loading Speed",
                 "solution": "Optimize images and scripts, leverage browser caching, and use content delivery networks (CDNs) to improve loading speed.",
-                "score": 60,
+                "score": 5,
                 "reason": "Slow loading speed impacts user experience and SEO performance, resulting in a moderate score."
             },
             {
@@ -369,7 +369,7 @@
                 "problemid": 3,
                 "description": "Mobile Responsiveness Issues",
                 "solution": "Implement responsive design principles, test across various devices, and optimize touch interactions to improve mobile experience.",
-                "score": 40,
+                "score": 90,
                 "reason": "Poor mobile responsiveness hinders user engagement, resulting in a high score."
             }
         ]

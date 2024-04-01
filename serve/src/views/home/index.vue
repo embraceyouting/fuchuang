@@ -71,7 +71,7 @@ onMounted(() => {
     title1.classList.add('contenta')
     title2.classList.add('contenta')
     title1.addEventListener('click', () => {
-        router.push('/submit')
+        router.push('/submit?intro=1')
     });
     title2.addEventListener('click', () => {
         router.push('/visualization')
@@ -142,7 +142,7 @@ const cardList = computed(() => {
         .text {
             font-size: 120px;
             font-weight: 800;
-            background-image: linear-gradient(to right, white, #88b5fd);
+            background-image: linear-gradient(to right, white, #71a2f2);
             /* Set the gradient colors */
             background-clip: text;
             color: transparent;
@@ -300,10 +300,10 @@ const cardList = computed(() => {
             line-height: 1.5;
             margin: 0 30px;
 
-            .contenta{
+            .contenta {
                 cursor: pointer;
 
-                &:hover{
+                &:hover {
                     text-decoration: underline;
                 }
             }
@@ -341,15 +341,15 @@ const cardList = computed(() => {
 
 @keyframes glowing {
     0% {
-        box-shadow: 0 0 15px rgb(220, 146, 137), 0 0 10px rgb(220, 146, 137), 0 0 15px rgb(220, 146, 137);
+        box-shadow: 0 0 25px rgb(220, 146, 137), 0 0 25px rgb(220, 146, 137), 0 0 25px rgb(220, 146, 137);
     }
 
     50% {
-        box-shadow: 0 0 20px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+        box-shadow: 0 0 30px #ffffff, 0 0 30px #ffffff, 0 0 30px #ffffff;
     }
 
     100% {
-        box-shadow: 0 0 25px rgb(85, 107, 221), 0 0 30px rgb(85, 107, 221), 0 0 45px rgb(85, 107, 221);
+        box-shadow: 0 0 35px rgb(85, 107, 221), 0 0 40px rgb(85, 107, 221), 0 0 55px rgb(85, 107, 221);
     }
 }
 

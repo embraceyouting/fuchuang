@@ -9,7 +9,7 @@
           <div class="charts">
             <div v-for="(chart, index) in chartList" v-animate="{ direction: index % 2 ? 'top' : 'bottom' }"
               :key="chart.chart" class="chart">
-              <component :is="chart.chart" class="chart" :style="style(index)"></component>
+              <component :is="chart.chart" :style="style(index)" :thermaldata="thermaldata"></component>
               <div class="content">
                 <h4>{{ chart.title }}</h4>
                 <p>{{ chart.content }}</p>
@@ -18,8 +18,14 @@
           </div>
         </swiper-slide>
         <swiper-slide>
-          <keep-alive></keep-alive>
-          <World></World>
+          <keep-alive>
+            <china></china>
+          </keep-alive>
+        </swiper-slide>
+        <swiper-slide>
+          <keep-alive>
+            <World></World>
+          </keep-alive>
         </swiper-slide>
       </swiper>
     </div>
@@ -37,23 +43,34 @@ import nightingale from "../../components/visualization/nightingale.vue";
 import loading from "../../components/visualization/loading.vue";
 import thermal from "../../components/visualization/thermal.vue";
 import radar from "../../components/visualization/radar.vue"
+import china from "../../components/visualization/china.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
 setTimeout(() => isloading.value = false, 2000)
-
-service.get("/visual").then((res) => [
+const thermaldata = ref([]);
+service.get("/visual").then((res) => {
   console.log(res)
-])
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 6; j++) {
+      thermaldata.value.push([i, j, 0])
+    }
+  }
+  res.data.forEach((item1) => {
+    item1.problems.forEach((item2) => {
+      thermaldata.value[Math.floor(item2.score / 10) * 6 + item2.problemid - 1][2] += 1;
+    })
+  })
+})
   .catch((err) => {
 
   })
 
 function style(index) {
   if (index == 1) {
-    return "width: 420px;height: 420px;"
+    return "width: 440px;height: 440px;"
   }
   else {
     return "width: 350px;height: 350px;"
@@ -123,25 +140,13 @@ const chartList = [
           display: flex;
           height: 100%;
 
-          .left .right .center {
-            height: 100%;
-          }
+          .chart {
+            display: flex;
+            flex-direction: column;
 
-          .center {}
-
-          .nightingale {
-            width: 350px;
-            height: 350px;
-          }
-
-          .radar {
-            width: 350px;
-            height: 350px;
-          }
-
-          .thermal {
-            width: 630px;
-            height: 480px;
+            &:nth-child(even) {
+              flex-direction: column-reverse;
+            }
           }
         }
       }
