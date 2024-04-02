@@ -52,7 +52,7 @@ body {
 #bg {
     position: fixed;
     inset: 0;
-    filter: blur(35px);
+    filter: blur(60px);
     background: linear-gradient(45deg, #d4e7ff, #5e74f4);
     background-image: url('@/assets/image/back.jpg');
     background-size: 200% 200%;
@@ -68,8 +68,8 @@ body {
     transform: scale(1.1);
     background: linear-gradient(45deg, #d4e7ff, #5e74f4);
     background-image: url('@/assets/image/back.jpg');
-    opacity: 0.1;
-    filter: blur(35px);
+    opacity: 0.8;
+    filter: blur(60px);
     background-size: 200% 200%;
 }
 
