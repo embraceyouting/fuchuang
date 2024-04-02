@@ -1,12 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const OpenAI = require("openai");
 const { createMessage } = require("../utils/message");
-
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-	baseURL: "https://api.chatanywhere.com.cn/v1",
-});
+const { openai } = require("../utils/openai");
 
 router.get("/", async (req, res) => {
 	const query = req.query.key;
@@ -26,11 +21,11 @@ router.get("/", async (req, res) => {
 	});
 
 	stream.on("content", (delta, snapshot) => {
-		res.write(`data: ${JSON.stringify({msg: delta})}\n\n`);
+		res.write(`data: ${JSON.stringify({ msg: delta })}\n\n`);
 	});
 
 	stream.on("end", () => {
-		res.write(`data: ${JSON.stringify({msg: '[DONE]'})}\n\n`);
+		res.write(`data: ${JSON.stringify({ msg: "[DONE]" })}\n\n`);
 	});
 
 	for await (const chunk of stream) {

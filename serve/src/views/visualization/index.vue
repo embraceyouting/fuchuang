@@ -67,6 +67,10 @@ import pie from "../../components/visualization/pie.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 
+defineOptions({
+  name: "visualization"
+})
+
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
 setTimeout(() => isloading.value = false, 2000)
