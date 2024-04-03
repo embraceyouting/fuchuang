@@ -10,7 +10,7 @@ const { openai } = require("../utils/openai");
 
 async function getReport(json) {
 	// request 后端 然后把problems转成真实的就可以了
-	const problems = `{
+	const problems = {
 		click_no_response: [],
 		high_bounce_rate: { count: 10 },
 		repeat_click: [],
@@ -19,12 +19,12 @@ async function getReport(json) {
 		click_error: { count: 3 },
 		page_load_error: [],
 		white_screen: { count: 5 },
-	}`
+	}
 	const chatCompletion = await openai.chat.completions.create({
 		messages: [
 			{ role: "assistant", content: "你是一个网站体验评测的助手，你的任务是帮助我评测网站体验，返回分数和报告。" },
 			{ role: "user", content: "我会给你传入一个对象，包含八个字段，每个字段代表用户在使用网站时遇到的问题，请你分析该用户在使用网站时遇到的问题，然后生成一个网站体验分数（百分制）和一份使用markdown语法编写的网站体验报告。你可以给网站评分分为若干个指标，例如：页面加载速度、点击响应速度、页面稳定性、用户交互体验等等，并给这些指标分别打分，你返回的分数需要为这些指标单独分数的平均值。你需要以下面的格式进行返回：{分数}\n{报告}，请不要说多余的内容，直接返回我需要的内容即可。" },
-			{ role: "user", content: problems },
+			{ role: "user", content: JSON.stringify(problems) },
 		],
 		// model: "gpt-4-turbo-preview",
 		model: "gpt-3.5-turbo",
@@ -36,7 +36,7 @@ async function getReport(json) {
 	return {
 		report,
 		score,
-		raw: problems
+		raw: JSON.stringify(problems)
 	};
 }
 
