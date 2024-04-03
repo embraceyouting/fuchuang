@@ -4,28 +4,33 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted } from 'vue';
+import { getCurrentInstance, onMounted, ref } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
   const dom = document.getElementById('myChart');
   const myChart = echarts.init(dom); // 初始化echarts实例
+  const index = ref(null)
   const option = {
     tooltip: {
-      trigger:'item'
-    },
-    label: {
+      trigger: 'item',
+      formatter: function (params) {
+        if (index.value != null) {
+          const indicator = option.radar.indicator; // 获取雷达图的指标数组
+          return indicator[index.value].name + ' : ' + params.value[index.value] + '分'
+        }
+      }
     },
     legend: {
-      top: "3%",
-      data: ['average'],
+      top: "2.5%",
+      data: ['平均得分'],
       textStyle: {
-        color: 'white'
+        color: 'white',
       }
     },
     textStyle: {
-      color: 'white',
-      fontweight: 'bold'
+      color: 'black',
+      fontweight: 'bold',
     },
     radar: {
       radius: ["0%", "60%"],
@@ -48,21 +53,23 @@ onMounted(() => {
         type: 'radar',
         data: [
           {
-            value: [82, 30, 70, 35, 50, 68, 50, 70],
-            name: 'average',
+            value: [80, 76, 77, 64, 80, 78, 73, 76],
+            name: '平均得分',
           },
         ]
       }
     ]
   };
   myChart.setOption(option);
-
   // 添加resize事件监听器，以便在窗口大小改变时重新渲染图表
   window.addEventListener('resize', () => {
     setTimeout(() => {
       myChart.resize();
     }, 10);
   });
+  myChart.on('mouseover', (params) => {//写成箭头函数，获取到vue实例对象上的数据
+    index.value = params.event.target.__dimIdx;
+  })
 })
 </script>
 

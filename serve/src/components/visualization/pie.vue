@@ -14,7 +14,7 @@ onMounted(() => {
         title: {
             text: '用户分布',
             left: 'center',
-            top: '2%'
+            top: '2.5%'
         },
         tooltip: {
             trigger: 'item'
@@ -22,9 +22,12 @@ onMounted(() => {
         legend: {
             bottom: '0'
         },
+        textStyle: {
+            color: 'white',
+            fontweight: 'bold',
+        },
         series: [
             {
-                name: 'Access From',
                 type: 'pie',
                 radius: '60%',
                 center: ['50%', '50%'],
@@ -42,8 +45,9 @@ onMounted(() => {
                     }
                 },
                 label: {
-                    overflow: 'breakAll'
-                }
+                    overflow: 'breakAll',
+                    color: 'black'
+                },
             }
         ]
     };

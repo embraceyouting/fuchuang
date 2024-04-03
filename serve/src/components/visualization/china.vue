@@ -10,7 +10,52 @@ import china from "@/assets/china.json";  // 中国地图
 const chinaMap = ref();
 let myChart = null;
 
+// 模拟用户登录地点数据，按省份为单位
+let userData = {
+  '北京市': getRandomInt(500, 2000),
+  '上海市': getRandomInt(400, 1800),
+  '广东省': getRandomInt(100, 1000),
+  '浙江省': getRandomInt(300, 1500),
+  '四川省': getRandomInt(100, 1000),
+  '湖北省': getRandomInt(100, 1000),
+  '天津市': getRandomInt(100, 1000),
+  '重庆市': getRandomInt(100, 1000),
+  '福建省': getRandomInt(100, 1000),
+  '辽宁省': getRandomInt(100, 1000),
+  '山东省': getRandomInt(100, 1000),
+  '江苏省': getRandomInt(100, 1000),
+  '广西壮族自治区': getRandomInt(100, 1000),
+  '河北省': getRandomInt(100, 1000),
+  '河南省': getRandomInt(100, 1000),
+  '安徽省': getRandomInt(100, 1000),
+  '江西省': getRandomInt(100, 1000),
+  '湖南省': getRandomInt(100, 1000),
+  '黑龙江省': getRandomInt(100, 1000),
+  '山西省': getRandomInt(100, 1000),
+  '吉林省': getRandomInt(100, 1000),
+  '云南省': getRandomInt(100, 1000),
+  '贵州省': getRandomInt(100, 1000),
+  '甘肃省': getRandomInt(100, 500),
+  '陕西省': getRandomInt(100, 1000),
+  '青海省': getRandomInt(100, 500),
+  '西藏自治区': getRandomInt(100, 400),
+  '内蒙古自治区': getRandomInt(100, 400),
+  '新疆维吾尔自治区': getRandomInt(100, 400),
+  '宁夏回族自治区': getRandomInt(100, 1000),
+  '台湾省': getRandomInt(100, 1000),
+  '香港特别行政区': getRandomInt(100, 1000),
+  '澳门特别行政区': getRandomInt(100, 1000),
+};
+
+
 onMounted(() => {
+  // 将NaN替换为0
+  Object.keys(userData).forEach(key => {
+    if (isNaN(userData[key])) {
+      userData[key] = 0;
+    }
+  });
+
   initEchartMap();
 });
 
@@ -26,14 +71,26 @@ function initEchartMap() {
   myChart = echarts.init(chinaMap.value);
 
   const options = {
-    tooltip: {}, // 如果不需要鼠标悬浮提示信息，可以为空对象
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c} 人' // 提示信息格式，显示省份名称和用户数量
+    },
+    visualMap: {
+      min: 0,
+      max: Math.max(...Object.values(userData)), // 用户数量最大值
+      realtime: false,
+      calculable: true,
+      inRange: {
+        color: ['#d5e8f3', '#5470c6'] // 浅蓝色到深蓝色
+      }
+    },
     geo: {
       layoutCenter: ['50%', '50%'],
-      zoom: 1.23, //视觉比例大小,1.2即为原有大小的1.2倍
-      roam: false, //缩放开启
+      zoom: 1.23,
+      roam: false,
       map: "china",
       label: {
-        show: false // 不显示省份名称
+        show: false
       },
       itemStyle: {
         normal: {
@@ -48,7 +105,7 @@ function initEchartMap() {
         name: "地图",
         type: "map",
         geoIndex: 0,
-        data: [] // 不需要数据
+        data: Object.entries(userData).map(([name, value]) => ({ name, value }))
       }
     ]
   };
@@ -60,6 +117,10 @@ function initEchartMap() {
   });
 }
 
+// 生成指定范围内的随机整数
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 </script>
 
 <style scoped lang="scss">
