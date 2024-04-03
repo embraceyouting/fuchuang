@@ -12,7 +12,7 @@ onMounted(() => {
     const myChart = echarts.init(dom);
     const option = {
         legend: {
-            bottom: 20
+            bottom: "1.8%"
         },
         toolbox: {
             show: true,
@@ -23,30 +23,37 @@ onMounted(() => {
         series: [{
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: ["10%", "60%"],
+            radius: ["10%", "65%"],
             center: ['50%', '42%'],
             roseType: 'area',
             itemStyle: {
                 borderRadius: 8
             },
             data: [
-                { value: 45, name: 'rose 1' },
-                { value: 38, name: 'rose 2' },
-                { value: 32, name: 'rose 3' },
-                { value: 30, name: 'rose 4' },
-                { value: 25, name: 'rose 5' },
-                { value: 16, name: 'rose 6' },
+                { value: 45, name: '无响应' },
+                { value: 38, name: '高跳出率' },
+                { value: 32, name: '重复点击' },
+                { value: 30, name: '页面加载慢' },
+                { value: 25, name: '网络反馈慢' },
+                { value: 16, name: '点击错误' },
+                { value: 16, name: '加载错误' },
+                { value: 16, name: '白屏' },
             ],
             label: {
                 show: true,
                 // position: 'outer',
                 // alignTo: "edge",
-                edgeDistance : 0,
+                edgeDistance: 0,
                 overflow: 'breakAll'
             }
         }]
     };
     myChart.setOption(option);
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            myChart.resize();
+        }, 10);
+    });
 });
 </script>
 

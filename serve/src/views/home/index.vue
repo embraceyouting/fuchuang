@@ -140,7 +140,7 @@ const cardList = computed(() => {
         margin: 25vh auto;
 
         .text {
-            font-size: 120px;
+            font-size: 140px;
             font-weight: 800;
             background-image: linear-gradient(to right, white, #71a2f2);
             /* Set the gradient colors */
@@ -163,7 +163,7 @@ const cardList = computed(() => {
             p {
                 margin: 0;
                 text-align: center;
-                font-size: 23px;
+                font-size: 26px;
                 font-family: "Paytone One", "PingFangSC", sans-serif;
                 color: #212121b0;
                 letter-spacing: 1px;
@@ -176,9 +176,9 @@ const cardList = computed(() => {
 
             .intro_a {
                 text-decoration: none;
-                font-size: 23px;
+                font-size: 25px;
                 color: aliceblue;
-                padding: 8px 16px;
+                padding: 10px 20px;
                 background-color: #ffffff33;
                 border-radius: 4px;
                 transition: all 0.2s ease;
@@ -188,8 +188,8 @@ const cardList = computed(() => {
                 }
 
                 .icon {
-                    width: 0.9em;
-                    height: 0.9em;
+                    width: 1em;
+                    height: 1em;
                     vertical-align: -0.12em;
                     fill: currentColor;
                     overflow: hidden;

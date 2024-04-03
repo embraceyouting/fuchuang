@@ -4,23 +4,40 @@
       <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
         <loading></loading>
       </div>
-      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :pagination="{ clickable: true }">
+      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
         <swiper-slide>
           <div class="charts">
-            <div v-for="(chart, index) in chartList" v-animate="{ direction: index % 2 ? 'top' : 'bottom' }"
-              :key="chart.chart" class="chart">
-              <component :is="chart.chart" :style="style(index)" :thermaldata="thermaldata"></component>
-              <div class="content">
-                <h4>{{ chart.title }}</h4>
-                <p>{{ chart.content }}</p>
+            <div class="left">
+              <div class="left_chart">
+                <nightingale></nightingale>
+              </div>
+              <div class="left_chart">
+                <thermal :thermaldata="thermaldata"></thermal>
+              </div>
+              <div class="left_chart">
+                <linerace></linerace>
+              </div>
+            </div>
+            <div class="middle">
+              <div class="middle_font">
+
+              </div>
+              <div class="china">
+                <china></china>
+              </div>
+            </div>
+            <div class="right">
+              <div class="right_chart">
+                <sunburst></sunburst>
+              </div>
+              <div class="right_chart">
+                <radar></radar>
+              </div>
+              <div class="right_chart">
+                <pie></pie>
               </div>
             </div>
           </div>
-        </swiper-slide>
-        <swiper-slide>
-          <keep-alive>
-            <china></china>
-          </keep-alive>
         </swiper-slide>
         <swiper-slide>
           <keep-alive>
@@ -39,11 +56,14 @@ import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import nightingale from "../../components/visualization/nightingale.vue";
-import loading from "../../components/visualization/loading.vue";
-import thermal from "../../components/visualization/thermal.vue";
+import nightingale from "../../components/visualization/nightingale.vue"
+import loading from "../../components/visualization/loading.vue"
+import thermal from "../../components/visualization/thermal.vue"
 import radar from "../../components/visualization/radar.vue"
 import china from "../../components/visualization/china.vue"
+import linerace from "../../components/visualization/linerace.vue"
+import sunburst from "../../components/visualization/sunburst.vue"
+import pie from "../../components/visualization/pie.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 
@@ -110,11 +130,8 @@ const chartList = [
   height: calc(100vh - 60px);
 
   .swiper-container {
-    width: 85%;
-    height: 94%;
-    backdrop-filter: blur(10px) brightness(0.8);
-    background-color: rgba(255, 255, 255, 0.103);
-    border: 1px solid #ccc;
+    width: 94%;
+    height: 98%;
     border-radius: 8px;
     position: relative;
     display: flex;
@@ -122,6 +139,12 @@ const chartList = [
     justify-content: center;
 
     .isloading {
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(20px);
+      background-color: rgba(212, 217, 236, 0.315);
       animation: isloadinganimation 0.5s ease-in-out;
     }
 
@@ -132,17 +155,82 @@ const chartList = [
       align-items: center;
       justify-content: center;
       --swiper-navigation-color: white;
-      --swiper-pagination-color: white;
       position: initial;
+      border-radius: 8px;
 
       .swiper-slide {
         display: flex;
         align-items: center;
+        backdrop-filter: blur(20px);
+        background-color: rgba(212, 217, 236, 0.315);
         gap: 40px;
 
         .charts {
           display: flex;
+          justify-content: space-around;
           height: 100%;
+          width: 100%;
+
+          .left {
+            width: 24%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .left_chart {
+              height: 31.8%;
+              width: 100%;
+              border-radius: 5px;
+              backdrop-filter: blur(20px);
+              background-color: rgba(237, 238, 243, 0.078);
+            }
+          }
+
+          .middle {
+            width: 48%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-top: 1%;
+            overflow: hidden;
+
+            .middle_font {
+              height: 23%;
+              width: 100%;
+              border-radius: 5px;
+              backdrop-filter: blur(20px);
+              background-color: rgba(237, 238, 243, 0.078);
+            }
+
+
+            .china {
+              height: 75%;
+              width: 100%
+            }
+
+            .right {
+              width: 24%;
+              height: 100%;
+              margin: 1% 0%;
+            }
+          }
+
+          .right {
+            width: 24%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+
+            .right_chart {
+              height: 31.8%;
+              width: 100%;
+              border-radius: 5px;
+              backdrop-filter: blur(20px);
+              background-color: rgba(237, 238, 243, 0.078);
+            }
+          }
 
           .chart {
             display: flex;
@@ -159,11 +247,11 @@ const chartList = [
 }
 
 :deep(.swiper-button-next) {
-  transform: translateX(80px)
+  transform: translateX(50px)
 }
 
 :deep(.swiper-button-prev) {
-  transform: translateX(-80px)
+  transform: translateX(-50px)
 }
 
 :deep(.swiper-pagination-bullet) {

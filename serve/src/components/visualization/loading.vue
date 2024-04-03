@@ -60,6 +60,11 @@ onMounted(() => {
   }
 };
   myChart.setOption(option);
+  window.addEventListener('resize', () => {
+    setTimeout(() => {
+      myChart.resize();
+    }, 10);
+  });
 })
 </script>
 

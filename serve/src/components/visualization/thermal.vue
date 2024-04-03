@@ -11,7 +11,7 @@ const prop = defineProps({
 })
 // prettier-ignore
 const prob = [
-    'prob1', 'prob2', 'prob3', 'prob4', 'prob5', 'prob6',
+    'prob1', 'prob2', 'prob3', 'prob4', 'prob5', 'prob6'
 ];
 // prettier-ignore
 const score = [
@@ -28,8 +28,8 @@ onMounted(() => {
         },
         grid: {
             right: '2%',
-            height: '60%',
-            top: '12%'
+            height: '62%',
+            top: '8%'
         },
         xAxis: {
             type: 'category',
@@ -54,7 +54,7 @@ onMounted(() => {
             calculable: true,
             orient: 'horizontal',
             left: 'center',
-            bottom: '10%'
+            bottom: '2%'
         },
         series: [
             {
@@ -74,6 +74,11 @@ onMounted(() => {
         ]
     };
     myChart.setOption(option);
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            myChart.resize();
+        }, 10);
+    });
 })
 </script>
 
