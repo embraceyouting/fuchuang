@@ -88,6 +88,7 @@ function getSize(size) {
         display: flex;
         align-items: center;
         cursor: pointer;
+        box-shadow: 0 3px 10px -3px #0003;
 
         .file-info {
             display: flex;
