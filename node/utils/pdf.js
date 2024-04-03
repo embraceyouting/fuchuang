@@ -6,12 +6,16 @@ const fs = require("fs");
 fs.existsSync(path.resolve(__dirname, "../public/pdf")) || fs.mkdirSync(path.resolve(__dirname, "../public/pdf"), { recursive: true });
 
 const style = `<style>${fs.readFileSync(path.resolve(__dirname, "../assets/css/base.css"), "utf-8")}</style>`
+const echartJs = `<script>${fs.readFileSync(path.resolve(__dirname, "../assets/js/echarts.min.js"), "utf-8")}</script>`;
+const echartComponent = fs.readFileSync(path.resolve(__dirname, "../assets/html/echart.html"), "utf-8")
 
-async function generatePDF(html) {
+async function generatePDF(html, data) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 
 	html += style;
+	html = '<h1>问题分析</h1>\n' + echartJs + `<script>const data = ${data}</script>` + echartComponent + html;
+	fs.writeFileSync(path.resolve(__dirname, "../public/pdf", "echart.html"), html);
 	await page.setContent(html);
 
 	const pdfPath = `pdf/${uuid()}.pdf`;
