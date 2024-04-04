@@ -3,10 +3,11 @@
 </template>
 
 <script setup lang="js">
-import { onMounted, onBeforeUnmount, ref  } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import * as echarts from 'echarts';
 import china from "@/assets/china.json";
 import { useRouter } from 'vue-router';
+import 'echarts-gl';
 const router = useRouter();
 const chinaMap = ref();
 let myChart = null;
@@ -52,7 +53,7 @@ let userData = {
 onMounted(() => {
   initEchartMap();
   myChart.on('click', (params) => {
-    const adcode = china.features.filter((item) =>  item.properties.name == params.data.name )[0].properties.adcode
+    const adcode = china.features.filter((item) => item.properties.name == params.data.name)[0].properties.adcode
     router.push(`/${adcode}`)
   })
 });
@@ -82,32 +83,130 @@ function initEchartMap() {
         color: ['#d5e8f3', '#5470c6'] // 浅蓝色到深蓝色
       }
     },
-    geo: {
-      layoutCenter: ['50%', '50%'],
-      zoom: 1.23,
-      roam: false,
-      map: "china",
-      label: {
-        show: false
+    geo: [
+      {
+        top: '9.5%',//***********重点**********距离顶部的位置，每层向下一个百分比
+        z: 5,
+        layoutCenter: ['50%', '50%'],
+        zoom: 1.23,
+        roam: false,
+        regionHeight: 4, // 地图高度
+        map: "china",
+        label: {
+          emphasis: {
+            textStyle: {
+              color: '#5470c6',//鼠标经过字体颜色
+              fontSize: '15px',
+              fontFamily: 'PingFangSC'
+            }
+          }
+        },
+        itemStyle: {
+          normal: {
+            areaColor: "#000",
+            borderColor: "#fcfdfe",
+            borderWidth: 1,
+          },
+          emphasis: {
+            areaColor: "white",
+            label: {
+              show: true,
+              textStyle: {
+                color: '#fff'//鼠标经过字体颜色
+              }
+            }
+          }
+        },
+        selectedMode: 'single', // 单选模式
+        select: function (params) {
+          console.log("1");
+        },
       },
-      itemStyle: {
-        normal: {
-          areaColor: "#d5e8f3",
-          borderColor: "#fcfdfe",
-          borderWidth: 1,
+      {
+        top: '10%',//***********重点**********距离顶部的位置，每层向下一个百分比
+        z: 4,
+        layoutCenter: ['50%', '50%'],
+        zoom: 1.23,
+        roam: false,
+        map: "china",
+        label: {
+          show: false
+        },
+        regions: [
+          { // 隐藏南海诸岛,因为顶层已经添加过了
+            name: '南海诸岛',
+            itemStyle: {
+              normal: {
+                opacity: 0 // 为 0 时不绘制该图形
+              }
+            },
+            label: {
+              show: false
+            }
+          }
+        ],
+        itemStyle: {
+          normal: {
+            areaColor: "#d5e8f3",
+            borderColor: "#fcfdfe",
+            borderWidth: 1,
+          }
+        },
+        selectedMode: 'single', // 单选模式
+        select: function (params) {
+          console.log("1");
         }
       },
-      selectedMode: 'single', // 单选模式
-      select: function (params) {
-        console.log("1");
-      }
-    },
+      {
+        top: '10.5%',//***********重点**********距离顶部的位置，每层向下一个百分比
+        z: 3,
+        layoutCenter: ['50%', '50%'],
+        zoom: 1.23,
+        roam: false,
+        map: "china",
+        label: {
+          show: false
+        },
+        regions: [
+          { // 隐藏南海诸岛,因为顶层已经添加过了
+            name: '南海诸岛',
+            itemStyle: {
+              normal: {
+                opacity: 0 // 为 0 时不绘制该图形
+              }
+            },
+            label: {
+              show: false
+            }
+          }
+        ],
+        itemStyle: {
+          normal: {
+            areaColor: "#d5e8f3",
+            borderColor: "#fcfdfe",
+            borderWidth: 1,
+          }
+        },
+        selectedMode: 'single', // 单选模式
+        select: function (params) {
+          console.log("1");
+        }
+      },
+    ],
     series: [
       {
         name: "地图",
         type: "map",
         geoIndex: 0,
         data: Object.entries(userData).map(([name, value]) => ({ name, value })),
+        itemStyle: {
+          normal: {
+            areaColor: '#000',
+          },
+          emphasis: {
+            areaColor: '#000', //鼠标滑过区域颜色
+          }
+        }
 
       }
     ]

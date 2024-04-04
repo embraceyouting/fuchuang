@@ -53,7 +53,7 @@ body {
     position: fixed;
     inset: 0;
     filter: blur(60px);
-    background: linear-gradient(45deg, #d4e7ff, #5e74f4);
+    background: linear-gradient(45deg, #d4e7ff, #7166ef);
     background-image: url('@/assets/image/back.jpg');
     background-size: 200% 200%;
     overflow: hidden;
@@ -66,7 +66,7 @@ body {
     position: absolute;
     inset: 0;
     transform: scale(1.1);
-    background: linear-gradient(45deg, #d4e7ff, #5e74f4);
+    background: linear-gradient(45deg, #d4e7ff, #6176ed);
     background-image: url('@/assets/image/back.jpg');
     opacity: 0.8;
     filter: blur(60px);

@@ -40,7 +40,16 @@ onMounted(() => {
                 color: "white"
             },
             xAxis: {
-                data: timeArray.value
+                data: timeArray.value,
+                axisLabel: {
+                    interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
+                },
+                boundaryGap:false,
+            },
+            yAxis: {
+                axisLabel: {
+                    interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
+                }
             },
             series: [
                 {
@@ -65,32 +74,48 @@ onMounted(() => {
             textStyle: {
                 color: "white"
             },
-            title: {
-                text: '流量监测',
-                left: 'center',
-                top: '2.5%'
-            },
             tooltip: {
-                formatter: '{b} : {c}k'
+                formatter: '{b} : {c}'
             },
             grid: {
-                left: '14%',
-                height: '70%',
+                height: '80%',
                 right: '5%',
-                bottom: '10%'
+                top: '10',
+                bottom: '0',
             },
             xAxis: {
                 type: 'category',
-                data: timeArray.value
+                data: timeArray.value,
+                axisLabel: {
+                    interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
+                }
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                splitLine: {
+                    show: false
+                },
+                axisLabel: {
+                    interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
+                }
             },
             series: [
                 {
                     data: trafficData.value,
                     type: 'line',
-                    smooth: true
+                    smooth: true,
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            {
+                                offset: 0,
+                                color: 'rgba(58,77,233,0.8)'
+                            },
+                            {
+                                offset: 1,
+                                color: 'rgba(58,77,233,0.3)'
+                            }
+                        ])
+                    },
                 }
             ]
         };

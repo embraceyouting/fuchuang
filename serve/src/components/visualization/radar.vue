@@ -72,11 +72,6 @@ onMounted(() => {
   })
 })
 
-onBeforeUnmount(() => {
-  if (myChart) {
-    myChart.dispose();
-  }
-});
 </script>
 
 <style scoped></style>

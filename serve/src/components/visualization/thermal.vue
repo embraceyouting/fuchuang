@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, defineProps , onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, defineProps, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 const prop = defineProps({
@@ -12,7 +12,7 @@ const prop = defineProps({
 function getVirtualData() {
     const today = new Date();
     const data = [];
-    for (let i = 0; i < 150; i++) { // Changed to 150 days
+    for (let i = 0; i < 200; i++) { // Changed to 150 days
         const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
         data.push([
             date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(),
@@ -22,101 +22,85 @@ function getVirtualData() {
     return data.reverse(); // Reverse the array to display in ascending order
 }
 const data = getVirtualData();
+let myChart; // Declare myChart variable outside of the setup function
 onMounted(() => {
     const dom = document.getElementById('myChart3');
-    const myChart = echarts.init(dom); // Initialize echarts instance
+    myChart = echarts.init(dom); // Initialize echarts instance
     const option = {
         backgroundColor: 'transparent',
-        title: {
-            left: 'center',
-            textStyle: {
-                color: '#fff'
-            }
-        },
         tooltip: {
             trigger: 'item'
         },
-        legend: {
-            top: '1%',
-            left: 'center',
-            data: ['Steps', 'Top 12'],
-            textStyle: {
-                color: '#fff'
-            }
-        },
         calendar: [
             {
-                orient: 'vertical',
                 left: 'center',
-                range: [new Date(new Date().getTime() - 150 * 3600 * 24 * 1000), new Date()],
+                top: '45',
+                range: [new Date(new Date().getTime() - 200 * 3600 * 24 * 1000), new Date()],
                 splitLine: {
                     show: true,
                     lineStyle: {
-                        color: '#000',
-                        width: 4,
+                        color: 'transparent',
+                        width: 2,
                         type: 'solid'
                     }
                 },
                 yearLabel: {
-                    show: false
+                    show: false,
                 },
                 itemStyle: {
-                    color: '#323c48',
-                    borderWidth: 1,
-                    borderColor: '#111'
+                    color: 'transparent',
+                    borderWidth: 5,
+                    borderColor: 'transparent',
+                    margin: ['5px', '5px'],
+                },
+                cellSize: ['21', '21'],
+                dayLabel: {
+                    show: false
+                },
+                monthLabel: {
+                    show: false
                 }
             }
         ],
+        visualMap: {
+            min: 0,
+            max: 10000,
+            color: ["#6681cc", "#c7dbee"],
+            type: 'piecewise',
+            orient: 'horizontal',
+            left: 'center',
+            bottom: "55"
+        },
         series: [
             {
-                name: 'Steps',
-                type: 'scatter',
+                name: 'PageView',
+                type: 'heatmap',
                 coordinateSystem: 'calendar',
                 data: data,
                 symbolSize: function (val) {
                     return val[1] / 500;
                 },
                 itemStyle: {
-                    color: '#ddb926'
+                    color: '#ddb926',
+                    borderRadius: 5,
                 }
             },
-            {
-                name: 'Steps',
-                type: 'scatter',
-                coordinateSystem: 'calendar',
-                calendarIndex: 1,
-                data: data,
-                symbolSize: function (val) {
-                    return val[1] / 500;
-                },
-                itemStyle: {
-                    color: '#ddb926'
-                }
-            },
-            {
-                name: 'Top 12',
-                type: 'effectScatter',
-                coordinateSystem: 'calendar',
-                calendarIndex: 1,
-                data: data
-                    .sort(function (a, b) {
-                        return b[1] - a[1];
-                    })
-                    .slice(0, 12),
-                symbolSize: function (val) {
-                    return val[1] / 500;
-                },
-                showEffectOn: 'render',
-                rippleEffect: {
-                    brushType: 'stroke'
-                },
-                itemStyle: {
-                    color: '#f4e925',
-                    shadowBlur: 10,
-                    shadowColor: '#333'
-                },
-                zlevel: 1
-            },
+
+            // {
+            //     name: 'Steps',
+            //     type: 'scatter',
+            //     coordinateSystem: 'calendar',
+            //     calendarIndex: 1,
+            //     data: data,
+            //     symbolSize: function (val) {
+            //         return val[1] / 500;
+            //     },
+            //     itemStyle: {
+            //         color: '#fff',
+            //         borderRadius: 5,
+            //     }
+            // },
+
             {
                 name: 'Top 12',
                 type: 'effectScatter',
@@ -134,9 +118,9 @@ onMounted(() => {
                     brushType: 'stroke'
                 },
                 itemStyle: {
-                    color: '#f4e925',
+                    color: 'blue',
                     shadowBlur: 10,
-                    shadowColor: '#333'
+                    shadowColor: '#fff'
                 },
                 zlevel: 1
             }

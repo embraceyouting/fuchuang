@@ -4,52 +4,76 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted , onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
     const dom = document.getElementById('myChart6');
     const myChart = echarts.init(dom); // 初始化echarts实例
     const option = {
-        title: {
-            text: '用户分布',
-            left: 'center',
-            top: '2.5%'
-        },
         tooltip: {
             trigger: 'item'
         },
         legend: {
-            bottom: '0'
+            align: 'left',
+            orient: 'vertical',
+            right: 0,
+            icon: 'circle',
+            y: 'center',
+            type: 'scroll',
+            x: 'right',
+            bottom: 10,
+            data: (function () {
+                var list = [];
+                for (var i = 1; i <= 5; i++) {
+                    list.push(i + 2019 + '');
+                }
+                return list;
+            })()
+        },
+        radar: {
+            center: ["36%", "50%"],
+            indicator: [
+                { text: 'IE8-', max: 200 },
+                { text: 'IE9+', max: 200 },
+                { text: 'Safari', max: 200 },
+                { text: 'Firefox', max: 200 },
+                { text: 'Chrome', max: 200 }
+            ]
         },
         textStyle: {
-            color: 'white',
-            fontweight: 'bold',
+            color: 'white'
         },
-        series: [
-            {
-                type: 'pie',
-                radius: '60%',
-                center: ['50%', '50%'],
-                data: [
-                    { value: 1048, name: '北方' },
-                    { value: 735, name: '港澳台' },
-                    { value: 580, name: '南方' },
-                    { value: 484, name: '国外' },
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                },
-                label: {
-                    overflow: 'breakAll',
-                    color: 'black'
-                },
+        series: (function () {
+            var series = [];
+            for (var i = 1; i <= 5; i++) {
+                series.push({
+                    type: 'radar',
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 2
+                    },
+                    emphasis: {
+                        areaStyle: {
+                            color: '#b0e5e1'
+                        }
+                    },
+                    data: [
+                        {
+                            value: [
+                                (10 - i) * 20,
+                                (10 - i) * 4 + 60,
+                                i * 20 + 10,
+                                i * 30,
+                                (i * 40) / 2
+                            ],
+                            name: i + 2019 + ''
+                        }
+                    ]
+                });
             }
-        ]
+            return series;
+        })()
     };
     myChart.setOption(option);
 
@@ -62,9 +86,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  if (myChart) {
-    myChart.dispose();
-  }
+    if (myChart) {
+        myChart.dispose();
+    }
 });
 </script>
 

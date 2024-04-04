@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted , onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 
@@ -26,14 +26,6 @@ onMounted(() => {
             }
         }
         const option = {
-            textStyle: {
-                color: "white"
-            },
-            title: {
-                text: '用户访问量', // 设置标题为用户访问量
-                left: 'center',
-                top: '2.5%'
-            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -41,60 +33,86 @@ onMounted(() => {
                 }
             },
             legend: {
-                bottom: '0'
+                show: false
             },
             grid: {
                 left: '3%',
-                right: '4%',
-                bottom: '10%',
-                top: '15%',
+                right: '10%',
+                bottom: '3%',
+                top: '20',
                 containLabel: true
             },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: dateList
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value'
-                }
-            ],
-            series: [
-                {
-                    name: 'pc',
-                    type: 'bar',
-                    stack: 'Ad',
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [120, 132, 101, 134, 90, 230, 210]
+            xAxis: {
+                max: '30000',
+                position: 'top',
+                type: 'value',
+                boundaryGap: [0, 0.01],
+                splitLine: {
+                    show: false,
                 },
+                axisLabel: {
+                    show: true,
+                },
+                interval: 10000, //加入axisLabel字段,interval后面加你想要间隔的个数
+            },
+            yAxis: {
+                type: 'category',
+                data: ['巴西', '英国', '美国', '印度', '中国', '日本'],
+                axisLine: {
+                    lineStyle: {
+                        color: 'white',
+                    }
+                }
+            },
+            textStyle: {
+                color: 'white',
+            },
+            series: [
                 {
                     name: 'mobile',
                     type: 'bar',
-                    stack: 'Ad',
-                    emphasis: {
-                        focus: 'series'
+                    data: [18000, 23000, 29000, 4000, 30000],
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                            {
+                                offset: 0,
+                                color: 'rgba(58,77,233,1)'
+                            },
+                            {
+                                offset: 1,
+                                color: 'rgba(58,77,233,0.2)'
+                            }
+                        ])
                     },
-                    data: [220, 182, 191, 234, 290, 330, 310]
+                    barCategoryGap: "40%"
                 },
+                {
+                    name: 'pc',
+                    type: 'bar',
+                    data: [18000, 23000, 29000, 4000, 30000],
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                            {
+                                offset: 0,
+                                color: '#91cc75'
+                            },
+                            {
+                                offset: 1,
+                                color: '#91cc7566'
+                            }
+                        ])
+                    },
+                    barCategoryGap: "40%"
+                }
             ]
         };
         myChart.setOption(option);
+        window.addEventListener('resize', () => {
+            setTimeout(() => {
+                myChart.resize();
+            }, 10);
+        });
     }, 10);
-    window.addEventListener('resize', () => {
-        setTimeout(() => {
-            myChart.resize();
-        }, 10);
-    });
-});
-
-onBeforeUnmount(() => {
-  if (myChart) {
-    myChart.dispose();
-  }
 });
 </script>
 

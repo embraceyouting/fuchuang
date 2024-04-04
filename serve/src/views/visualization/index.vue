@@ -1,47 +1,72 @@
 <template>
   <div class="main">
     <div class="swiper-container">
-      <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
+      <!-- <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
         <loading></loading>
-      </div>
-      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
+      </div> -->
+      <swiper :modules="modules" :simulateTouch="false" :navigation="true">
         <swiper-slide>
           <div class="charts">
             <div class="left">
-              <BorderBox8 :color="['rgb(157,180,223)', 'rgb(84,112,198)']" class="left_chart">
-                <stack></stack>
-              </BorderBox8>
-              <BorderBox7 :duration="5" class="left_chart">
-                <thermal :thermaldata="thermaldata"></thermal>
-              </BorderBox7>
+              <div class="left_chart">
+                <BorderBox2 class="text_pv"><span>用户分布</span></BorderBox2>
+                <div class="chart">
+                  <stack></stack>
+                </div>
+              </div>
+              <div class="left_chart">
+                <BorderBox2 class="text_pv"><span>网站评分</span></BorderBox2>
+                <div class="chart">
+                  <left_pie></left_pie>
+                </div>
+              </div>
+              <div class="left_chart">
+                <BorderBox2 class="text_pv"><span>核心网站指标</span></BorderBox2>
+                <div class="chart">
+                  <left_line></left_line>
+                </div>
+              </div>
             </div>
             <div class="middle">
-              <BorderBox6 class="middle_up">
-                <div class="middle_font">
-                  <p>Fly View 可视化平台</p>
-                </div>
-              </BorderBox6>
               <div class="china">
                 <china></china>
               </div>
+              <div class="middle_font">
+                <BorderBox2 class="text"><span>用户访问量</span></BorderBox2>
+                <thermal :thermaldata="thermaldata"></thermal>
+              </div>
             </div>
             <div class="right">
-              <BorderBox12 :color="['rgb(226,197,187)', 'rgb(175,197,230)']" class="right_chart">
-                <relation></relation>
-              </BorderBox12>
-              <BorderBox7 class="right_chart">
-                <pie></pie>
-              </BorderBox7>
-              <BorderBox2 class="right_chart">
-                <linerace></linerace>
-              </BorderBox2>
+
+
+              <div class="right_chart">
+                <BorderBox2 class="text_pv"><span>兼容性趋势</span></BorderBox2>
+                <div class="chart">
+                  <pie></pie>
+                </div>
+
+              </div>
+
+              <div class="right_chart">
+                <BorderBox2 class="text_pv"><span>流量实时监测</span></BorderBox2>
+                <div class="chart">
+                  <linerace></linerace>
+                </div>
+              </div>
+
+              <div class="right_chart">
+                <BorderBox2 class="text_pv"><span>数字看板</span></BorderBox2>
+                <div class="grid chart">
+                  <div class="item bb" v-for="i in 6">
+                    <div><span style="font-size: 32px;">13</span><span><small>实打实</small></span></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </swiper-slide>
         <swiper-slide>
-          <keep-alive>
-            <World></World>
-          </keep-alive>
+          <World></World>
         </swiper-slide>
       </swiper>
     </div>
@@ -62,11 +87,13 @@ import radar from "../../components/visualization/radar.vue"
 import china from "../../components/visualization/china.vue"
 import linerace from "../../components/visualization/linerace.vue"
 import relation from "../../components/visualization/relation.vue"
+import left_line from "../../components/visualization/left_line.vue"
+import left_pie from "../../components/visualization/left_pie.vue"
 import pie from "../../components/visualization/pie.vue"
 import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
-import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox12 } from '@dataview/datav-vue3';
+import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@dataview/datav-vue3';
 
 defineOptions({
   name: "visualization"
@@ -74,7 +101,7 @@ defineOptions({
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
-setTimeout(() => isloading.value = false, 2000)
+setTimeout(() => isloading.value = false, 3000)
 const thermaldata = ref([]);
 service.get("/visual").then((res) => {
   console.log(res)
@@ -163,7 +190,7 @@ const chartList = [
         display: flex;
         align-items: center;
         backdrop-filter: blur(20px);
-        background-color: rgba(212, 217, 236, 0.315);
+        background-color: rgba(216, 221, 239, 0.5);
         gap: 40px;
 
         .charts {
@@ -177,20 +204,44 @@ const chartList = [
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
 
             .left_chart {
 
-              &:first-child {
-                height: 29%;
+              display: flex;
+              flex-direction: column;
+              margin-top: 10px;
+
+              .text_pv {
+                height: auto;
+                width: fit-content;
+                padding: 12px 20px;
+                margin-bottom: 10px;
+                margin-left: auto;
+              }
+
+              &:nth-child(1) {
+                height: 40%;
                 width: 100%;
               }
 
-              &:last-child {
-                height: 68%;
+              &:nth-child(2) {
+                height: 25%;
                 width: 100%;
-                backdrop-filter: blur(20px);
-                background-color: rgba(116, 116, 116, 0.094);
+              }
+
+              &:nth-child(3) {
+                height: 30%;
+                width: 100%;
+                position: relative;
+
+                .chart {
+                  position: absolute;
+                  inset: 0;
+                }
+              }
+
+              .chart {
+                flex: 1;
               }
             }
           }
@@ -200,41 +251,31 @@ const chartList = [
             height: 100%;
             display: flex;
             flex-direction: column;
-            margin-top: 1%;
+            margin-top: 2%;
             overflow: hidden;
 
-            .middle_up {
-              height: 23%;
-              width: 100%;
-
-              .middle_font {
-                height: 100%;
-                width: 100%;
-                display: flex;
-                align-items: center !important;
-                justify-content: center;
-                border-radius: 4px;
-                backdrop-filter: blur(20px);
-                background-color: rgba(237, 238, 243, 0);
-
-                p {
-                  margin: 0;
-                  text-align: center;
-                  font-size: 46px;
-                  font-family: "Paytone One", "PingFangSC", sans-serif;
-                  color: #212121b0;
-                  letter-spacing: 1px;
-                }
-
-              }
-
-
+            .china {
+              height: 65%;
+              width: 100%
             }
 
+            .middle_font {
+              height: 35%;
+              width: 100%;
+              display: flex;
+              align-items: center;
 
-            .china {
-              height: 75%;
-              width: 100%
+              .text {
+                width: 15px;
+                padding: 15px 18px;
+                font-size: 15px;
+                transform: translateY(-30px);
+                box-sizing: content-box;
+                height: fit-content;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
             }
 
             .right {
@@ -244,16 +285,77 @@ const chartList = [
             }
           }
 
+          .text_pv {
+            height: auto;
+            width: fit-content;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+          }
+
           .right {
             width: 24%;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
 
             .right_chart {
-              height: 31.8%;
               width: 100%;
+              margin-top: 10px;
+              display: flex;
+              flex-direction: column;
+
+              .item {
+                border-radius: 5px;
+                backdrop-filter: blur(20px);
+                padding: 2px;
+                border: 1px solid #fff;
+
+
+                &>div {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  padding: 5px 0 8px;
+                  border: #fff 1px solid;
+                  border-radius: 2px;
+                  background-color: #dddddd1a;
+
+                  &>span {
+                    line-height: 1.1;
+                    font-family: "YouSheBiaoTiHei", "PingFangSC";
+                  }
+                }
+
+
+              }
+
+              &:nth-child(1) {
+                height: 280px;
+              }
+
+              &:nth-child(2) {
+                height: 300px;
+              }
+
+              &:nth-child(3) {}
+
+              .chart {
+                flex: 1;
+              }
+
+              .grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px
+              }
+
+              .text_pv {
+                height: auto;
+                width: fit-content;
+                padding: 12px 20px;
+                margin-bottom: 10px;
+              }
             }
           }
 

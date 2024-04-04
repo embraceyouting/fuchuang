@@ -14,46 +14,53 @@ onMounted(() => {
   const dom = document.getElementById('myChart2');
   const myChart = echarts.init(dom); // 初始化echarts实例
   const option = {
-    graphic: {
-      elements: [
-        {
-          type: 'group',
-          left: 'center',
-          top: 'center',
-          children: new Array(7).fill(0).map((val, i) => ({
-            type: 'rect',
-            x: i * 20,
-            shape: {
-              x: 0,
-              y: -40,
-              width: 10,
-              height: 80
+  graphic: {
+    elements: [
+      {
+        type: 'text',
+        left: 'center',
+        top: 'center',
+        style: {
+          text: 'Fly View',
+          fontSize: 80,
+          fontWeight: 'bold',
+          lineDash: [0, 200],
+          lineDashOffset: 0,
+          fill: 'transparent',
+          stroke: '#000',
+          lineWidth: 1
+        },
+        keyframeAnimation: {
+          duration: 3000,
+          loop: true,
+          keyframes: [
+            {
+              percent: 0.7,
+              style: {
+                fill: 'transparent',
+                lineDashOffset: 200,
+                lineDash: [200, 0]
+              }
             },
-            style: {
-              fill: '#5470c6'
+            {
+              // Stop for a while.
+              percent: 0.8,
+              style: {
+                fill: 'transparent'
+              }
             },
-            keyframeAnimation: {
-              duration: 1000,
-              delay: i * 200,
-              loop: true,
-              keyframes: [
-                {
-                  percent: 0.5,
-                  scaleY: 0.3,
-                  easing: 'cubicIn'
-                },
-                {
-                  percent: 1,
-                  scaleY: 1,
-                  easing: 'cubicOut'
-                }
-              ]
+            {
+              percent: 1,
+              style: {
+                fill: 'black'
+              }
             }
-          }))
+          ]
         }
-      ]
-    }
-  };
+      }
+    ]
+  }
+};
   myChart.setOption(option);
   window.addEventListener('resize', () => {
     setTimeout(() => {

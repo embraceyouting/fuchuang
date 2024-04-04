@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted , onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 
@@ -56,11 +56,6 @@ onMounted(() => {
     });
 });
 
-onBeforeUnmount(() => {
-  if (myChart) {
-    myChart.dispose();
-  }
-});
 </script>
 
 <style scoped>
