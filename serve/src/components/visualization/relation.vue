@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref , onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
@@ -34,6 +34,32 @@ onMounted(() => {
             { name: '页面加载性能' }, // 新增页面加载性能类别
             { name: '文本输入' }, // 新增文本输入类别
             { name: '点击事件' }, // 新增点击事件类别
+            { name: '用户F', category: 0 },
+            { name: '评分6', category: 1 },
+            { name: '页面渲染性能2', category: 2 },
+            { name: '鼠标点击事件2', category: 4 },
+            { name: '用户F', category: 0 },
+            { name: '用户G', category: 0 },
+            { name: '用户H', category: 0 },
+            { name: '用户I', category: 0 },
+            { name: '用户J', category: 0 },
+            { name: '用户K', category: 0 },
+            { name: '用户L', category: 0 },
+            { name: '用户M', category: 0 },
+            { name: '用户N', category: 0 },
+            { name: '用户O', category: 0 },
+            { name: '用户P', category: 0 },
+            { name: '用户Q', category: 0 },
+            { name: '用户R', category: 0 },
+            { name: '用户S', category: 0 },
+            { name: '用户T', category: 0 },
+            { name: '用户U', category: 0 },
+            { name: '用户V', category: 0 },
+            { name: '用户W', category: 0 },
+            { name: '用户X', category: 0 },
+            { name: '用户Y', category: 0 },
+            { name: '用户Z', category: 0 },
+            { name: '评分6', category: 1 },
         ],
         links: [
             { source: 0, target: 4, value: 90 }, // 用户A 对应索引 0，评分1 对应索引 4
@@ -51,11 +77,26 @@ onMounted(() => {
             { source: 11, target: 10, value: 2.9 }, // 点击Get Started 对应索引 11，文本输入 对应索引 10
             { source: 12, target: 13, value: 1000 }, // 模拟新增连接
             { source: 12, target: 8, value: 1500 }, // 模拟新增连接
+            { source: 4, target: 8, value: 80 }, // 评分1 对应索引 4，页面加载性能 对应索引 8
+            { source: 5, target: 9, value: 75 }, // 评分2 对应索引 5，页面加载性能2 对应索引 9
+            { source: 6, target: 10, value: 88 }, // 评分3 对应索引 6，页面加载性能2 对应索引 10
+            { source: 7, target: 11, value: 95 }, // 评分4 对应索引 7，鼠标点击事件2 对应索引 11
+            { source: 9, target: 12, value: 85 }, // 页面加载性能2 对应索引 9，用户F 对应索引 12
+            { source: 10, target: 13, value: 70 }, // 页面加载性能2 对应索引 10，用户F 对应索引 13
+            { source: 11, target: 14, value: 95 }, // 鼠标点击事件2 对应索引 11，用户F 对应索引 14
+            { source: 4, target: 8, value: 80 }, // 评分1 对应索引 4，页面加载性能 对应索引 8
+            { source: 5, target: 9, value: 75 }, // 评分2 对应索引 5，页面加载性能2 对应索引 9
+            { source: 6, target: 10, value: 88 }, // 评分3 对应索引 6，页面加载性能2 对应索引 10
+            { source: 7, target: 11, value: 95 }, // 评分4 对应索引 7，鼠标点击事件2 对应索引 11
+            { source: 9, target: 12, value: 85 }, // 页面加载性能2 对应索引 9，用户F 对应索引 12
+            { source: 10, target: 13, value: 70 }, // 页面加载性能2 对应索引 10，用户F 对应索引 13
+            { source: 11, target: 14, value: 95 }, // 鼠标点击事件2 对应索引 11，用户F 对应索引 14
         ]
     };
     const option = {
         legend: {
-            data: ['用户', '评分', '页面加载性能', '文本输入', '点击事件']
+            data: ['用户', '评分', '页面加载性能', '文本输入', '点击事件'],
+            top: '5%'
         },
         series: [
             {
@@ -77,8 +118,11 @@ onMounted(() => {
                     repulsion: 20,
                     gravity: 0.2
                 },
-                edges: webkitDep.links
-            }
+                edges: webkitDep.links,
+                lineStyle: {
+                    color: 'white' // 设置连线的颜色为天蓝色
+                }
+            },
         ]
     };
     myChart.setOption(option);
@@ -89,6 +133,12 @@ onMounted(() => {
         }, 10);
     });
 })
+
+onBeforeUnmount(() => {
+  if (myChart) {
+    myChart.dispose();
+  }
+});
 </script>
 
 <style scoped></style>

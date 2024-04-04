@@ -8,31 +8,33 @@
         <swiper-slide>
           <div class="charts">
             <div class="left">
-              <div class="left_chart">
+              <BorderBox8 :color="['rgb(157,180,223)', 'rgb(84,112,198)']" class="left_chart">
                 <stack></stack>
-              </div>
-              <div class="left_chart">
+              </BorderBox8>
+              <BorderBox7 :duration="5" class="left_chart">
                 <thermal :thermaldata="thermaldata"></thermal>
-              </div>
+              </BorderBox7>
             </div>
             <div class="middle">
-              <div class="middle_font">
-                <p>Fly View 可视化平台</p>
-              </div>
+              <BorderBox6 class="middle_up">
+                <div class="middle_font">
+                  <p>Fly View 可视化平台</p>
+                </div>
+              </BorderBox6>
               <div class="china">
                 <china></china>
               </div>
             </div>
             <div class="right">
-              <div class="right_chart">
+              <BorderBox12 :color="['rgb(226,197,187)', 'rgb(175,197,230)']" class="right_chart">
                 <relation></relation>
-              </div>
-              <div class="right_chart">
+              </BorderBox12>
+              <BorderBox7 class="right_chart">
                 <pie></pie>
-              </div>
-              <div class="right_chart">
+              </BorderBox7>
+              <BorderBox2 class="right_chart">
                 <linerace></linerace>
-              </div>
+              </BorderBox2>
             </div>
           </div>
         </swiper-slide>
@@ -64,6 +66,7 @@ import pie from "../../components/visualization/pie.vue"
 import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
+import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox12 } from '@dataview/datav-vue3';
 
 defineOptions({
   name: "visualization"
@@ -178,18 +181,17 @@ const chartList = [
 
             .left_chart {
 
-              &:first-child{
+              &:first-child {
                 height: 29%;
                 width: 100%;
-                border-radius: 5px;
-                backdrop-filter: blur(20px);
-                background-color: rgba(237, 238, 243, 0.078);
               }
-              height:68%;
-              width: 100%;
-              border-radius: 5px;
-              backdrop-filter: blur(20px);
-              background-color: rgba(237, 238, 243, 0.078);
+
+              &:last-child {
+                height: 68%;
+                width: 100%;
+                backdrop-filter: blur(20px);
+                background-color: rgba(116, 116, 116, 0.094);
+              }
             }
           }
 
@@ -201,24 +203,32 @@ const chartList = [
             margin-top: 1%;
             overflow: hidden;
 
-            .middle_font {
+            .middle_up {
               height: 23%;
               width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-radius: 5px;
-              backdrop-filter: blur(20px);
-              background-color: rgba(237, 238, 243, 0.078);
 
-              p {
-                margin: 0;
-                text-align: center;
-                font-size: 46px;
-                font-family: "Paytone One", "PingFangSC", sans-serif;
-                color: #212121b0;
-                letter-spacing: 1px;
+              .middle_font {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center !important;
+                justify-content: center;
+                border-radius: 4px;
+                backdrop-filter: blur(20px);
+                background-color: rgba(237, 238, 243, 0);
+
+                p {
+                  margin: 0;
+                  text-align: center;
+                  font-size: 46px;
+                  font-family: "Paytone One", "PingFangSC", sans-serif;
+                  color: #212121b0;
+                  letter-spacing: 1px;
+                }
+
               }
+
+
             }
 
 
@@ -244,9 +254,6 @@ const chartList = [
             .right_chart {
               height: 31.8%;
               width: 100%;
-              border-radius: 5px;
-              backdrop-filter: blur(20px);
-              background-color: rgba(237, 238, 243, 0.078);
             }
           }
 

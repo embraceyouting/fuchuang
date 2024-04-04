@@ -16,7 +16,7 @@ export default [
 			},
 		],
 		meta: {
-            isNav: true
+			isNav: true
 		},
 	},
 	{
@@ -25,19 +25,19 @@ export default [
 		component: () => import("../views/visualization/index.vue"),
 		meta: {
 			isNavItem: true,
-            isNav: true,
+			isNav: true,
 			isKeepAlive: true,
 			title: "navbar.visualization"
 		},
 	},
 	{
-		
-		path:"/:adcode",
-		name:"province",
+
+		path: "/:adcode",
+		name: "province",
 		component: () => import("../views/visualization/province.vue"), //根据具体file来变化，need change
 		meta: {
 			isNavItem: false,
-            isNav: false,
+			isNav: false,
 			isKeepAlive: false,
 		},
 	},
@@ -47,7 +47,7 @@ export default [
 		component: () => import("../views/submit/index.vue"),
 		meta: {
 			isNavItem: true,
-            isNav: true,
+			isNav: true,
 			isKeepAlive: true,
 			title: "navbar.submit"
 		},
@@ -58,7 +58,7 @@ export default [
 		component: () => import("../views/user/index.vue"),
 		meta: {
 			isNavItem: true,
-            isNav: true,
+			isNav: true,
 			title: "navbar.mine"
 		},
 	},
@@ -68,7 +68,7 @@ export default [
 		component: () => import("../views/chat/index.vue"),
 		meta: {
 			isNavItem: true,
-            isNav: true,
+			isNav: true,
 			title: "navbar.chat"
 		},
 	},

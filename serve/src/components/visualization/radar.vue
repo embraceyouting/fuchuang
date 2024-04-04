@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref , onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 onMounted(() => {
@@ -71,6 +71,12 @@ onMounted(() => {
     index.value = params.event.target.__dimIdx;
   })
 })
+
+onBeforeUnmount(() => {
+  if (myChart) {
+    myChart.dispose();
+  }
+});
 </script>
 
 <style scoped></style>

@@ -12,7 +12,6 @@ import * as echarts from 'echarts'
 import i18n from '@/i18n/index.js'
 import animate from './directives/animate';
 
-
 const app = createApp(App);
 
 app.config.globalProperties.$echarts = echarts

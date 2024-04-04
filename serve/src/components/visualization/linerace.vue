@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, ref } from 'vue';
+import { getCurrentInstance, onMounted, ref, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 
@@ -36,6 +36,9 @@ onMounted(() => {
 
         // 动态更新图表
         const option = {
+            textStyle: {
+                color: "white"
+            },
             xAxis: {
                 data: timeArray.value
             },
@@ -59,6 +62,9 @@ onMounted(() => {
         }
 
         const option = {
+            textStyle: {
+                color: "white"
+            },
             title: {
                 text: '流量监测',
                 left: 'center',
@@ -99,6 +105,12 @@ onMounted(() => {
             myChart.resize();
         }, 10);
     });
+});
+
+onBeforeUnmount(() => {
+    if (myChart) {
+        myChart.dispose();
+    }
 });
 </script>
 

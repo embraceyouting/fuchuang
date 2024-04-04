@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="js">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref  } from 'vue';
 import * as echarts from 'echarts';
 import axios from 'axios';
 import { useRoute } from 'vue-router';

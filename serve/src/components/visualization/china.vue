@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="js">
-import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref  } from 'vue';
 import * as echarts from 'echarts';
 import china from "@/assets/china.json";
 import { useRouter } from 'vue-router';

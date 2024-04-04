@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, defineProps } from 'vue';
+import { getCurrentInstance, onMounted, defineProps , onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 const prop = defineProps({
@@ -58,7 +58,7 @@ onMounted(() => {
                     }
                 },
                 yearLabel: {
-                    show:false
+                    show: false
                 },
                 itemStyle: {
                     color: '#323c48',
@@ -149,6 +149,12 @@ onMounted(() => {
         }, 10);
     });
 })
+
+onBeforeUnmount(() => {
+    if (myChart) {
+        myChart.dispose();
+    }
+});
 </script>
 
 <style scoped></style>
