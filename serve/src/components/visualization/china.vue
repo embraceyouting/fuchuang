@@ -5,11 +5,11 @@
 <script setup lang="js">
 import { onMounted, onBeforeUnmount, ref } from 'vue';
 import * as echarts from 'echarts';
-import china from "@/assets/china.json";  // 中国地图
-
+import china from "@/assets/china.json";
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const chinaMap = ref();
 let myChart = null;
-
 // 模拟用户登录地点数据，按省份为单位
 let userData = {
   '北京市': getRandomInt(500, 2000),
@@ -45,18 +45,16 @@ let userData = {
   '台湾省': getRandomInt(100, 1000),
   '香港特别行政区': getRandomInt(100, 1000),
   '澳门特别行政区': getRandomInt(100, 1000),
+  '海南省': getRandomInt(100, 1000),
+  '南海诸岛': getRandomInt(10, 100),
 };
 
-
 onMounted(() => {
-  // 将NaN替换为0
-  Object.keys(userData).forEach(key => {
-    if (isNaN(userData[key])) {
-      userData[key] = 0;
-    }
-  });
-
   initEchartMap();
+  myChart.on('click', (params) => {
+    const adcode = china.features.filter((item) =>  item.properties.name == params.data.name )[0].properties.adcode
+    router.push(`/${adcode}`)
+  })
 });
 
 onBeforeUnmount(() => {
@@ -98,6 +96,10 @@ function initEchartMap() {
           borderColor: "#fcfdfe",
           borderWidth: 1,
         }
+      },
+      selectedMode: 'single', // 单选模式
+      select: function (params) {
+        console.log("1");
       }
     },
     series: [
@@ -105,7 +107,8 @@ function initEchartMap() {
         name: "地图",
         type: "map",
         geoIndex: 0,
-        data: Object.entries(userData).map(([name, value]) => ({ name, value }))
+        data: Object.entries(userData).map(([name, value]) => ({ name, value })),
+
       }
     ]
   };

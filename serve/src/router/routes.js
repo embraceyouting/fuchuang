@@ -29,13 +29,17 @@ export default [
 			isKeepAlive: true,
 			title: "navbar.visualization"
 		},
-		children:[
-			{
-				path:":name",
-				name:"subject-file",
-				component: () => import("../views/visualization/index.vue"), //根据具体file来变化，need change
-			}
-		]
+	},
+	{
+		
+		path:"/:adcode",
+		name:"province",
+		component: () => import("../views/visualization/province.vue"), //根据具体file来变化，need change
+		meta: {
+			isNavItem: false,
+            isNav: false,
+			isKeepAlive: false,
+		},
 	},
 	{
 		path: "/submit",
