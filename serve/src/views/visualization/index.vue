@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <div class="swiper-container">
-      <!-- <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
+      <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
         <loading></loading>
-      </div> -->
-      <swiper :modules="modules" :simulateTouch="false" :navigation="true">
+      </div>
+      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
         <swiper-slide>
           <div class="charts">
             <div class="left">
@@ -31,6 +31,7 @@
 
             <div class="middle">
               <div class="china">
+                <BorderBox2 class="text_pv"><span>用户地域分布</span></BorderBox2>
                 <china></china>
               </div>
               <div class="middle_font">
@@ -61,7 +62,8 @@
               <div class="right_chart">
                 <BorderBox2 class="text_pv"><span>数字看板</span></BorderBox2>
                 <div class="grid chart">
-                  <div class="item" v-for="item in problemList" :key="item.name" :style="{ backgroundColor: getColor(item.times) }">
+                  <div class="item" v-for="item in problemList" :key="item.name"
+                    :style="{ background: getColor(item.times) }">
                     <div>
                       <span style="font-size: 32px;">{{ item.times }}</span>
                       <span><small>{{ item.name }}</small></span>
@@ -120,16 +122,14 @@ const problemList = [
 ];
 
 function getColor(times) {
-  if(times<=5){
-    return "#91CC75"
-  }else if(times<=10){
-
-    return "#8AA2D9"
-
-  }else if(times<=15){
-    return "#FAC858"
-  }else{
-    return "#EE6666"
+  if (times <= 5) {
+    return "linear-gradient(45deg, #91CC7533, #91CC75)"
+  } else if (times <= 10) {
+    return "linear-gradient(45deg, #8AA2D933, #8AA2D9)"
+  } else if (times <= 15) {
+    return "linear-gradient(45deg, #FAC85833, #FAC858)"
+  } else {
+    return "linear-gradient(45deg, #EE666633, #EE6666)"
   }
 }
 
@@ -238,16 +238,23 @@ function getColor(times) {
             height: 100%;
             display: flex;
             flex-direction: column;
-            margin-top: 2%;
             overflow: hidden;
 
             .china {
-              height: 65%;
-              width: 100%
+              height: 70%;
+              width: 100%;
+              margin-top: 10px;
+              position: relative;
+
+              .text_pv {
+                position: absolute;
+                top: 0;
+                left: 0;
+              }
             }
 
             .middle_font {
-              height: 35%;
+              height: 30%;
               width: 100%;
               display: flex;
               align-items: center;
@@ -256,7 +263,6 @@ function getColor(times) {
                 width: 15px;
                 padding: 15px 18px;
                 font-size: 15px;
-                transform: translateY(-12px);
                 box-sizing: content-box;
                 height: fit-content;
                 display: flex;
@@ -303,6 +309,7 @@ function getColor(times) {
                   display: flex;
                   flex-direction: column;
                   justify-content: center;
+                  height: 100%;
                   align-items: center;
                   padding: 5px 0 8px;
                   border: #fff 1px solid;
@@ -311,22 +318,25 @@ function getColor(times) {
                   &>span {
                     line-height: 1.1;
                     font-family: "YouSheBiaoTiHei", "PingFangSC";
+                    padding: 0 8px;
+                    text-align: center;
+                    white-space: nowrap;
                   }
                 }
 
 
               }
 
-              &:nth-child(1){
-                height: 250px;
+              &:nth-child(1) {
+                height: 32%;
               }
 
               &:nth-child(2) {
-                height: 250px;
+                height: 32%;
               }
 
               &:nth-child(3) {
-                height: 145px;
+                height: 30%;
               }
 
               .chart {

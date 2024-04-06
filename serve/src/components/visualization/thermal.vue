@@ -66,7 +66,7 @@ onMounted(() => {
             type: 'piecewise',
             orient: 'horizontal',
             left: 'center',
-            bottom: "40"
+            bottom: "5%"
         },
         series: [
             {

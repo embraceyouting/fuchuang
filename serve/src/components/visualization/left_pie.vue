@@ -4,6 +4,7 @@
 </template>
 
 <script setup>
+import { getRandom } from '@/utils';
 import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
@@ -30,11 +31,11 @@ onMounted(() => {
                 startAngle: 180,
                 endAngle: 360,
                 data: [
-                    { value: 1048, name: '优秀', itemStyle: { color:"#91CC75" } },
-                    { value: 735, name: '良好', itemStyle: { color:"#8AA2D9" } },
-                    { value: 580, name: '一般', itemStyle: { color:"#6F89CF" } },
-                    { value: 484, name: '较差', itemStyle: { color:"#FAC858" } },
-                    { value: 300, name: '极差', itemStyle: { color:"#EE6666" } }
+                    { value: getRandom(1800, 2400), name: '优秀', itemStyle: { color:"#91CC75" } },
+                    { value: getRandom(500, 800), name: '良好', itemStyle: { color:"#6F89CF" } },
+                    { value: getRandom(300, 800), name: '一般', itemStyle: { color:"#FAC858" } },
+                    { value: getRandom(200, 400), name: '较差', itemStyle: { color:"#FFAC00" } },
+                    { value: getRandom(200, 400), name: '极差', itemStyle: { color:"#EE6666" } }
                 ],
                 itemStyle: {
                     borderRadius: 6
