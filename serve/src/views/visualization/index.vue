@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <div class="swiper-container">
-      <!-- <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
+      <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
         <loading></loading>
-      </div> -->
-      <swiper :modules="modules" :simulateTouch="false" :navigation="true">
+      </div>
+      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
         <swiper-slide>
           <div class="charts">
             <div class="left">
