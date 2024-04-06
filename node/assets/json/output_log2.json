@@ -1,0 +1,151 @@
+{
+    "浏览环境": {
+        "用户所在地": {
+            "国家": "China",
+            "省份": "Taipei",
+            "城市": "Tucheng"
+        },
+        "设备信息": "PC Mac",
+        "浏览器": "Chrome",
+        "IP地址": "103.156.242.195"
+    },
+    "综合体验": {
+        "页面加载速度": [
+            4791
+        ],
+        "页面质量评估": "Good",
+        "鼠标事件": {
+            "点击延迟": [
+                1972.6
+            ],
+            "点击后延迟大于1000ms次数：": 1,
+            "重复点击次数": 12,
+            "点击报错次数": 9,
+            "加载错误次数": 10,
+            "出现白屏次数": 1,
+            "多个问题同时出现的事件数": 12,
+            "最高加载延迟": 29566
+        }
+    },
+    "详细用户行为": [
+        [
+            {
+                "操作1": "https://special-item-501508.framer.app/",
+                "事件": "Page Visit",
+                "问题": "操作引发白屏"
+            }
+        ],
+        [
+            {
+                "操作2": "Input frank@gmail.com",
+                "事件": "Text Input",
+                "问题": "等待了11898ms"
+            }
+        ],
+        [
+            {
+                "操作3": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,等待了12012ms"
+            }
+        ],
+        [
+            {
+                "操作4": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "鼠标点击后延长时间过长，达到1972.6ms,存在重复点击,控制台错误,等待了14712ms"
+            }
+        ],
+        [
+            {
+                "操作5": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,等待了19338ms"
+            }
+        ],
+        [
+            {
+                "操作6": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了21242ms"
+            }
+        ],
+        [
+            {
+                "操作7": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了22576ms"
+            }
+        ],
+        [
+            {
+                "操作8": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了23428ms"
+            }
+        ],
+        [
+            {
+                "操作9": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了25352ms"
+            }
+        ],
+        [
+            {
+                "操作10": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了28444ms"
+            }
+        ],
+        [
+            {
+                "操作11": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,控制台错误,等待了28807ms"
+            }
+        ],
+        [
+            {
+                "操作12": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,控制台错误,等待了29116ms"
+            }
+        ],
+        [
+            {
+                "操作13": "blank click",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,等待了29266ms"
+            }
+        ],
+        [
+            {
+                "操作14": "blank click",
+                "事件": "Element Click",
+                "问题": "存在重复点击,控制台错误,等待了29566ms"
+            }
+        ],
+        [
+            {
+                "操作15": "Height Reduction 1%,Width Increase 11%",
+                "事件": "Window Resizing",
+                "问题": "控制台错误"
+            }
+        ],
+        [
+            {
+                "操作16": "Height Reduction 1%,Width Increase 11%",
+                "事件": "Window Resizing",
+                "问题": "本次操作无问题"
+            }
+        ],
+        [
+            {
+                "操作17": "Scrolling Stagnation 519.5s",
+                "事件": "Viewport Stay",
+                "问题": "本次操作无问题"
+            }
+        ]
+    ]
+}

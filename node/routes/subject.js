@@ -7,23 +7,35 @@ const { readFile } = require("fs");
 const { generatePDF } = require("../utils/pdf.js");
 const { marked } = require("marked");
 const { openai } = require("../utils/openai");
+const http = require('http');
 
-async function getReport(json) {
-	// request 后端 然后把problems转成真实的就可以了
-	const problems = {
-		click_no_response: [],
-		high_bounce_rate: { count: 10 },
-		repeat_click: [],
-		slow_page_toad: { count: 7 },
-		slow_network_feedback: [],
-		click_error: { count: 3 },
-		page_load_error: [],
-		white_screen: { count: 5 },
+async function getReport(json, problems) {
+	function extractEventData(problems) {
+		console.log(problems)
+		const eventData = JSON.parse(problems)["综合体验"]["鼠标事件"];
+		const {
+			'重复点击次数': repeat_click,
+			'点击后延迟大于1000ms次数：': slow_page_toad,
+			'点击报错次数': click_error,
+			'加载错误次数': page_load_error,
+			'出现白屏次数': white_screen,
+			'多个问题同时出现的事件数': multipleIssuesCount,
+		} = eventData;
+
+		return {
+			repeat_click,
+			slow_page_toad,
+			click_error,
+			page_load_error,
+			white_screen,
+			multipleIssuesCount,
+		};
 	}
+
 	const chatCompletion = await openai.chat.completions.create({
 		messages: [
 			{ role: "assistant", content: "你是一个网站体验评测的助手，你的任务是帮助我评测网站体验，返回分数和报告。" },
-			{ role: "user", content: "我会给你传入一个对象，包含八个字段，每个字段代表用户在使用网站时遇到的问题，请你分析该用户在使用网站时遇到的问题，然后生成一个网站体验分数（百分制）和一份使用markdown语法编写的网站体验报告。你可以给网站评分分为若干个指标，例如：页面加载速度、点击响应速度、页面稳定性、用户交互体验等等，并给这些指标分别打分，你返回的分数需要为这些指标单独分数的平均值。你需要以下面的格式进行返回：{分数}\n{报告}，请不要说多余的内容，直接返回我需要的内容即可。" },
+			{ role: "user", content: "我会给你传入一个json对象，包含几个字段，代表用户在使用网站时遇到的问题，请你分析该用户在使用网站时遇到的问题，然后生成一个网站体验分数（百分制）和一份使用markdown语法编写的网站体验报告，并生成最终的得分和解决方案,每个问题方面分成三个部分，每个问题的标题部分、评分部分、和分析部分，格式为标题，然后换行是评分，再换行是分析，评分和分析前面都有一个markdown语法的-,标题只是加粗,你需要保证这部分的格式。你可以给网站评分分为若干个指标，例如：页面加载速度、点击响应速度、页面稳定性、用户交互体验等等，并给这些指标分别打分，你返回的最终分数为这些指标单独分数的平均值。你需要以下面的格式进行返回：{分数}\n{报告}，请不要说多余的内容，直接返回我需要的内容即可。" },
 			{ role: "user", content: JSON.stringify(problems) },
 		],
 		model: "gpt-4-turbo-preview",
@@ -36,7 +48,7 @@ async function getReport(json) {
 	return {
 		report,
 		score,
-		raw: JSON.stringify(problems)
+		raw: JSON.stringify(extractEventData(problems))
 	};
 }
 
@@ -85,19 +97,48 @@ router.post("/", function (req, res) {
 					.sort(([k1, v1], [k2, v2]) => v1 - v2)
 					.pop()[0];
 				const sql = "UPDATE files SET website = ? WHERE id = ?";
-				db.query(sql, [website, file.id], (err, result) => {});
+				db.query(sql, [website, file.id], (err, result) => { });
 
-				getReport(json)
-					.then(({ score, report, raw }) => {
-						const sql = "UPDATE files SET score = ? WHERE id = ?";
-						db.query(sql, [score, file.id], (err, result) => {});
-						return generatePDF(marked(report), raw);
-					})
-					.then((path) => {
-						const sql =
-							"UPDATE files SET path_pdf = ? WHERE id = ?";
-						db.query(sql, [path, file.id], (err, result) => {});
+
+				const http = require('http');
+				const datajson = JSON.stringify(json);
+				const options = {
+					hostname: '192.168.1.103',
+					port: 5000,
+					path: '/endpoint',
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Content-Length': Buffer.byteLength(datajson) // 计算数据长度
+					}
+				};
+				const req = http.request(options, (res) => {
+					console.log(`statusCode: ${res.statusCode}`);
+					res.on('data', (chunk) => {
+						const problems = chunk.toString()
+						if (res.statusCode === 200) {
+							getReport(json, problems)
+								.then(({ score, report, raw }) => {
+									const sql = "UPDATE files SET score = ? WHERE id = ?";
+									db.query(sql, [score, file.id], (err, result) => { });
+									return generatePDF(marked(report), raw);
+								})
+								.then((path) => {
+									const sql =
+										"UPDATE files SET path_pdf = ? WHERE id = ?";
+									db.query(sql, [path, file.id], (err, result) => { });
+								});
+						}
+						else {
+							console.log("something is wrong")
+						}
 					});
+				});
+				req.on('error', (error) => {
+					console.error('Error:', error);
+				});
+				req.write(datajson);
+				req.end();
 			});
 		}
 		res.status(200).send(createMessage(200, "文件上传成功。", req.files));

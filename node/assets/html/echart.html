@@ -1,88 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECharts Bar Chart</title>
 <style>
-	#echart {
-		height: 400px;
-	}
+    #echart {
+        height: 400px;
+    }
 </style>
+</head>
+<body>
 
 <div id="echart"></div>
-<script type="text/javascript">
-	const myChart = echarts.init(document.getElementById("echart"));
-	const chinese = {
-		click_no_response: "无响应",
-		high_bounce_rate: "高跳转率",
-		repeat_click: "重复点击",
-		slow_page_toad: "慢页面加载",
-		slow_network_feedback: "慢网络反馈",
-		click_error: "点击错误",
-		page_load_error: "页面加载错误",
-		white_screen: "白屏",
-	};
-	const colors = {
-		3: "green",
-		7: "yellow",
-	};
-	const option = {
-		tooltip: {},
-    animation: false,
-		xAxis: {
-			data: Object.keys(data).map((key) => chinese[key]),
-			axisLabel: {
-				interval: 0,
-			},
-		},
-		yAxis: {
-			axisLabel: {
-				show: false,
-			},
-			splitLine: false
-		},
-		series: [
-			{
-				name: "数量",
-				type: "bar",
-				label: {
-					show: true,
-					position: "top",
-				},
-				data: Object.values(data)
-					.map((item) => item.count || item.length)
-					.map((item) => ({
-						value: item,
-						itemStyle: {
-							color: new echarts.graphic.LinearGradient(
-								0,
-								0,
-								0,
-								1,
-								[
-									{
-										offset: 0,
-										color:
-											item > 7
-												? "#9C2A32"
-												: item > 3
-												? "#E04C4C"
-												: "#67B270",
-									},
-									{
-										offset: 1,
-										color:
-											item > 7
-												? "#F20C00"
-												: item > 3
-												? "#FAC81E"
-												: "#0ECDA5",
-									},
-								]
-							),
-							barBorderRadius: [4, 4, 0, 0],
-						},
-					})),
-				markLine: {
-					data: [{ type: "average", name: "平均值" }],
-				},
-			},
-		],
-	};
-	myChart.setOption(option);
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+<script>
+    const myChart = echarts.init(document.getElementById("echart"));
+
+    const chinese = {
+        repeat_click: "重复点击",
+        slow_page_toad: "页面加载缓慢",
+        click_error: "点击报错",
+        page_load_error: "加载错误",
+        white_screen: "出现白屏",
+        multipleIssuesCount: "多个问题的事件"
+    };
+
+    const option = {
+        tooltip: {},
+        animation: false,
+        xAxis: {
+            data: Object.keys(data).map((key) => chinese[key]),
+            axisLabel: { interval: 0 }
+        },
+        yAxis: { axisLabel: { show: false }, splitLine: false },
+        series: [
+            {
+                name: "数量",
+                type: "bar",
+                label: { show: true, position: "top" },
+                data: Object.values(data).map((item) => ({
+                    value: item,
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(
+                            0,
+                            0,
+                            0,
+                            1,
+                            [
+                                { offset: 0, color: item > 7 ? "#9C2A32" : item > 3 ? "#E04C4C" : "#67B270" },
+                                { offset: 1, color: item > 7 ? "#F20C00" : item > 3 ? "#FAC81E" : "#0ECDA5" }
+                            ]
+                        ),
+                        barBorderRadius: [4, 4, 0, 0]
+                    }
+                })),
+                markLine: { data: [{ type: "average", name: "平均值" }] }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
 </script>
+
+</body>
+</html>

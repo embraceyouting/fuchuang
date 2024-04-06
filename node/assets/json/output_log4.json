@@ -1,0 +1,138 @@
+{
+    "浏览环境": {
+        "用户所在地": {
+            "国家": "JP",
+            "省份": "Tokyo Prefecture",
+            "城市": "Motoyoyogich艒"
+        },
+        "设备信息": "PC Mac",
+        "浏览器": "Chrome",
+        "IP地址": "212.107.30.195"
+    },
+    "综合体验": {
+        "页面加载速度": [
+            4967
+        ],
+        "页面质量评估": "Needs Improvement",
+        "鼠标事件": {
+            "点击延迟": [
+                1911.2,
+                2184.7
+            ],
+            "点击后延迟大于1000ms次数：": 2,
+            "重复点击次数": 8,
+            "点击报错次数": 1,
+            "加载错误次数": 2,
+            "出现白屏次数": 1,
+            "多个问题同时出现的事件数": 4,
+            "最高加载延迟": 70377
+        }
+    },
+    "详细用户行为": [
+        [
+            {
+                "操作1": "https://special-item-501508.framer.app/",
+                "事件": "Page Visit",
+                "问题": "操作引发白屏"
+            }
+        ],
+        [
+            {
+                "操作2": "https://special-item-501508.framer.app/",
+                "事件": "Element Click",
+                "问题": "存在重复点击,等待了8512ms"
+            }
+        ],
+        [
+            {
+                "操作3": "blank click",
+                "事件": "Element Click",
+                "问题": "存在重复点击,等待了11857ms"
+            }
+        ],
+        [
+            {
+                "操作4": "Input frank@gmail.com",
+                "事件": "Text Input",
+                "问题": "等待了19546ms"
+            }
+        ],
+        [
+            {
+                "操作5": "Input frank@gmail.com",
+                "事件": "Element Click",
+                "问题": "存在重复点击,点击后报错,等待了19610ms"
+            }
+        ],
+        [
+            {
+                "操作6": "Scrolling Stagnation 22.5s",
+                "事件": "Viewport Stay",
+                "问题": "控制台错误"
+            }
+        ],
+        [
+            {
+                "操作7": "Scrolling Stagnation 22.5s",
+                "事件": "Element Click",
+                "问题": "存在重复点击,控制台错误,等待了23446ms"
+            }
+        ],
+        [
+            {
+                "操作8": "Scrolling Stagnation 22.5s",
+                "事件": "Element Click",
+                "问题": "存在重复点击,等待了24345ms"
+            }
+        ],
+        [
+            {
+                "操作9": "Scrolling Stagnation 4.2s",
+                "事件": "Viewport Stay",
+                "问题": "本次操作无问题"
+            }
+        ],
+        [
+            {
+                "操作10": "Height Reduction 0%,Width Reduction 26%",
+                "事件": "Window Resizing",
+                "问题": "本次操作无问题"
+            }
+        ],
+        [
+            {
+                "操作11": "Height Reduction 0%,Width Reduction 26%",
+                "事件": "Window Resizing",
+                "问题": "本次操作无问题"
+            }
+        ],
+        [
+            {
+                "操作12": "blank click",
+                "事件": "Element Click",
+                "问题": "鼠标点击后延长时间过长，达到1911.2ms,存在重复点击,等待了49582ms"
+            }
+        ],
+        [
+            {
+                "操作13": "blank click",
+                "事件": "Element Click",
+                "问题": "存在重复点击,等待了69194ms"
+            }
+        ],
+        [
+            {
+                "操作14": "blank click",
+                "事件": "Element Click",
+                "问题": "鼠标点击后延长时间过长，达到2184.7ms,存在重复点击,等待了70377ms"
+            }
+        ],
+        [
+            {
+                "操作15": "Scrolling Stagnation 54.3s",
+                "事件": "Viewport Stay",
+                "问题": "本次操作无问题"
+            }
+        ]
+    ]
+}

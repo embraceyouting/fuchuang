@@ -24,7 +24,6 @@ onMounted(() => {
         series: [
             {
                 padAngle: 5,
-                name: 'Access From',
                 type: 'pie',
                 radius: ['100%', '160%'],
                 center: ['60%', '90%'],
