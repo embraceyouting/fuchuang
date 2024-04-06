@@ -27,15 +27,19 @@
                 </div>
               </div>
             </div>
+
+
             <div class="middle">
               <div class="china">
                 <china></china>
               </div>
               <div class="middle_font">
                 <BorderBox2 class="text"><span>用户访问量</span></BorderBox2>
-                <thermal :thermaldata="thermaldata"></thermal>
+                <thermal></thermal>
               </div>
             </div>
+
+
             <div class="right">
 
 
@@ -57,8 +61,11 @@
               <div class="right_chart">
                 <BorderBox2 class="text_pv"><span>数字看板</span></BorderBox2>
                 <div class="grid chart">
-                  <div class="item bb" v-for="i in 6">
-                    <div><span style="font-size: 32px;">13</span><span><small>实打实</small></span></div>
+                  <div class="item" v-for="item in problemList" :key="item.name" :style="{ backgroundColor: getColor(item.times) }">
+                    <div>
+                      <span style="font-size: 32px;">{{ item.times }}</span>
+                      <span><small>{{ item.name }}</small></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -102,49 +109,29 @@ defineOptions({
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
 setTimeout(() => isloading.value = false, 3000)
-const thermaldata = ref([]);
-service.get("/visual").then((res) => {
-  console.log(res)
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 6; j++) {
-      thermaldata.value.push([i, j, 0])
-    }
-  }
-  res.data.forEach((item1) => {
-    item1.problems.forEach((item2) => {
-      thermaldata.value[Math.floor(item2.score / 10) * 6 + item2.problemid - 1][2] += 1;
-    })
-  })
-})
-  .catch((err) => {
 
-  })
+const problemList = [
+  { name: '用户白屏', times: '3' },
+  { name: '页面加载缓慢', times: '12' },
+  { name: '页面未找到', times: '9' },
+  { name: '服务器错误', times: '15' },
+  { name: '数据库连接失败', times: '7' },
+  { name: '图片加载失败', times: '8' }
+];
 
-function style(index) {
-  if (index == 1) {
-    return "width: 440px;height: 440px;"
-  }
-  else {
-    return "width: 350px;height: 350px;"
+function getColor(times) {
+  if(times<=5){
+    return "#91CC75"
+  }else if(times<=10){
+
+    return "#8AA2D9"
+
+  }else if(times<=15){
+    return "#FAC858"
+  }else{
+    return "#EE6666"
   }
 }
-const chartList = [
-  {
-    title: '111',
-    chart: nightingale,
-    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
-  },
-  {
-    title: '222',
-    chart: thermal,
-    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
-  },
-  {
-    title: '333',
-    chart: radar,
-    content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清"
-  }
-]
 
 
 
@@ -220,7 +207,7 @@ const chartList = [
               }
 
               &:nth-child(1) {
-                height: 40%;
+                height: 39.2%;
                 width: 100%;
               }
 
@@ -269,7 +256,7 @@ const chartList = [
                 width: 15px;
                 padding: 15px 18px;
                 font-size: 15px;
-                transform: translateY(-30px);
+                transform: translateY(-12px);
                 box-sizing: content-box;
                 height: fit-content;
                 display: flex;
@@ -309,6 +296,7 @@ const chartList = [
                 backdrop-filter: blur(20px);
                 padding: 2px;
                 border: 1px solid #fff;
+                background-color: #cc9a9ac1;
 
 
                 &>div {
@@ -319,7 +307,6 @@ const chartList = [
                   padding: 5px 0 8px;
                   border: #fff 1px solid;
                   border-radius: 2px;
-                  background-color: #dddddd1a;
 
                   &>span {
                     line-height: 1.1;
@@ -330,15 +317,17 @@ const chartList = [
 
               }
 
-              &:nth-child(1) {
-                height: 280px;
+              &:nth-child(1){
+                height: 250px;
               }
 
               &:nth-child(2) {
-                height: 300px;
+                height: 250px;
               }
 
-              &:nth-child(3) {}
+              &:nth-child(3) {
+                height: 145px;
+              }
 
               .chart {
                 flex: 1;
@@ -356,15 +345,6 @@ const chartList = [
                 padding: 12px 20px;
                 margin-bottom: 10px;
               }
-            }
-          }
-
-          .chart {
-            display: flex;
-            flex-direction: column;
-
-            &:nth-child(even) {
-              flex-direction: column-reverse;
             }
           }
         }

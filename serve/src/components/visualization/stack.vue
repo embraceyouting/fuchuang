@@ -3,28 +3,29 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount , ref } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
+// 初始化数组
+const regions = ref(['巴西', '英国', '美国', '印度', '中国', '日本', '韩国', '法国', '德国', '朝鲜']);
+const mobile = ref([13000, 23000, 29000, 40000, 30000, 10300, 20300, 29000, 40000, 13000]);
+const pc = ref([10300, 20300, 20900, 24000, 23000, 13000, 23000, 20900, 40000, 23000]);
+// 每次拿6个元素
+const batchSize = 6;
+// 当前索引
+let currentIndexRegions = 0;
+let currentIndexMobile = 0;
+let currentIndexPc = 0;
+// 用于存放每次拿到的批次
+const batchesRegions = ref([]);
+const batchesMobile = ref([]);
+const batchesPc = ref([]);
+// 每隔2秒拿一次批次
 
 onMounted(() => {
     setTimeout(() => {
         const dom = document.getElementById('myChart7');
         const myChart = echarts.init(dom);
-        const today = new Date();
-        const dateList = [];
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date(today);
-            if (i === 0) {
-                dateList.push('今天');
-            } else {
-                date.setDate(today.getDate() - i);
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-                const formattedDate = `${month}-${day}`;
-                dateList.push(formattedDate);
-            }
-        }
         const option = {
             tooltip: {
                 trigger: 'axis',
@@ -39,7 +40,7 @@ onMounted(() => {
                 left: '3%',
                 right: '10%',
                 bottom: '3%',
-                top: '20',
+                top: '10',
                 containLabel: true
             },
             xAxis: {
@@ -71,7 +72,7 @@ onMounted(() => {
                 {
                     name: 'mobile',
                     type: 'bar',
-                    data: [18000, 23000, 29000, 4000, 30000],
+                    data: [13000, 23000, 29000, 40000, 30000, 10300],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
@@ -89,7 +90,7 @@ onMounted(() => {
                 {
                     name: 'pc',
                     type: 'bar',
-                    data: [18000, 23000, 29000, 4000, 30000],
+                    data: [10300, 20300, 20900, 24000, 23000, 13000],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
@@ -112,6 +113,52 @@ onMounted(() => {
                 myChart.resize();
             }, 10);
         });
+
+        setInterval(() => {
+            // 处理 regions 数组
+            const endIndexRegions = currentIndexRegions + batchSize;
+            batchesRegions.value = [];
+            for (let i = currentIndexRegions; i < endIndexRegions; i++) {
+                const index = i % regions.value.length;
+                batchesRegions.value.push(regions.value[index]);
+            }
+            currentIndexRegions = (currentIndexRegions + 1) % regions.value.length;
+
+            // 处理 mobile 数组
+            const endIndexMobile = currentIndexMobile + batchSize;
+            batchesMobile.value = [];
+            for (let i = currentIndexMobile; i < endIndexMobile; i++) {
+                const index = i % mobile.value.length;
+                batchesMobile.value.push(mobile.value[index]);
+            }
+            currentIndexMobile = (currentIndexMobile + 1) % mobile.value.length;
+
+            // 处理 pc 数组
+            const endIndexPc = currentIndexPc + batchSize;
+            batchesPc.value = [];
+            for (let i = currentIndexPc; i < endIndexPc; i++) {
+                const index = i % pc.value.length;
+                batchesPc.value.push(pc.value[index]);
+            }
+            currentIndexPc = (currentIndexPc + 1) % pc.value.length;
+
+            const option = {
+                yAxis:{
+                    data:batchesRegions.value
+                },
+                series:[
+                    {
+                        data:batchesMobile.value
+                    },
+                    {
+                        data:batchesPc.value
+                    }
+                ]
+            }
+
+            myChart.setOption(option)
+        }, 2000);
+        
     }, 10);
 });
 </script>

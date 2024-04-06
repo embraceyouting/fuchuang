@@ -32,7 +32,8 @@ onMounted(() => {
             })()
         },
         radar: {
-            center: ["36%", "50%"],
+            radius: ["0%", "70%"],
+            center: ["36%", "54%"],
             indicator: [
                 { text: 'IE8-', max: 200 },
                 { text: 'IE9+', max: 200 },

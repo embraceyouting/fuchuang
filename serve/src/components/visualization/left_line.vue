@@ -10,14 +10,19 @@ let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 // 初始化流量数据和时间点数组
 const trafficData = ref([]);
 const trafficData2 = ref([]);
-const timeArray = ref([]);
-
+const today = new Date();
+let timeArray = [];
+for (let i = 0; i < 6; i++) {
+    const previousDate = new Date(today);
+    previousDate.setDate(today.getDate() - i);
+    const formattedDate = `${previousDate.getMonth() + 1}-${previousDate.getDate()}`;
+    timeArray.unshift(formattedDate); // 使用unshift方法将日期添加到数组的开头
+}
 onMounted(() => {
     const dom = document.getElementById('myChart12');
     const myChart = echarts.init(dom);
-    timeArray.value = ['3-29', '3-30', '3-31', '4-1', '4-2', '4-3'];
-    trafficData.value = [230, 240, 260, 220, 190, 130]
-    trafficData2.value = [150, 330, 170, 280, 150, 190]
+    trafficData.value = [23, 24, 26, 22, 19, 13]
+    trafficData2.value = [15, 33, 17, 28, 15, 19]
     generateInitialData()
     function generateInitialData() {
         const option = {
@@ -39,8 +44,13 @@ onMounted(() => {
             },
             xAxis: {
                 type: 'category',
-                data: timeArray.value,
+                data: timeArray,
                 boundaryGap: false,
+                axisLine: {
+                    lineStyle: {
+                        color: 'white',
+                    }
+                }
             },
             yAxis: {
                 type: 'value',

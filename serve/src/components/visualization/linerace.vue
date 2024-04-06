@@ -21,7 +21,7 @@ onMounted(() => {
     // 更新数据函数
     function updateData() {
         const currentTime = new Date().getTime();
-        const newTraffic = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+        const newTraffic = Math.floor(Math.random() * (80 - 10 + 1)) + 10;
 
         // 添加新的数据点
         trafficData.value.push(newTraffic);
@@ -45,6 +45,11 @@ onMounted(() => {
                     interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
                 },
                 boundaryGap:false,
+                axisLine: {
+                    lineStyle: {
+                        color: 'white',
+                    }
+                }
             },
             yAxis: {
                 axisLabel: {
@@ -66,7 +71,7 @@ onMounted(() => {
         for (let i = 11; i >= 0; i--) {
             const time = new Date(currentTime - i * 5000).toISOString().substr(14, 5);
             timeArray.value.push(time);
-            const traffic = Math.floor(Math.random() * (800 - 100 + 1)) + 100;
+            const traffic = Math.floor(Math.random() * (80 - 10 + 1)) + 10;
             trafficData.value.push(traffic);
         }
 

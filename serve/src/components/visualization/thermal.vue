@@ -6,9 +6,6 @@
 import { getCurrentInstance, onMounted, defineProps, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
-const prop = defineProps({
-    thermaldata: Array
-})
 function getVirtualData() {
     const today = new Date();
     const data = [];
@@ -69,7 +66,7 @@ onMounted(() => {
             type: 'piecewise',
             orient: 'horizontal',
             left: 'center',
-            bottom: "55"
+            bottom: "40"
         },
         series: [
             {
