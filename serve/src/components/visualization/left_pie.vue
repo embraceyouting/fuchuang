@@ -13,7 +13,8 @@ onMounted(() => {
     const myChart = echarts.init(dom); // Initialize echarts instance
     const option = {
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            formatter: '{b}: {d}%' // 修改tooltip的formatter，显示具体数值和比例
         },
         legend: {
             align: 'right',
@@ -40,9 +41,9 @@ onMounted(() => {
                 itemStyle: {
                     borderRadius: 6
                 },
-                label: {
-                    show: false
-                },
+                label:{
+                    show:false
+                }
             }
         ]
     };

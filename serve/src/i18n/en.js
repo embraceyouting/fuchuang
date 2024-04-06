@@ -25,6 +25,12 @@ export default {
 		content3:
 			"Our experience reports will point out current website issues and provide best website experience practices to help you improve your website and enhance the user experience. We also share examples of successful web experiences, analysing their successful strategies and solutions to common problems to provide you with inspiration and reference. In this way, we hope to stimulate your creative thinking and enable you to succeed in delivering exceptional web experiences.",
 		title4: "Contact Us",
+		title5:"Proportion",
+		content5:
+		    "We adjust the weight according to different users' concerns and expectations of the website experience, and flexibly adjust the weight of various aspects of the experience report. Through this module, we are able to more accurately reflect the needs of users and provide personalized experience reports. For example, if current users are more concerned about rendering speed and ease of use of the site, we can adjust the weight of these aspects in the experience report to better meet user expectations. This flexible weight adjustment mechanism allows us to provide more tailored experience reports for different users and different types of websites",
+		title6:"Average level",
+		content6:
+		    "Evaluate and compare all aspects of the website experience based on extensive data aggregation and analysis. Through this module, we are able to compare the user's website experience with the industry average, helping users to better understand the performance advantages and room for improvement in different aspects of their website. Including but not limited to page loading speed, interactive response time, user interface design and other metrics. Then, compare these metrics with the corresponding industry or similar types of websites, calculate the average level of each aspect, and understand how their website is performing in all aspects"
 	},
 	contact: {
 		info: "is produced by the members of Zeqi Studio of School of Information and Software Engineering (SISE), University of Electronic Science and Technology of China (UESTC), Leng Rui, Zeng Di, Zhang Haoxiang, and Tu Guobin.",

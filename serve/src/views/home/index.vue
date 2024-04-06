@@ -101,9 +101,9 @@ const cardList = computed(() => {
             content: $t('card.content1')
         },
         {
-            title: "比重",
+            title: $t('card.title5'),
             icon: nightingale,
-            content: "我们根据不同使用者的关注点和对网站体验的期望进行比重调整，灵活调整体验报告中各方面的比重。通过这一模块，我们能够更准确地反映用户的需求，提供个性化的体验报告。例如，如果当前使用者更关注网站的渲染速度和使用流畅度，我们可以调整这些方面在体验报告中的比重，以更好地满足用户的期望。这种灵活的比重调整机制使得我们能够针对不同的使用者和不同类型的网站提供更贴合实际需求的体验报告"
+            content: $t('card.content5')
         },
         {
             title: $t('card.title2'),
@@ -111,9 +111,9 @@ const cardList = computed(() => {
             content: $t('card.content2')
         },
         {
-            title: "平均水平",
+            title: $t('card.title6'),
             icon: radar,
-            content: "基于广泛的数据汇总和分析，针对网站体验的各个方面进行评估和比较。通过这一模块，我们能够将用户的网站体验与行业平均水平进行对比，帮助用户更清晰地了解其网站在不同方面的表现优势和改进空间。包括但不限于页面加载速度、交互响应时间、用户界面设计等指标。然后，将这些指标与相应行业或类似类型的网站进行比较，计算出每个方面的平均水平，了解其网站在各个方面的表现如何"
+            content: $t('card.content6')
         },
         {
             title: $t('card.title3'),
@@ -282,7 +282,7 @@ const cardList = computed(() => {
     margin-bottom: 80px;
     margin-left: auto;
     margin-right: auto;
-    max-width: 850px;
+    max-width: 880px;
     width: 90%;
 
     .card {
