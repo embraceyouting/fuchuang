@@ -141,7 +141,7 @@ body {
           small {
             font-size: 12px;
             margin-left: 4px;
-            color: #000000;
+            color: inherit;
           }
         }
 
