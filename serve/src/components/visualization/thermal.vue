@@ -31,7 +31,7 @@ onMounted(() => {
         calendar: [
             {
                 left: 'center',
-                top: '45',
+                top: '40',
                 range: [new Date(new Date().getTime() - 200 * 3600 * 24 * 1000), new Date()],
                 splitLine: {
                     show: true,
@@ -66,7 +66,7 @@ onMounted(() => {
             type: 'piecewise',
             orient: 'horizontal',
             left: 'center',
-            bottom: "5%"
+            bottom: "4.8%"
         },
         series: [
             {

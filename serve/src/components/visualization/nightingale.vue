@@ -3,10 +3,22 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount, computed, watch  } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
-
+const { $t } = getCurrentInstance().proxy
+const datalist = computed(()=>{
+    return[
+        { value: 45, name: $t("nightgale.value1") },
+        { value: 38, name: $t("nightgale.value2") },
+        { value: 32, name: $t("nightgale.value3") },
+        { value: 30, name: $t("nightgale.value4") },
+        { value: 25, name: $t("nightgale.value5") },
+        { value: 16, name: $t("nightgale.value6") },
+        { value: 16, name: $t("nightgale.value7") },
+        { value: 16, name: $t("nightgale.value8") },
+    ]
+})
 onMounted(() => {
     const dom = document.getElementById('myChart2');
     const myChart = echarts.init(dom);
@@ -23,26 +35,17 @@ onMounted(() => {
         series: [{
             name: 'Nightingale Chart',
             type: 'pie',
-            radius: ["10%", "65%"],
+            radius: ["10%", "55%"],
             center: ['50%', '42%'],
             roseType: 'area',
             itemStyle: {
                 borderRadius: 8
             },
-            data: [
-                { value: 45, name: '无响应' },
-                { value: 38, name: '高跳出率' },
-                { value: 32, name: '重复点击' },
-                { value: 30, name: '页面加载慢' },
-                { value: 25, name: '网络反馈慢' },
-                { value: 16, name: '点击错误' },
-                { value: 16, name: '加载错误' },
-                { value: 16, name: '白屏' },
-            ],
+            data: datalist.value, // 记得在使用计算属性时要使用 .value
             label: {
                 show: true,
-                // position: 'outer',
-                // alignTo: "edge",
+                position: 'outer',
+                alignTo: "edge",
                 edgeDistance: 0,
                 overflow: 'breakAll'
             }
@@ -53,6 +56,14 @@ onMounted(() => {
         setTimeout(() => {
             myChart.resize();
         }, 10);
+    });
+    // 监听datalist的变化，并重新渲染图表
+    watch(datalist, (newVal, oldVal) => {
+        myChart.setOption({
+            series: [{
+                data: newVal
+            }]
+        });
     });
 });
 

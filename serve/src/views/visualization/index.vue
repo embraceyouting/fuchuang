@@ -7,6 +7,23 @@
       <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
         <swiper-slide>
           <div class="charts">
+            <div class="select_part">
+              <el-select
+                v-model="value"
+                filterable
+                placeholder="Select"
+                style="width: 120px;"
+                @change="handleChange"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+            
             <div class="left">
               <div class="left_chart">
                 <BorderBox2 class="text_pv"><span>用户分布</span></BorderBox2>
@@ -28,7 +45,6 @@
               </div>
             </div>
 
-
             <div class="middle">
               <div class="china">
                 <BorderBox2 class="text_pv"><span>用户地域分布</span></BorderBox2>
@@ -39,7 +55,6 @@
                 <thermal></thermal>
               </div>
             </div>
-
 
             <div class="right">
 
@@ -84,18 +99,15 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref } from "vue"
+import { ref ,toRef } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import nightingale from "../../components/visualization/nightingale.vue"
 import loading from "../../components/visualization/loading.vue"
 import thermal from "../../components/visualization/thermal.vue"
-import radar from "../../components/visualization/radar.vue"
 import china from "../../components/visualization/china.vue"
 import linerace from "../../components/visualization/linerace.vue"
-import relation from "../../components/visualization/relation.vue"
 import left_line from "../../components/visualization/left_line.vue"
 import left_pie from "../../components/visualization/left_pie.vue"
 import pie from "../../components/visualization/pie.vue"
@@ -103,6 +115,23 @@ import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@dataview/datav-vue3';
+
+const value = toRef(localStorage.getItem("json"))
+const options = [
+  {
+    value: 'log2.json',
+    label: 'log2.json',
+  },
+  {
+    value: 'log4.json',
+    label: 'log4.json',
+  },
+]
+
+function handleChange(){
+  localStorage.setItem("json",value.value)
+  window.location.reload()
+}
 
 defineOptions({
   name: "visualization"
@@ -185,6 +214,15 @@ function getColor(times) {
           justify-content: space-around;
           height: 100%;
           width: 100%;
+          position: relative;
+
+          .select_part{
+            position:absolute;
+            left: 50%;
+            top: 17px;
+            transform: translateX(-50%);
+            z-index: 10000000;
+          }
 
           .left {
             width: 24%;
@@ -383,6 +421,19 @@ function getColor(times) {
   height: 5px;
   border-radius: 5px;
 }
+
+:deep(.el-select__wrapper){
+  background-color: rgba(244, 239, 239, 0.096);
+}
+
+:deep(.el-select__placeholder){
+  color: black;
+}
+
+:deep(.el-icon svg){
+  color: black;
+}
+
 
 @keyframes isloadinganimation {
   0% {

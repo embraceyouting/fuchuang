@@ -116,10 +116,10 @@ function goToView(list) {
     }, 1000)
 }
 
-onUnmounted(() => {
-    intro.exit();
+router.beforeEach((to, from, next) => {
+    intro.exit(); // 在路由切换前调用 intro.exit()
+    next(); // 继续导航
 })
-
 </script>
 
 <style scoped lang="scss">

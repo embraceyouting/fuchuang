@@ -29,8 +29,8 @@ const bgY = ref(0);
 function handleMouseMove(event) {
     const mouseX = event.pageX;
     const mouseY = event.pageY;
-    bgX.value = mouseX / innerWidth * 1;
-    bgY.value = mouseY / innerHeight * 1;
+    bgX.value = mouseX / innerWidth * 10;
+    bgY.value = mouseY / innerHeight * 10;
 }
 
 function handleResize() {
@@ -52,7 +52,7 @@ body {
 #bg {
     position: fixed;
     inset: 0;
-    filter: blur(60px);
+    filter: blur(65px);
     background: linear-gradient(45deg, #d4e7ff, #7166ef);
     background-image: url('@/assets/image/back.jpg');
     background-size: 200% 200%;
@@ -69,7 +69,7 @@ body {
     background: linear-gradient(45deg, #d4e7ff, #6176ed);
     background-image: url('@/assets/image/back.jpg');
     opacity: 0.8;
-    filter: blur(60px);
+    filter: blur(65px);
     background-size: 200% 200%;
 }
 

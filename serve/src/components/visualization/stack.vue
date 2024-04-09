@@ -7,9 +7,9 @@ import { getCurrentInstance, onMounted, onBeforeUnmount , ref } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 // 初始化数组
-const regions = ref(['巴西', '英国', '美国', '印度', '中国', '日本', '韩国', '法国', '德国', '朝鲜']);
-const mobile = ref([13000, 23000, 29000, 40000, 30000, 10300, 20300, 29000, 40000, 13000]);
-const pc = ref([10300, 20300, 20900, 24000, 23000, 13000, 23000, 20900, 40000, 23000]);
+const regions = ref(['巴西', '英国', '美国', '印度', '中国', '日本', '韩国', '法国', '德国', '朝鲜', '挪威', '埃及']);
+const mobile = ref([10850, 11900, 13150, 13580, 20230, 14170, 14490, 12390, 12540, 14950, 13280, 11850]);
+const pc = ref([19150, 18100, 16850, 16420, 9767, 15830, 15510, 17610, 17460, 15050, 16720, 18150]);
 // 每次拿6个元素
 const batchSize = 6;
 // 当前索引
@@ -44,7 +44,7 @@ onMounted(() => {
                 containLabel: true
             },
             xAxis: {
-                max: '30000',
+                max: '20000',
                 position: 'top',
                 type: 'value',
                 boundaryGap: [0, 0.01],
@@ -72,7 +72,7 @@ onMounted(() => {
                 {
                     name: 'mobile',
                     type: 'bar',
-                    data: [13000, 23000, 29000, 40000, 30000, 10300],
+                    data: [10850, 11900, 13150, 13580, 20230, 14170],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
@@ -90,7 +90,7 @@ onMounted(() => {
                 {
                     name: 'pc',
                     type: 'bar',
-                    data: [10300, 20300, 20900, 24000, 23000, 13000],
+                    data: [19150, 18100, 16850, 16420, 9767, 15830],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {

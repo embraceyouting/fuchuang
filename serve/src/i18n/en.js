@@ -61,4 +61,24 @@ export default {
 		text3: "To see what can FlyView does, type [help] for it.",
 		placeholder: "please enter content",
 	},
+	nightgale:{
+		value1: "No Response",
+		value2: "High Bounce Rate",
+		value3: "Duplicate Clicks",
+		value4: "Slow Page Load",
+		value5: "Slow Network Response",
+		value6: "Click Errors",
+		value7: "Loading Errors",
+		value8: "White Screen"
+	},
+	radar:{
+		value1: "No Response",
+		value2: "High Bounce Rate",
+		value3: "Duplicate Clicks",
+		value4: "Slow Page Load",
+		value5: "Slow Network Response",
+		value6: "Click Errors",
+		value7: "Loading Errors",
+		value8: "White Screen"
+	}
 };
