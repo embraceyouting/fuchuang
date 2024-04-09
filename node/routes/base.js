@@ -30,4 +30,8 @@ router.get("/cover", async (req, res) => {
 	}
 });
 
+router.get("/", (req, res) => {
+	res.send(createMessage(200, "Hello World!"));
+});
+
 module.exports = router;

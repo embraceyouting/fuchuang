@@ -7,3 +7,4 @@
 
 # 忽略 .env
 .env
+.vercel
