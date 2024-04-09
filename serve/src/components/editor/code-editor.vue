@@ -231,6 +231,7 @@ onBeforeUnmount(() => {
     if (editor) {
         editor.dispose();
     }
+    
 });
 </script>
 

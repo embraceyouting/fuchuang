@@ -61,4 +61,24 @@ export default {
 		text3: "想知道 FlyView 的功能，输入 [help] 即可查看。",
 		placeholder: "请输入内容",
 	},
+	nightgale: {
+        value1: "无响应",
+        value2: "高跳出率",
+        value3: "重复点击",
+        value4: "页面加载慢",
+        value5: "网络反馈慢",
+        value6: "点击错误",
+        value7: "加载错误",
+        value8: "白屏"
+    },
+	radar:{
+		value1: "无响应",
+        value2: "高跳出率",
+        value3: "重复点击",
+        value4: "页面加载慢",
+        value5: "网络反馈慢",
+        value6: "点击错误",
+        value7: "加载错误",
+        value8: "白屏"
+	}
 };

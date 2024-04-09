@@ -52,7 +52,7 @@ const chooseLang = (languagevalue) => {
 .navbar {
     width: 100%;
     height: 60px;
-    background-color: #5e77d27b;
+    background-image: linear-gradient(to bottom, #5e77d27b, #5e77d21e);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
