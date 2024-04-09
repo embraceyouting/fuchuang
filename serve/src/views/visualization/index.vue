@@ -12,7 +12,7 @@
                 v-model="value"
                 filterable
                 placeholder="Select"
-                style="width: 120px;"
+                style="width: 200px;"
                 @change="handleChange"
               >
                 <el-option
@@ -115,22 +115,20 @@ import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@newpanjing/datav-vue3';
+import { is } from 'immutable'
 
-const value = toRef(localStorage.getItem("json"))
-const options = [
-  {
-    value: 'log2.json',
-    label: 'log2.json',
-  },
-  {
-    value: 'log4.json',
-    label: 'log4.json',
-  },
-]
+const value = ""
+let options = []
+service.get("/visual").then((res)=>{
+  const optionsSet = new Set(res.data.map(obj => obj.website));
+  options = [...optionsSet].map(website => ({ value: website, label: website }));
+})
 
 function handleChange(){
-  localStorage.setItem("json",value.value)
-  window.location.reload()
+  isloading.value = true;
+  setTimeout(()=>{
+    isloading.value = false;
+  },3000)
 }
 
 defineOptions({
