@@ -9,7 +9,7 @@ const { marked } = require("marked");
 const { openai } = require("../utils/openai");
 const http = require('http');
 
-async function getReport(json, problems) {
+async function getReport(json) {
 	const problems1 = {
 		"浏览环境": {
 			"用户所在地": {
@@ -263,13 +263,14 @@ router.post("/", function (req, res) {
 						'Content-Length': Buffer.byteLength(datajson) // 计算数据长度
 					}
 				};
-				const req = http.request(options, (res) => {
-					console.log(`statusCode: ${res.statusCode}`);
-					res.on('data', (chunk) => {
-						let problems = chunk.toString()
-						console.log(problems)
-						if (res.statusCode === 200) {
-							getReport(json, problems)
+				// const req = http.request(options, (res) => {
+				// 	console.log(`statusCode: ${res.statusCode}`);
+				// 	res.on('data', (chunk) => {
+				// 		let problemsstr = chunk.toString()
+				// 		problems = problemsstr.replace(/\n/g, "");
+				// 		console.log(problems)
+				// 		if (res.statusCode === 200) {
+							getReport(json)
 								.then(({ score, report, raw }) => {
 									const sql = "UPDATE files SET score = $1 WHERE id = $2";
 									db.query(sql, [score, file.id], (err, result) => { });
