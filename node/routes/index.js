@@ -11,6 +11,5 @@ router.use("/", baseRoute);
 router.use("/gpt", gptRoute);
 router.use("/user", userRoute);
 router.use("/subject", subjectRoute);
-router.use("/visual", visualRoute);
 
 module.exports = router;
