@@ -206,7 +206,7 @@ async function getReport(json, problems) {
 router.post("/", function (req, res) {
 	upload(req, res, async function (err) {
 		if (err) {
-			return res.status(500).send(createMessage(500, "上传文件时出错。"));
+			return res.status(500).send(createMessage(500, "上传文件时出错"));
 		}
 		const uid = req.user.id;
 		for (let i = 0; i < req.files.length; i++) {
@@ -216,7 +216,7 @@ router.post("/", function (req, res) {
 				"utf-8"
 			);
 			const sql =
-				"INSERT INTO files (uid, path, filename) VALUES (?, ?, ?)";
+				"INSERT INTO files (uid, path, filename) VALUES ($1, $2, $3) RETURNING id";
 			const id = await new Promise((resolve) => {
 				db.query(
 					sql,
@@ -227,7 +227,7 @@ router.post("/", function (req, res) {
 								.status(500)
 								.send(createMessage(500, "插入数据库时出错。"));
 						}
-						resolve(result.insertId);
+						resolve(result.rows[0].id);
 					}
 				);
 			});
@@ -247,7 +247,7 @@ router.post("/", function (req, res) {
 				)
 					.sort(([k1, v1], [k2, v2]) => v1 - v2)
 					.pop()[0];
-				const sql = "UPDATE files SET website = ? WHERE id = ?";
+				const sql = "UPDATE files SET website = $1 WHERE id = $2";
 				db.query(sql, [website, file.id], (err, result) => { });
 
 
@@ -271,13 +271,13 @@ router.post("/", function (req, res) {
 						if (res.statusCode === 200) {
 							getReport(json, problems)
 								.then(({ score, report, raw }) => {
-									const sql = "UPDATE files SET score = ? WHERE id = ?";
+									const sql = "UPDATE files SET score = $1 WHERE id = $2";
 									db.query(sql, [score, file.id], (err, result) => { });
 									return generatePDF(marked(report), raw);
 								})
 								.then((path) => {
 									const sql =
-										"UPDATE files SET path_pdf = ? WHERE id = ?";
+										"UPDATE files SET path_pdf = $1 WHERE id = $2";
 									db.query(sql, [path, file.id], (err, result) => { });
 								});
 						}
@@ -288,6 +288,17 @@ router.post("/", function (req, res) {
 				});
 				req.on('error', (error) => {
 					console.error('Error:', error);
+					getReport(json)
+								.then(({ score, report, raw }) => {
+									const sql = "UPDATE files SET score = $1 WHERE id = $2";
+									db.query(sql, [score, file.id], (err, result) => { });
+									return generatePDF(marked(report), raw);
+								})
+								.then((path) => {
+									const sql =
+										"UPDATE files SET path_pdf = $1 WHERE id = $2";
+									db.query(sql, [path, file.id], (err, result) => { });
+								});
 				});
 				req.write(datajson);
 				req.end();
@@ -300,13 +311,13 @@ router.post("/", function (req, res) {
 router.get("/:id?", (req, res) => {
 	const { id } = req.params;
 	const sql = id
-		? "SELECT filename as title,path,id,time,website as url,path_pdf,score FROM files WHERE id = ?"
-		: "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,f.path_pdf,f.score,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id WHERE f.uid = ? ORDER BY f.id DESC";
-	db.query(sql, [id || req.user.id], (err, results) => {
+		? "SELECT filename as title,path,id,time,website as url,path_pdf,score FROM files WHERE id = $1"
+		: "SELECT f.filename as title,f.path,f.id,f.time,f.website as url,f.path_pdf,f.score,u.username,u.id as uid FROM files as f JOIN users as u ON f.uid = u.id WHERE f.uid = $1 ORDER BY f.id DESC";
+	db.query(sql, [id || req.user.id], (err, result) => {
 		if (err) {
 			return res.status(500).send(createMessage(500, "获取数据时出错"));
 		}
-		res.send(createMessage(200, "获取数据成功", id ? results[0] : results));
+		res.send(createMessage(200, "获取数据成功", id ? result.rows[0] : result.rows));
 	});
 });
 
@@ -315,7 +326,7 @@ router.delete("/:id", (req, res) => {
 	if (!id) {
 		return res.status(400).send(createMessage(400, "未提供文件名。"));
 	}
-	const sql = "DELETE FROM files WHERE id = ?";
+	const sql = "DELETE FROM files WHERE id = $1";
 	db.query(sql, [id], (err, result) => {
 		if (err) {
 			console.error("删除数据库记录时出错:", err);
