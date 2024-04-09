@@ -102,7 +102,7 @@ import pie from "../../components/visualization/pie.vue"
 import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
-import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@dataview/datav-vue3';
+import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@newpanjing/datav-vue3';
 
 defineOptions({
   name: "visualization"
