@@ -140,12 +140,12 @@ const isloading = ref(true)
 setTimeout(() => isloading.value = false, 3000)
 
 const problemList = [
-  { name: '用户白屏', times: '3' },
-  { name: '页面加载缓慢', times: '12' },
-  { name: '页面未找到', times: '9' },
-  { name: '服务器错误', times: '15' },
-  { name: '数据库连接失败', times: '7' },
-  { name: '图片加载失败', times: '8' }
+  { name: '用户白屏', times: '1' },
+  { name: '重复点击', times: '12' },
+  { name: '加载错误', times: '10' },
+  { name: '页面加载缓慢', times: '1' },
+  { name: '点击报错', times: '9' },
+  { name : '多个事件' , times: '12'}
 ];
 
 function getColor(times) {

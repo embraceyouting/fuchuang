@@ -11,7 +11,7 @@
         <div class="icon">
             WebSite & BigData
             <div class="fullscreen">
-                <el-icon :size="32" @click="fullscreen">
+                <el-icon :size="32" @click="fullscreen" color="white">
                     <FullScreen v-if="!isFullScreen" />
                     <Close v-else />
                 </el-icon>
@@ -220,6 +220,10 @@ function fullscreen() {
 
             .el-icon{
                 cursor: pointer;
+                
+                svg{
+                    color: white;
+                }
             }
 
             .text {

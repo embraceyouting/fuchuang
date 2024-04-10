@@ -14,7 +14,7 @@
                     </span>
 
                     <span class="location tag">
-                        {{ userInfo?.location || '电子科技大学' }}</span>
+                        {{ userInfo?.location || 'xxxx大学' }}</span>
                 </p>
                 <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature ||
             '这个人很懒，什么也没留下...' }}</p>
@@ -39,7 +39,7 @@
                     <div class="container">
                         <TransitionGroup name="list">
                             <div class="item" v-for="sub in filteredList" :key="sub.id">
-                                <ProjectCard :time="sub.time" :url="sub.url" :title="sub.title" :uid="sub.uid"
+                                <ProjectCard :time="add8(sub.time)" :url="sub.url" :title="sub.title" :uid="sub.uid"
                                     :username="sub.username" :path="sub.path" :score="sub.score" :id="sub.id">
                                 </ProjectCard>
                             </div>
@@ -89,6 +89,12 @@ function toggleAll() {
     } else {
         activeList.value = subjectUrlList.value
     }
+}
+
+function add8(time){
+    var date = new Date(time);
+    date.setHours(date.getHours() + 8);
+    return date.toISOString();
 }
 
 userStore.getSubjectList().then(() => {

@@ -33,7 +33,7 @@ export default {
 		    "Evaluate and compare all aspects of the website experience based on extensive data aggregation and analysis. Through this module, we are able to compare the user's website experience with the industry average, helping users to better understand the performance advantages and room for improvement in different aspects of their website. Including but not limited to page loading speed, interactive response time, user interface design and other metrics. Then, compare these metrics with the corresponding industry or similar types of websites, calculate the average level of each aspect, and understand how their website is performing in all aspects"
 	},
 	contact: {
-		info: "is produced by the members of Zeqi Studio of School of Information and Software Engineering (SISE), University of Electronic Science and Technology of China (UESTC), Leng Rui, Zeng Di, Zhang Haoxiang, and Tu Guobin.",
+		info: "is produced by the members of xxxxxx of School of xxxxxxxxxxxxxxxxx, xxxxxxxxxxxxxxxxxx, xx, xxx, xxx, and xxx.",
 		email: "If you have any questions about this project, Please contact us by Email:",
 		dot: ".",
 	},
