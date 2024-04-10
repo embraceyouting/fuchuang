@@ -251,25 +251,25 @@ router.post("/", function (req, res) {
 				db.query(sql, [website, file.id], (err, result) => { });
 
 
-				const http = require('http');
-				const datajson = JSON.stringify(json);
-				const options = {
-					hostname: '192.168.1.111',
-					port: 5000,
-					path: '/endpoint',
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'Content-Length': Buffer.byteLength(datajson) // 计算数据长度
-					}
-				};
-				const req = http.request(options, (res) => {
-					console.log(`statusCode: ${res.statusCode}`);
-					res.on('data', (chunk) => {
-						let problemsstr = chunk.toString()
-						problems = problemsstr.replace(/\n/g, "");
-						console.log(problems)
-						if (res.statusCode === 200) {
+				// const http = require('http');
+				// const datajson = JSON.stringify(json);
+				// const options = {
+				// 	hostname: '192.168.1.111',
+				// 	port: 5000,
+				// 	path: '/endpoint',
+				// 	method: 'POST',
+				// 	headers: {
+				// 		'Content-Type': 'application/json',
+				// 		'Content-Length': Buffer.byteLength(datajson) // 计算数据长度
+				// 	}
+				// };
+				// const req = http.request(options, (res) => {
+				// 	console.log(`statusCode: ${res.statusCode}`);
+				// 	res.on('data', (chunk) => {
+				// 		let problemsstr = chunk.toString()
+				// 		problems = problemsstr.replace(/\n/g, "");
+				// 		console.log(problems)
+				// 		if (res.statusCode === 200) {
 							getReport(json)
 								.then(({ score, report, raw }) => {
 									const sql = "UPDATE files SET score = $1 WHERE id = $2";
@@ -281,28 +281,28 @@ router.post("/", function (req, res) {
 										"UPDATE files SET path_pdf = $1 WHERE id = $2";
 									db.query(sql, [path, file.id], (err, result) => { });
 								});
-						}
-						else {
-							console.log("something is wrong")
-						}
-					});
-				});
-				req.on('error', (error) => {
-					console.error('Error:', error);
-					getReport(json)
-								.then(({ score, report, raw }) => {
-									const sql = "UPDATE files SET score = $1 WHERE id = $2";
-									db.query(sql, [score, file.id], (err, result) => { });
-									return generatePDF(marked(report), raw);
-								})
-								.then((path) => {
-									const sql =
-										"UPDATE files SET path_pdf = $1 WHERE id = $2";
-									db.query(sql, [path, file.id], (err, result) => { });
-								});
-				});
-				req.write(datajson);
-				req.end();
+					// 	}
+					// 	else {
+					// 		console.log("something is wrong")
+					// 	}
+					// });
+				// });
+				// req.on('error', (error) => {
+				// 	console.error('Error:', error);
+				// 	getReport(json)
+				// 				.then(({ score, report, raw }) => {
+				// 					const sql = "UPDATE files SET score = $1 WHERE id = $2";
+				// 					db.query(sql, [score, file.id], (err, result) => { });
+				// 					return generatePDF(marked(report), raw);
+				// 				})
+				// 				.then((path) => {
+				// 					const sql =
+				// 						"UPDATE files SET path_pdf = $1 WHERE id = $2";
+				// 					db.query(sql, [path, file.id], (err, result) => { });
+				// 				});
+				// });
+				// req.write(datajson);
+				// req.end();
 			});
 		}
 		res.status(200).send(createMessage(200, "文件上传成功。", req.files));

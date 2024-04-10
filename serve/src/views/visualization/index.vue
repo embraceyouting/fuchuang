@@ -119,9 +119,9 @@ import { is } from 'immutable'
 
 const value = ""
 let options = []
-service.get("/visual").then((res)=>{
-  const optionsSet = new Set(res.data.map(obj => obj.website));
-  options = [...optionsSet].map(website => ({ value: website, label: website }));
+service.get("/subject").then((res)=>{
+  const optionsSet = new Set(res.data.map(obj => obj.url));
+  options = [...optionsSet].map(url => ({ value: url, label: url }));
 })
 
 function handleChange(){

@@ -22,7 +22,7 @@ onMounted(() => {
         top: 'center',
         style: {
           text: 'Fly View',
-          fontSize: 80,
+          fontSize: 180,
           fontWeight: 'bold',
           lineDash: [0, 200],
           lineDashOffset: 0,
