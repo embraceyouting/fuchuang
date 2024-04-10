@@ -281,28 +281,28 @@ router.post("/", function (req, res) {
 										"UPDATE files SET path_pdf = $1 WHERE id = $2";
 									db.query(sql, [path, file.id], (err, result) => { });
 								});
-						}
-						else {
-							console.log("something is wrong")
-						}
-					});
-				});
-				req.on('error', (error) => {
-					console.error('Error:', error);
-					getReport(json)
-								.then(({ score, report, raw }) => {
-									const sql = "UPDATE files SET score = $1 WHERE id = $2";
-									db.query(sql, [score, file.id], (err, result) => { });
-									return generatePDF(marked(report), raw);
-								})
-								.then((path) => {
-									const sql =
-										"UPDATE files SET path_pdf = $1 WHERE id = $2";
-									db.query(sql, [path, file.id], (err, result) => { });
-								});
-				});
-				req.write(datajson);
-				req.end();
+					// 	}
+					// 	else {
+					// 		console.log("something is wrong")
+					// 	}
+					// });
+				// });
+				// req.on('error', (error) => {
+				// 	console.error('Error:', error);
+				// 	getReport(json)
+				// 				.then(({ score, report, raw }) => {
+				// 					const sql = "UPDATE files SET score = $1 WHERE id = $2";
+				// 					db.query(sql, [score, file.id], (err, result) => { });
+				// 					return generatePDF(marked(report), raw);
+				// 				})
+				// 				.then((path) => {
+				// 					const sql =
+				// 						"UPDATE files SET path_pdf = $1 WHERE id = $2";
+				// 					db.query(sql, [path, file.id], (err, result) => { });
+				// 				});
+				// });
+				// req.write(datajson);
+				// req.end();
 			});
 		}
 		res.status(200).send(createMessage(200, "文件上传成功。", req.files));

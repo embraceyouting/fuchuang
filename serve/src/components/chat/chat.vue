@@ -17,7 +17,7 @@
                 <el-icon @click="goBack">
                     <ArrowLeftBold />
                 </el-icon>
-                <span>GPT 4.0</span>
+                <span>{{ $t('gpt.assistant') }}</span>
             </h4>
             <ChatCard v-for="(item, index) in messageList" :key="index" :item="item"
                 :isDie="index !== messageList.length - 1">

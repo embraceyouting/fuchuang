@@ -8,8 +8,8 @@ let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 // 初始化数组
 const regions = ref(['巴西', '英国', '美国', '印度', '中国', '日本', '韩国', '法国', '德国', '朝鲜', '挪威', '埃及']);
-const mobile = ref([10850, 11900, 13150, 13580, 20230, 14170, 14490, 12390, 12540, 14950, 13280, 11850]);
-const pc = ref([19150, 18100, 16850, 16420, 9767, 15830, 15510, 17610, 17460, 15050, 16720, 18150]);
+const mobile = ref([1085, 1190, 1310, 1380, 2230, 1170, 1490, 1390, 1240, 1950, 1380, 1150]);
+const pc = ref([1915, 1810, 1650, 1420, 967, 1830, 1510, 1610, 1460, 1050, 1620, 1150]);
 // 每次拿6个元素
 const batchSize = 6;
 // 当前索引
@@ -44,7 +44,7 @@ onMounted(() => {
                 containLabel: true
             },
             xAxis: {
-                max: '20000',
+                max: '2000',
                 position: 'top',
                 type: 'value',
                 boundaryGap: [0, 0.01],
@@ -54,7 +54,7 @@ onMounted(() => {
                 axisLabel: {
                     show: true,
                 },
-                interval: 10000, //加入axisLabel字段,interval后面加你想要间隔的个数
+                interval: 1000, //加入axisLabel字段,interval后面加你想要间隔的个数
             },
             yAxis: {
                 type: 'category',
@@ -72,7 +72,7 @@ onMounted(() => {
                 {
                     name: 'mobile',
                     type: 'bar',
-                    data: [10850, 11900, 13150, 13580, 20230, 14170],
+                    data: [1085, 1190, 1315, 1358, 2023, 1417],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
@@ -90,7 +90,7 @@ onMounted(() => {
                 {
                     name: 'pc',
                     type: 'bar',
-                    data: [19150, 18100, 16850, 16420, 9767, 15830],
+                    data: [1915, 1810, 1685, 1642, 976, 1583],
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
