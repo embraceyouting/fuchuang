@@ -13,13 +13,13 @@
         <div class="info" :class="{ 'in-cover': inCover }">
             <h4 class="title" :title="title" v-if="id">{{ title }}</h4>
             <a class="title url" :title="title" v-else :href="url" target="_blank">{{ title }}</a>
-            <p class="url" v-if="score">
+            <p class="url" v-if="id">
                 <a :href="url" target="_blank"><span class="tag"><el-icon>
                             <Monitor />
                         </el-icon>访问该网站</span></a>
                 <span class="tag"><el-icon>
                         <DocumentChecked />
-                    </el-icon>{{ score || 90 }}分</span>
+                    </el-icon>{{ score || '暂无评' }}分</span>
             </p>
             <p class="user" v-if="uid">
                 <router-link :to="`/user/${uid}`">@{{ username }}</router-link>
