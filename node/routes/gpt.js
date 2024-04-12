@@ -16,7 +16,8 @@ router.get("/", async (req, res) => {
 
 	const stream = await openai.beta.chat.completions.stream({
 		messages: [{ role: "user", content: query }],
-		model: "gpt-3.5-turbo",
+		// model: "gpt-3.5-turbo",
+		model: "gpt-4-turbo-preview",
 		stream: true,
 	});
 

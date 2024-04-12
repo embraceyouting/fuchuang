@@ -131,7 +131,7 @@ async function search(e) {
             }
         })
     })
-    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value},files:${result.join("[FILE SEPARATOR]").slice(0, 6666)}&token=${getToken()}`);
+    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value},files:${result.join("[FILE SEPARATOR]").slice(0, 4000)}&token=${getToken()}`);
     key.value = '';
     fileList.value = []
     const obj = reactive({ text: '', type: "assistant", isEnd: false })

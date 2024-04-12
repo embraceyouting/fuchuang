@@ -169,14 +169,14 @@ async function getReport(json) {
 	if (JSON.stringify(json) === json1) {
 		return {
 			report: report1,
-			score: 73.1,
+			score: 73,
 			raw: JSON.stringify(extractEventData(JSON.parse(output1))),
 		};
 	}
 	if (JSON.stringify(json) === json2) {
 		return {
 			report: report2,
-			score: 82.4,
+			score: 82,
 			raw: JSON.stringify(extractEventData(JSON.parse(output2))),
 		};
 	}
