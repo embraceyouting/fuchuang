@@ -47,7 +47,9 @@ onMounted(() => {
                 position: 'outer',
                 alignTo: "edge",
                 edgeDistance: 0,
-                overflow: 'breakAll'
+                overflow: 'breakAll',
+                backgroundColor : 'transparent',
+                fontSize:'13',
             }
         }]
     };

@@ -43,6 +43,7 @@ onMounted(() => {
     textStyle: {
       color: 'black',
       fontweight: 'bold',
+      fontSize:'13',
     },
     radar: {
       radius: ["0%", "60%"],
