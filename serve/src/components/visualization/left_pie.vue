@@ -14,7 +14,7 @@ onMounted(() => {
     const option = {
         tooltip: {
             trigger: 'item',
-            formatter: '{b}: {d}%' // 修改tooltip的formatter，显示具体数值和比例
+            // formatter: '{b}: {d}%' // 修改tooltip的formatter，显示具体数值和比例
         },
         legend: {
             align: 'right',

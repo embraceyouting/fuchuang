@@ -47,7 +47,7 @@
 
             <div class="middle">
               <div class="china">
-                <BorderBox2 class="text_pv"><span>用户地域分布</span></BorderBox2>
+                <!-- <BorderBox2 class="text_pv"><span>用户地域分布</span></BorderBox2> -->
                 <china></china>
               </div>
               <div class="middle_font">

@@ -30,7 +30,9 @@ onMounted(() => {
                 color: "white"
             },
             tooltip: {
-                formatter: '{b} : {c}'
+                formatter: function (params) {
+                    return `<b>日期</b>&emsp;${params.name}<br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${params.seriesName}</b>&emsp;${params.value}%`
+                }
             },
             legend: {
                 left: '0',

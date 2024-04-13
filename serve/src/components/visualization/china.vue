@@ -52,10 +52,10 @@ let userData = {
 
 onMounted(() => {
   initEchartMap();
-  myChart.on('click', (params) => {
-    const adcode = china.features.filter((item) => item.properties.name == params.data.name)[0].properties.adcode
-    router.push(`/${adcode}`)
-  })
+  // myChart.on('click', (params) => {
+  //   const adcode = china.features.filter((item) => item.properties.name == params.data.name)[0].properties.adcode
+  //   router.push(`/${adcode}`)
+  // })
 });
 
 onBeforeUnmount(() => {
@@ -72,7 +72,9 @@ function initEchartMap() {
   const options = {
     tooltip: {
       trigger: 'item',
-      formatter: '{b}: {c} 人' // 提示信息格式，显示省份名称和用户数量
+      formatter: function (params) {
+        return `<b>${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i>&emsp;${userData[params.name]}人`
+      }
     },
     visualMap: {
       min: 0,
@@ -81,7 +83,10 @@ function initEchartMap() {
       calculable: true,
       inRange: {
         color: ['#d5e8f3', '#5470c6'] // 浅蓝色到深蓝色
-      }
+      },
+      bottom: '10%',
+      left: '10%',
+      orient: 'horizontal',
     },
     geo: [
       {

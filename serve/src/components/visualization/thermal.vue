@@ -19,6 +19,7 @@ function getVirtualData() {
     return data.reverse(); // Reverse the array to display in ascending order
 }
 const data = getVirtualData();
+const date = new Date();
 let myChart; // Declare myChart variable outside of the setup function
 onMounted(() => {
     const dom = document.getElementById('myChart3');
@@ -32,7 +33,7 @@ onMounted(() => {
             {
                 left: 'center',
                 top: '40',
-                range: [new Date(new Date().getTime() - 200 * 3600 * 24 * 1000), new Date()],
+                range: [new Date(new Date().getTime() - (200 - new Date().getDay() + 1) * 3600 * 24 * 1000), new Date()],
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -52,7 +53,9 @@ onMounted(() => {
                 },
                 cellSize: ['21', '21'],
                 dayLabel: {
-                    show: false
+                    show: true,
+                    firstDay: 1,
+                    nameMap: ['日', '一', '二', '三', '四', '五', '六'],
                 },
                 monthLabel: {
                     show: false
@@ -70,10 +73,15 @@ onMounted(() => {
         },
         series: [
             {
-                name: 'PageView',
+                name: '每日访问量',
                 type: 'heatmap',
                 coordinateSystem: 'calendar',
                 data: data,
+                tooltip: {
+                    formatter: function (params) {
+                        return '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + '<b>日期</b>&emsp;&emsp;' + params.value[0] + '<br/>' + '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + '<b>访问量</b>&emsp;' + params.value[1];
+                    }
+                },
                 symbolSize: function (val) {
                     return val[1] / 500;
                 },
@@ -82,26 +90,15 @@ onMounted(() => {
                     borderRadius: 5,
                 }
             },
-
-            // {
-            //     name: 'Steps',
-            //     type: 'scatter',
-            //     coordinateSystem: 'calendar',
-            //     calendarIndex: 1,
-            //     data: data,
-            //     symbolSize: function (val) {
-            //         return val[1] / 500;
-            //     },
-            //     itemStyle: {
-            //         color: '#fff',
-            //         borderRadius: 5,
-            //     }
-            // },
-
             {
                 name: 'Top 12',
                 type: 'effectScatter',
                 coordinateSystem: 'calendar',
+                tooltip: {
+                    formatter: function (params) {
+                        return `<b>Top 12</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>日期</b>&emsp;&emsp;${params.data[0]} <br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>访问量</b>&emsp; ${params.data[1]}`
+                    }
+                },
                 data: data
                     .sort(function (a, b) {
                         return b[1] - a[1];

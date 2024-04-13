@@ -8,7 +8,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { getRandom } from '@/utils';
 
 const chart = ref(null);
-let countries = ["中国", "日本", "美国", "英国", "法国", "德国", "澳大利亚", "印度", "巴西", "加拿大"].map(item => ({ name: item, in: getRandom(30, 150), out: getRandom(30, 150) }));
+const getRandomCount = () => getRandom(300, 1500)
+let countries = ["中国", "日本", "美国", "英国", "法国", "德国", "澳大利亚", "印度", "巴西", "加拿大"].map(item => ({ name: item, in: getRandomCount(), out: getRandomCount() }));
 const COUNT = 8;
 let start = ref(0)
 let currentList = computed(() => countries.slice(start.value, COUNT + start.value).concat(countries.slice(0, Math.max(0, start.value + COUNT - countries.length))));
@@ -62,7 +63,6 @@ onMounted(() => {
         label: {
           show: true,
           position: "left",
-          formatter: "{c}k"
         },
         itemStyle: {
           color: "#aaac",
@@ -75,7 +75,6 @@ onMounted(() => {
         label: {
           show: true,
           position: "left",
-          formatter: "{c}k"
         },
         itemStyle: {
           color: "#5f86eadd",
@@ -86,8 +85,8 @@ onMounted(() => {
   });
 
   timer = setInterval(() => {
-    countries[start.value].in = getRandom(30, 150)
-    countries[start.value].out = getRandom(30, 150)
+    countries[start.value].in = getRandomCount()
+    countries[start.value].out = getRandomCount()
     start.value = (start.value + 1) % countries.length
     myChart.setOption({
       yAxis: {

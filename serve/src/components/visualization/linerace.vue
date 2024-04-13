@@ -44,7 +44,7 @@ onMounted(() => {
                 axisLabel: {
                     interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
                 },
-                boundaryGap:false,
+                boundaryGap: false,
                 axisLine: {
                     lineStyle: {
                         color: 'white',
@@ -80,7 +80,9 @@ onMounted(() => {
                 color: "white"
             },
             tooltip: {
-                formatter: '{b} : {c}'
+                formatter: function (params) {
+                    return `<b>${new Date().toLocaleString().slice(0, 10)}&nbsp;&nbsp;${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>实时访问流量</b>&emsp;${trafficData.value[params.dataIndex]}人`
+                }
             },
             grid: {
                 height: '80%',

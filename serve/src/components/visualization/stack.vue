@@ -3,13 +3,14 @@
 </template>
 
 <script setup>
+import { getRandom } from '@/utils';
 import { getCurrentInstance, onMounted, onBeforeUnmount , ref } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 // 初始化数组
-const regions = ref(['巴西', '英国', '美国', '印度', '中国', '日本', '韩国', '法国', '德国', '朝鲜', '挪威', '埃及']);
-const mobile = ref([1085, 1190, 1310, 1380, 2230, 1170, 1490, 1390, 1240, 1950, 1380, 1150]);
-const pc = ref([1915, 1810, 1650, 1420, 967, 1830, 1510, 1610, 1460, 1050, 1620, 1150]);
+const regions = ref(["浙江", "江苏", "湖南", "湖北", "广东", "广西", "贵州", "云南", "陕西", "山西", "山东", "河南", "河北", "福建", "辽宁", "吉林", "新疆", "青海", "甘肃", "四川", "重庆", "宁夏", "西藏", "安徽", "北京", "天津", "上海", "江西", "海南", "香港", "澳门", "台湾"]);
+const mobile = ref(Array.from({ length: regions.value.length }, () => getRandom(1000, 2000)));
+const pc = ref(Array.from({ length: regions.value.length }, () => getRandom(1000, 2000)));
 // 每次拿6个元素
 const batchSize = 6;
 // 当前索引

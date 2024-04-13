@@ -35,10 +35,10 @@ onMounted(() => {
             radius: ["0%", "70%"],
             center: ["36%", "54%"],
             indicator: [
-                { text: 'IE8-', max: 200 },
-                { text: 'IE9+', max: 200 },
-                { text: 'Safari', max: 200 },
+                { text: 'IE', max: 200 },
                 { text: 'Firefox', max: 200 },
+                { text: 'Safari', max: 200 },
+                { text: 'Edge', max: 200 },
                 { text: 'Chrome', max: 200 }
             ]
         },
@@ -63,9 +63,9 @@ onMounted(() => {
                         {
                             value: [
                                 (10 - i) * 20,
-                                (10 - i) * 4 + 60,
-                                i * 20 + 10,
-                                i * 30,
+                                i * 20,
+                                i * 15 + 10,
+                                30 * i + 30,
                                 i * 40 - 20
                             ],
                             name: i + 2019 + ''
