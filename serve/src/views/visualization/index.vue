@@ -115,9 +115,8 @@ import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
 import service from '@/service'
 import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@newpanjing/datav-vue3';
-import { is } from 'immutable'
 
-const value = ""
+let value = ref("")
 let options = []
 service.get("/subject").then((res)=>{
   const optionsSet = new Set(res.data.map(obj => obj.url));
