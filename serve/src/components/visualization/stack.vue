@@ -59,7 +59,7 @@ onMounted(() => {
             },
             yAxis: {
                 type: 'category',
-                data: ['巴西', '英国', '美国', '印度', '中国', '日本'],
+                data: regions.value.slice(currentIndexRegions, currentIndexRegions + batchSize),
                 axisLine: {
                     lineStyle: {
                         color: 'white',
@@ -73,7 +73,7 @@ onMounted(() => {
                 {
                     name: 'mobile',
                     type: 'bar',
-                    data: [1085, 1190, 1315, 1358, 2023, 1417],
+                    data: mobile.value.slice(currentIndexMobile, currentIndexMobile + batchSize),
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
@@ -91,7 +91,7 @@ onMounted(() => {
                 {
                     name: 'pc',
                     type: 'bar',
-                    data: [1915, 1810, 1685, 1642, 976, 1583],
+                    data: pc.value.slice(currentIndexPc, currentIndexPc + batchSize),
                     itemStyle: {
                         color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
                             {
