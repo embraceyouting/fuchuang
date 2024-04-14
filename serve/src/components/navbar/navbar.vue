@@ -22,7 +22,7 @@
                     </ElIcon>
                     {{ $t('navbar.login') }}
                 </router-link>
-                <ElAvatar :src="userStore.userInfo?.avatar" :size="32" v-else>{{ userStore.userInfo?.username }}
+                <ElAvatar @click="toUser" :src="userStore.userInfo?.avatar" :size="32" v-else>{{ userStore.userInfo?.username }}
                 </ElAvatar>
             </div>
         </div>
@@ -38,6 +38,9 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/user';
 const userStore = useUserStore()
 const router = useRouter();
+function toUser() {
+    router.push(`/user`)
+}
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 import { useI18n } from 'vue-i18n'
 let { locale } = useI18n()
