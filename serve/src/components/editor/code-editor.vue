@@ -47,12 +47,12 @@ import * as monaco from 'monaco-editor';
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import JsonIcon from '@/icons/JsonIcon.vue';
 import { Delete, DocumentCopy, FolderOpened } from '@element-plus/icons-vue';
-import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import service from '@/service';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
+const TIPS = "// please choose a json file first."
 
 const props = defineProps({
     files: Array,
@@ -74,12 +74,12 @@ const emit = defineEmits(['uploaded'])
 watch(() => props.files, () => {
     if (props.files.includes(current.value)) return
     current.value = null
-    code.value = ''
-    editor.setValue('')
+    code.value = TIPS
+    editor.setValue(code.value)
 }, { deep: true })
 
 let editor = null;
-let code = ref('');
+let code = ref(TIPS);
 const current = ref(null);
 const editorRef = ref(null);
 
@@ -199,7 +199,7 @@ self.MonacoEnvironment = {
 
 onMounted(() => {
     editor = monaco.editor.create(editorRef.value, {
-        value: '',
+        value: TIPS,
         language: 'json',
         readOnly: false,
         theme: 'vs',
