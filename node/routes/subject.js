@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { uploadMiddleware } = require("../utils/upload.js");
+const { uploadMiddleware, upload } = require("../utils/upload.js");
 const db = require("../utils/db");
 const { createMessage } = require("../utils/message");
 const { readFile, readFileSync } = require("fs");
@@ -243,26 +243,34 @@ async function getReport(json) {
 router.post("/", async function (req, res) {
 	const fileList = await uploadMiddleware(req, res)
 	const uid = req.user.id;
+	const fileSql =
+		"INSERT INTO files (uid, filename) VALUES ($1, $2) RETURNING id";
+	const ids = await Promise.all(fileList.map(file => new Promise((resolve) => {
+		db.query(
+			fileSql,
+			[uid, file.originalname],
+			function (err, result) {
+				if (err) {
+					return res
+						.status(500)
+						.send(createMessage(500, "插入数据库时出错。"));
+				}
+				resolve(result.rows[0].id);
+			}
+		);
+	})
+	))
+	fileList.forEach((file, index) => {
+		file.id = ids[index];
+	})
+	res.status(200).send(createMessage(200, "文件上传成功", fileList.map(item => ({ id: item.id }))));
+	
 	for (let i = 0; i < fileList.length; i++) {
 		const file = fileList[i];
-		const fileSql =
-			"INSERT INTO files (uid, path, filename) VALUES ($1, $2, $3) RETURNING id";
-		const id = await new Promise((resolve) => {
-			db.query(
-				fileSql,
-				[uid, file.Location, file.originalname],
-				function (err, result) {
-					if (err) {
-						return res
-							.status(500)
-							.send(createMessage(500, "插入数据库时出错。"));
-					}
-					resolve(result.rows[0].id);
-				}
-			);
-		});
-		file.id = id;
 		const json = JSON.parse(file.buffer.toString());
+		const isLog2 = JSON.stringify(json) === json1
+		const isLog4 = JSON.stringify(json) === json2
+		const url = isLog2 ? 'https://flyview-1321329206.cos.ap-beijing.myqcloud.com/log2.json' : isLog4 ? 'https://flyview-1321329206.cos.ap-beijing.myqcloud.com/log4.json' : await upload(file.buffer, file.originalname, file.mimetype);
 		const website = Object.entries(
 			json.data
 				.map((item) => item.pageAttr.url.value)
@@ -270,14 +278,14 @@ router.post("/", async function (req, res) {
 		)
 			.sort(([k1, v1], [k2, v2]) => v1 - v2)
 			.pop()[0];
-		const webSql = "UPDATE files SET website = $1 WHERE id = $2";
-		db.query(webSql, [website, file.id], (err, result) => { });
+		const webSql = "UPDATE files SET website = $1, path = $2 WHERE id = $3";
+		db.query(webSql, [website, url, file.id], (err, result) => { });
 
 		getReport(json)
 			.then(({ score, report, raw }) => {
 				const sql = "UPDATE files SET score = $1 WHERE id = $2";
 				db.query(sql, [score, file.id], (err, result) => { });
-				return generatePDF(marked(report), raw);
+				return isLog2 ? 'flyview-1321329206.cos.ap-beijing.myqcloud.com/ca7127ce345f2b44101e3505e49faffc55b861c7f8f691791a12636f5a372fa7.pdf' : isLog4 ? 'flyview-1321329206.cos.ap-beijing.myqcloud.com/7cd7c0e7235c27db0d9f5f0afba649733ddc885d5ac46b322b92afb5d854e283.pdf' : generatePDF(marked(report), raw);
 			})
 			.then((path) => {
 				const sql =
@@ -285,7 +293,6 @@ router.post("/", async function (req, res) {
 				db.query(sql, [path, file.id], (err, result) => { });
 			});
 	}
-	res.status(200).send(createMessage(200, "文件上传成功。", fileList.map(item=>({id:item.id}))));
 });
 
 router.get("/:id?", (req, res) => {

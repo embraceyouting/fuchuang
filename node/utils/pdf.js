@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const { upload } = require("./upload");
 const crypto = require("crypto");
+// const chromium = require('chrome-aws-lambda');
 
 const assetsDir = path.resolve(process.cwd(), "assets");
 
@@ -17,7 +18,14 @@ function hashBuffer(buffer) {
 }
 
 async function generatePDF(html, data) {
-	const browser = await puppeteer.launch();
+	const browser = await puppeteer.launch()
+	// const browser = await chromium.puppeteer.launch({
+	// 	args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
+	// 	defaultViewport: chromium.defaultViewport,
+	// 	executablePath: await chromium.executablePath,
+	// 	headless: true,
+	// 	ignoreHTTPSErrors: true,
+	// })
 	const page = await browser.newPage();
 
 	html += style;
@@ -39,7 +47,7 @@ async function generatePDF(html, data) {
 	const name = hashBuffer(Buffer.from(html));
 	const url = await upload(buffer, `${name}.pdf`, "application/pdf");
 	await browser.close();
-	return url.Location;
+	return url;
 }
 
 module.exports = {

@@ -10,7 +10,7 @@ router.post("/login", (req, res) => {
 	const sql = `SELECT * FROM users WHERE email = $1 and password = $2`;
 	db.query(sql, [email, password], (err, result) => {
 		if (err) {
-			return res.status(500).send(createMessage(500, "服务器错误"));
+			return res.status(500).send(createMessage(500, "服务器错误: 获取用户信息失败"));
 		}
 		if (result.rowCount == 0) {
 			return res.status(400).send(createMessage(400, "用户名或密码错误"));
@@ -37,7 +37,7 @@ router.post("/", (req, res) => {
 		(err, result) => {
 			if (err) {
 				console.error("插入数据库时出错:", err);
-				return res.status(500).send(createMessage(500, "服务器错误"));
+				return res.status(500).send(createMessage(500, "服务器错误: 注册失败"));
 			}
 			const userInfo = {
 				id: result.rows[0].id,
@@ -58,7 +58,7 @@ router.get("/", (req, res) => {
 	db.query(sql, [id], (err, result) => {
 		if (err) {
 			console.error("从数据库中获取数据时出错:", err);
-			return res.status(500).send(createMessage(500, "服务器错误"));
+			return res.status(500).send(createMessage(500, "服务器错误: 获取用户信息失败"));
 		}
 		if (result.rowCount == 0) {
 			return res.status(400).send(createMessage(400, "用户不存在"));

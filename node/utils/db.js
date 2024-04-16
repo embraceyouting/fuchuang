@@ -1,7 +1,17 @@
-const { Pool } = require("pg");
+const { Client } = require("pg");
 
-const db = new Pool({
+const db = new Client({
 	connectionString: process.env.POSTGRES_URL,
+});
+
+db.on("error", (err, client) => {
+	console.error("Error: " + err);
+	db.connect((err, client) => {
+		if (err) {
+			console.error("Error connecting to database: " + err.stack);
+			return;
+		}
+	});
 });
 
 db.connect((err, client) => {

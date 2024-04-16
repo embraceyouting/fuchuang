@@ -82,7 +82,7 @@ function open() {
 }
 
 function download() {
-    const path = import.meta.env.VITE_BASE_URL + props.path
+    const path = props.path
     saveAs(path, props.title)
 }
 

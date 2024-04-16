@@ -23,7 +23,8 @@
     "openai": "^4.29.1",
     "pg": "^8.11.5",
     "puppeteer": "^22.6.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "chrome-aws-lambda": "^6.0.0"
   },
   "devDependencies": {
     "cos-nodejs-sdk-v5": "^2.13.4",
