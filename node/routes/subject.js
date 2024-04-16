@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../utils/upload.js");
+const { uploadMiddleware } = require("../utils/upload.js");
 const db = require("../utils/db");
 const { createMessage } = require("../utils/message");
 const { readFile, readFileSync } = require("fs");
@@ -240,68 +240,52 @@ async function getReport(json) {
 	};
 }
 
-router.post("/", function (req, res) {
-	upload(req, res, async function (err) {
-		if (err) {
-			return res.status(500).send(createMessage(500, "上传文件时出错"));
-		}
-		const uid = req.user.id;
-		for (let i = 0; i < req.files.length; i++) {
-			const file = req.files[i];
-			const jsonPath = "uploads/" + file.filename; // 构建文件路径，相对于 public 目录
-			const filename = Buffer.from(file.originalname, "latin1").toString(
-				"utf-8"
-			);
-			const sql =
-				"INSERT INTO files (uid, path, filename) VALUES ($1, $2, $3) RETURNING id";
-			const id = await new Promise((resolve) => {
-				db.query(
-					sql,
-					[uid, jsonPath, filename],
-					function (err, result) {
-						if (err) {
-							return res
-								.status(500)
-								.send(createMessage(500, "插入数据库时出错。"));
-						}
-						resolve(result.rows[0].id);
+router.post("/", async function (req, res) {
+	const fileList = await uploadMiddleware(req, res)
+	const uid = req.user.id;
+	for (let i = 0; i < fileList.length; i++) {
+		const file = fileList[i];
+		const fileSql =
+			"INSERT INTO files (uid, path, filename) VALUES ($1, $2, $3) RETURNING id";
+		const id = await new Promise((resolve) => {
+			db.query(
+				fileSql,
+				[uid, file.Location, file.originalname],
+				function (err, result) {
+					if (err) {
+						return res
+							.status(500)
+							.send(createMessage(500, "插入数据库时出错。"));
 					}
-				);
-			});
-			file.id = id;
-
-			readFile(file.path, "utf-8", (err, data) => {
-				if (err) {
-					return res
-						.status(500)
-						.send(createMessage(500, "读取文件时出错。"));
+					resolve(result.rows[0].id);
 				}
-				const json = JSON.parse(data);
-				const website = Object.entries(
-					json.data
-						.map((item) => item.pageAttr.url.value)
-						.reduce((p, c) => ((p[c] = p[c] ? p[c] + 1 : 1), p), {})
-				)
-					.sort(([k1, v1], [k2, v2]) => v1 - v2)
-					.pop()[0];
-				const sql = "UPDATE files SET website = $1 WHERE id = $2";
-				db.query(sql, [website, file.id], (err, result) => {});
+			);
+		});
+		file.id = id;
+		const json = JSON.parse(file.buffer.toString());
+		const website = Object.entries(
+			json.data
+				.map((item) => item.pageAttr.url.value)
+				.reduce((p, c) => ((p[c] = p[c] ? p[c] + 1 : 1), p), {})
+		)
+			.sort(([k1, v1], [k2, v2]) => v1 - v2)
+			.pop()[0];
+		const webSql = "UPDATE files SET website = $1 WHERE id = $2";
+		db.query(webSql, [website, file.id], (err, result) => { });
 
-				getReport(json)
-					.then(({ score, report, raw }) => {
-						const sql = "UPDATE files SET score = $1 WHERE id = $2";
-						db.query(sql, [score, file.id], (err, result) => {});
-						return generatePDF(marked(report), raw);
-					})
-					.then((path) => {
-						const sql =
-							"UPDATE files SET path_pdf = $1 WHERE id = $2";
-						db.query(sql, [path, file.id], (err, result) => {});
-					});
+		getReport(json)
+			.then(({ score, report, raw }) => {
+				const sql = "UPDATE files SET score = $1 WHERE id = $2";
+				db.query(sql, [score, file.id], (err, result) => { });
+				return generatePDF(marked(report), raw);
+			})
+			.then((path) => {
+				const sql =
+					"UPDATE files SET path_pdf = $1 WHERE id = $2";
+				db.query(sql, [path, file.id], (err, result) => { });
 			});
-		}
-		res.status(200).send(createMessage(200, "文件上传成功。", req.files));
-	});
+	}
+	res.status(200).send(createMessage(200, "文件上传成功。", fileList.map(item=>({id:item.id}))));
 });
 
 router.get("/:id?", (req, res) => {

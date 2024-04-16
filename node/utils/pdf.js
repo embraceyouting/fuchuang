@@ -1,20 +1,20 @@
-const { v4: uuid } = require("uuid");
 const puppeteer = require("puppeteer");
 const path = require("path");
 const fs = require("fs");
+const { upload } = require("./upload");
+const crypto = require("crypto");
 
 const assetsDir = path.resolve(process.cwd(), "assets");
-const publicDir = path.resolve(process.cwd(), "public");
-
-try {
-	fs.existsSync(path.resolve(publicDir, "pdf")) || fs.mkdirSync(path.resolve(publicDir, "pdf"), { recursive: true });
-} catch (error) {
-	console.error(error);
-}
 
 const style = `<style>${fs.readFileSync(path.resolve(assetsDir, "./css/base.css"), "utf-8")}</style>`
 const echartJs = `<script>${fs.readFileSync(path.resolve(assetsDir, "./js/echarts.min.js"), "utf-8")}</script>`;
 const echartComponent = fs.readFileSync(path.resolve(assetsDir, "./html/echart.html"), "utf-8")
+
+function hashBuffer(buffer) {
+	const hash = crypto.createHash("sha256");
+	hash.update(buffer);
+	return hash.digest("hex");
+}
 
 async function generatePDF(html, data) {
 	const browser = await puppeteer.launch();
@@ -22,12 +22,9 @@ async function generatePDF(html, data) {
 
 	html += style;
 	html = '<h1>问题分析</h1>\n' + echartJs + `<script>const data = ${data}</script>` + echartComponent + html;
-	fs.writeFileSync(path.resolve(publicDir, "pdf", "echart.html"), html);
 	await page.setContent(html);
 
-	const pdfPath = `pdf/${uuid()}.pdf`;
-	await page.pdf({
-		path: path.resolve(publicDir, pdfPath),
+	const buffer = await page.pdf({
 		format: "A4",
 		printBackground: true,
 		margin: {
@@ -39,9 +36,10 @@ async function generatePDF(html, data) {
 		preferCSSPageSize: true,
 	});
 
+	const name = hashBuffer(Buffer.from(html));
+	const url = await upload(buffer, `${name}.pdf`, "application/pdf");
 	await browser.close();
-
-	return pdfPath;
+	return url.Location;
 }
 
 module.exports = {

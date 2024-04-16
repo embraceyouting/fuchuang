@@ -6,5 +6,5 @@
 /node_modules
 
 # 忽略 .env
-.env
 .vercel
+*.local

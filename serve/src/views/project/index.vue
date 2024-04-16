@@ -63,7 +63,9 @@ const getPdf = (cur) => {
           getPdf(cur)
         }, 1000)
       } else {
-        cur.src = import.meta.env.VITE_BASE_URL + res.data.path_pdf
+        const fullPath = 'https://' + res.data.path_pdf
+        await fetch(fullPath).catch(()=>{})
+        cur.src = fullPath
       }
       cur.url = res.data.url
       cur.title = res.data.title
