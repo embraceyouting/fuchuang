@@ -70,6 +70,9 @@ function initEchartMap() {
   myChart = echarts.init(chinaMap.value);
 
   const options = {
+    title: {
+      subtext: '审图号：GS(2020)4632号',
+    },
     tooltip: {
       trigger: 'item',
       formatter: function (params) {
