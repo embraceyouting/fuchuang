@@ -17,6 +17,7 @@
                 </li>
             </TransitionGroup>
             <ElEmpty v-else :image-size="100"></ElEmpty>
+            <el-button type="primary" class="add" @click="addFile">测试JSON数据</el-button>
         </div>
 
         <section class="editor-section">
@@ -51,6 +52,7 @@ import { ElMessage } from 'element-plus';
 import service from '@/service';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
+import Log2 from "@/assets/json/log2.json"
 
 const TIPS = "// please choose a json file first."
 
@@ -186,6 +188,10 @@ function uploadAll(files) {
         });
 }
 
+async function addFile() {
+    props.files.push({ name: 'Test.json', raw: new File([new TextEncoder().encode(JSON.stringify(Log2, null, 4))], 'Test.json', { type: 'application/json' }) })
+}
+
 
 function onEditorValueChange() {
     code.value = editor.getValue();
@@ -260,6 +266,10 @@ onBeforeUnmount(() => {
             .el-empty {
                 flex: 1;
             }
+        }
+
+        .add {
+            width: 100%;
         }
 
         .file-list {

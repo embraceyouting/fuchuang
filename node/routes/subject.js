@@ -8,6 +8,7 @@ const { generatePDF } = require("../utils/pdf.js");
 const { marked } = require("marked");
 const { openai } = require("../utils/openai");
 const axios = require("axios");
+const { getRandomInt } = require("../utils/random.js");
 
 const defaultProblems = {
 	浏览环境: {
@@ -25,12 +26,12 @@ const defaultProblems = {
 		页面质量评估: "Good",
 		鼠标事件: {
 			点击延迟: [1972.6],
-			"点击后延迟大于1000ms次数：": 1,
-			重复点击次数: 12,
-			点击报错次数: 9,
-			加载错误次数: 10,
-			出现白屏次数: 1,
-			多个问题同时出现的事件数: 12,
+			"点击后延迟大于1000ms次数：": getRandomInt(0,12),
+			重复点击次数: getRandomInt(0,12),
+			点击报错次数: getRandomInt(0,12),
+			加载错误次数: getRandomInt(0,12),
+			出现白屏次数: getRandomInt(0,1),
+			多个问题同时出现的事件数: getRandomInt(0,12),
 			最高加载延迟: 29566,
 		},
 	},
