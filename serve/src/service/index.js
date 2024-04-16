@@ -1,6 +1,7 @@
 import axios from "axios";
-import { getToken, removeToken, setToken } from "@/utils/token";
+import { getToken, setToken } from "@/utils/token";
 import { ElMessage } from "element-plus";
+import { useUserStore } from "@/store/user";
 
 const service = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
@@ -24,7 +25,7 @@ service.interceptors.response.use(
                 message: response.data.msg,
                 grouping: true,
             });
-            removeToken()
+            useUserStore().logout()
             return Promise.reject(response.data);
         }
         response.headers.authorization && setToken(response.headers.authorization);
@@ -32,7 +33,7 @@ service.interceptors.response.use(
     },
     (error) => {
         if (error.response.status === 401) {
-            removeToken()
+            useUserStore().logout()
         }
         ElMessage.error(error.response.data.msg);
         return Promise.reject(error.response);
