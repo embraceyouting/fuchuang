@@ -5,7 +5,7 @@
                 <ElButton @click="start" type="primary" plain class="start"><el-icon>
                         <Pointer />
                     </el-icon> 新手引导</ElButton>
-                <div class="post_part">
+                <div class="post_part" ref="upload">
                     <el-upload class="upload-demo" drag :auto-upload="false" accept=".json" name="files"
                         :file-list="file_list" :show-file-list="false" :on-change="handleChange" multiple>
                         <el-icon class="el-icon--upload"><upload-filled class="file_style" /></el-icon>
@@ -13,6 +13,10 @@
                             Drop JSON files here or <em>click to upload</em>
                         </div>
                     </el-upload>
+                    <div class="button">
+                        <el-button type="primary" size="small" class="add" @click="addFile(Log2)">测试JSON数据1</el-button>
+                        <el-button type="primary" size="small" class="add" @click="addFile(Log4)">测试JSON数据2</el-button>
+                    </div>
                 </div>
             </CodeEditor>
         </div>
@@ -30,6 +34,8 @@ import { useRoute, useRouter } from "vue-router";
 import { nextTick } from "vue";
 import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
+import Log2 from "@/assets/json/log2.json";
+import Log4 from "@/assets/json/log4.json";
 
 defineOptions({
     name: 'submit'
@@ -39,12 +45,13 @@ const intro = introJs()
 const childComponent = ref(null);
 const route = useRoute();
 const router = useRouter();
+const upload = ref(null);
 onMounted(() => {
     intro.setOptions({
         theme: 'modern',
         steps: [
             {
-                element: document.querySelector('.el-upload-dragger'),
+                element: upload.value,
                 intro: '点击上传文件',
                 title: "第二步"
             },
@@ -83,7 +90,7 @@ onMounted(() => {
                 intro._introItems[1].position = 'right';
                 intro._introItems[3].element = childComponent.value.$el.querySelector('.title .all');
                 intro._introItems[3].position = 'bottom';
-                childComponent.value.$el.querySelector('.editor-tree .file-list .file').addEventListener('click',()=> intro.nextStep())
+                childComponent.value.$el.querySelector('.editor-tree .file-list .file').addEventListener('click', () => intro.nextStep())
             })
         }
     })
@@ -108,6 +115,22 @@ function handleChange(file, fileList) {
             intro.goToStep(2);
         })
     }
+}
+
+async function addFile(file) {
+    const name = new Date().toLocaleString().replace(/\//g, '-') + '.json'
+    const f = {
+        name,
+        raw: new File(
+            [
+                new TextEncoder().encode(JSON.stringify(file, null, 4))
+            ],
+            name,
+            {
+                type: 'application/json'
+            })
+    }
+    handleChange(f, [...file_list.value, f]);
 }
 
 function goToView(list) {
@@ -148,6 +171,17 @@ router.beforeEach((to, from, next) => {
         .post_part {
             width: 100%;
             margin-bottom: 10px;
+
+            .button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+
+                .el-button {
+                    flex: 1;
+                }
+            }
 
             .upload-demo {
                 :deep(.el-upload) {

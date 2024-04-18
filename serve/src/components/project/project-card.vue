@@ -70,8 +70,6 @@ const props = defineProps({
     isMask: Boolean
 })
 
-console.log(props)
-
 const cover = ref(NotFound);
 const card = ref(null);
 const paddingTop = ref(0);
