@@ -301,6 +301,10 @@ const loginFn = () => {
                 margin-bottom: 16px;
             }
         }
+
+        button {
+            margin-top: 20px;
+        }
     }
 
     .sign-up-container {
