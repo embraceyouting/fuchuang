@@ -97,6 +97,8 @@ function add8(time){
     return date.toISOString();
 }
 
+userStore.getUserInfo()
+
 userStore.getSubjectList().then(() => {
     activeList.value = subjectUrlList.value
 })
@@ -331,13 +333,14 @@ userStore.getSubjectList().then(() => {
 
                 .item {
                     position: relative;
+                    min-width: 0;
                 }
 
-                @media screen and (max-width: 760px) {
+                @media screen and (max-width: 768px) {
                     grid-template-columns: repeat(2, 1fr);
                 }
 
-                @media screen and (max-width: 360px) {
+                @media screen and (max-width: 428px) {
                     grid-template-columns: repeat(1, 1fr);
                 }
 
@@ -369,6 +372,42 @@ userStore.getSubjectList().then(() => {
                     line-height: 20px;
                     margin: 10px;
                 }
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        min-width: 0;
+        width: 100%;
+        padding: 24px;
+
+        .bg {
+            right: 0;
+        }
+
+        header {
+            padding: 40px 0 60px;
+            min-width: 0;
+
+            .userInfo {
+                flex: 1;
+
+                .other {
+                    margin-top: 0;
+                    height: fit-content;
+                    flex-wrap: wrap;
+
+                    .tag {
+                        margin-top: 4px;
+                    }
+                }
+            }
+
+            .tool {
+                position: absolute;
+                right: 0;
+                margin-right: 0;
+                bottom: 12px;
             }
         }
     }

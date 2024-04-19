@@ -222,5 +222,15 @@ router.beforeEach((to, from, next) => {
             }
         }
     }
+
+    @media screen and (max-width: 768px) {
+        height: max-content;
+
+        .editor-container {
+            width: 100%;
+            padding: 12px;
+            margin: 0;
+        }
+    }
 }
 </style>

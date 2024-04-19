@@ -32,7 +32,7 @@
                         <FolderOpened />
                     </el-icon>
                     <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{
-            $t('post.uploadall')
+                        $t('post.uploadall')
                         }}</el-button>
                 </h4>
             </header>
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
     if (editor) {
         editor.dispose();
     }
-    
+
 });
 </script>
 
@@ -335,8 +335,6 @@ onBeforeUnmount(() => {
 
     }
 
-
-
     .editor-section {
         width: 70%;
         height: 100%;
@@ -414,6 +412,28 @@ onBeforeUnmount(() => {
 
     }
 
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
 
+        .editor-tree {
+            width: 100%;
+            height: 480px;
+            border-radius: 8px 8px 0 0;
+
+            .el-empty {
+                padding: 0;
+            }
+        }
+
+        .editor-section {
+            width: 100%;
+            height: 80vh;
+            border-radius: 0 0 8px 8px;
+
+            header {
+                border-top-right-radius: unset;
+            }
+        }
+    }
 }
 </style>

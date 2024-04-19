@@ -137,7 +137,7 @@ const cardList = computed(() => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 25vh auto;
+        margin: 20vh auto;
 
         .text {
             font-size: 140px;
@@ -360,5 +360,47 @@ const cardList = computed(() => {
 
 .glowing-border {
     animation: glowing 4s linear infinite alternate;
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        .text_title {
+            .text {
+                font-size: 15vmin;
+            }
+
+            .sub_text {
+                margin: 40px 60px;
+
+                p {
+                    font-size: 16px;
+                }
+            }
+
+            .intro_div {
+                .intro_a {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    svg,
+    :deep(.chart) {
+        transform: scale(0.8);
+    }
+
+    .contact {
+        :deep(.icon) {
+            transform-origin: right bottom;
+            transform: scale(0.8);
+            bottom: -20%;
+            right: -10%;
+
+        }
+        :deep(.float) {
+            display: none;
+        }
+    }
 }
 </style>

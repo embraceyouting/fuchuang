@@ -1,5 +1,5 @@
 <template>
-    <section class="card" ref="card">
+    <section class="card" ref="card" v-if="!autoHeight || autoHeight && paddingTop" :class="{ 'enter-animation': isEnter }">
         <ElIcon class="delete" @click="remove" v-if="id">
             <Delete />
         </ElIcon>
@@ -67,7 +67,8 @@ const props = defineProps({
     autoHeight: Boolean,
     height: String,
     inCover: Boolean,
-    isMask: Boolean
+    isMask: Boolean,
+    isEnter: Boolean
 })
 
 const cover = ref(NotFound);
@@ -121,7 +122,7 @@ onMounted(() => {
     ob = new IntersectionObserver(entries => {
         if (entries[0].isIntersecting) {
             getCover().then(() => {
-                ob && ob.unobserve(card.value)
+                ob && card.value && ob.unobserve(card.value)
             })
         }
     })
@@ -129,7 +130,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    ob && ob.unobserve(card.value)
+    ob && card.value && ob.unobserve(card.value)
 })
 </script>
 
@@ -141,6 +142,22 @@ onBeforeUnmount(() => {
     display: flex;
     position: relative;
     flex-direction: column;
+
+    &.enter-animation {
+        animation: scale 0.5s;
+
+        @keyframes scale {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    }
 
     .delete {
         position: absolute;

@@ -36,7 +36,8 @@
                     <DocumentAdd />
                 </el-icon>
             </ElButton>
-            <ElButton native-type="submit" @click="search" :disabled="!useUserStore().userInfo || isEnter || !key && !fileList.length">
+            <ElButton native-type="submit" @click="search"
+                :disabled="!useUserStore().userInfo || isEnter || !key && !fileList.length">
                 <ElIcon size="32">
                     <SubmitIcon />
                 </ElIcon>
@@ -159,6 +160,7 @@ async function search(e) {
 function cancle() {
     if (!source) return
     source.close();
+    messageList.value[messageList.value.length - 1].text += '\n\n(已中断)'
     messageList.value[messageList.value.length - 1].isEnd = true
 }
 
@@ -238,6 +240,7 @@ function addFile() {
 
             .list {
                 display: flex;
+                margin: 0;
                 margin-top: 30px;
                 align-items: flex-start;
                 padding: 0 50px;
@@ -342,6 +345,48 @@ function addFile() {
                 display: flex;
                 cursor: pointer;
                 align-items: center;
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .content {
+            &.center {
+
+                svg {
+                    width: 30vmin;
+                    height: 30vmin;
+                }
+
+                .list {
+                    flex-direction: column;
+                    padding: 0;
+                    margin-top: 0;
+                    gap: 12px;
+
+                    .card {
+                        flex-direction: row;
+                        padding: 0px 24px 0 6px;
+                        width: 100%;
+
+                        :deep(img) {
+                            width: 70px;
+                            height: 70px;
+                        }
+
+                        :deep(span) {
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+
+            h4 {
+                margin: 20px auto 30px;
+            }
+
+            .name {
+                font-size: 14px;
             }
         }
     }

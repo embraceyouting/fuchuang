@@ -4,8 +4,10 @@
 </template>
 
 <script setup>
-
+import { storeToRefs } from 'pinia';
+import { useMobileStore } from '@/store/mobile';
 import { getCurrentInstance, onMounted } from 'vue';
+const { isMobile } = storeToRefs(useMobileStore())
 
 // 通过 internalInstance.appContext.config.globalProperties 获取全局属性或方法
 let internalInstance = getCurrentInstance();
@@ -21,9 +23,9 @@ onMounted(() => {
         left: 'center',
         top: 'center',
         style: {
-          text: 'Fly View',
-          fontSize: 180,
-          fontWeight: 'bold',
+          text: 'Fly  View',
+          fontSize: isMobile.value ? 50 : 100,
+          fontFamily: 'Paytone One',
           lineDash: [0, 200],
           lineDashOffset: 0,
           fill: 'transparent',
@@ -52,7 +54,7 @@ onMounted(() => {
             {
               percent: 1,
               style: {
-                fill: 'black'
+                fill: '#000'
               }
             }
           ]

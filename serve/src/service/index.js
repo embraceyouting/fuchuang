@@ -32,6 +32,13 @@ service.interceptors.response.use(
         return response.data;
     },
     (error) => {
+        if (error.message) {
+            ElMessage.error({
+                message: error.message,
+                grouping: true,
+            });
+            return Promise.reject(error);
+        }
         if (error.response.status === 401) {
             useUserStore().logout()
         }

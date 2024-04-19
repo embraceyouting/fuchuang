@@ -7,6 +7,7 @@ export default {
 		lang: "EN",
 		chat: "AI 问答",
 		submit: "上传",
+		change: "切换语言",
 		ue: "最佳体验"
 	},
 	text: {

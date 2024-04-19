@@ -7,6 +7,7 @@ export default {
 		lang: "中文",
 		chat: "AI Chat",
 		submit: "Upload",
+		change: "Change Language",
 		ue: "UE",
 	},
 	text: {
