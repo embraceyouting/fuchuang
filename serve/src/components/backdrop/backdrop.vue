@@ -61,30 +61,19 @@ body {
     z-index: -99;
 }
 
-#bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: scale(1.1);
-    background: linear-gradient(45deg, #d4e7ff, #6176ed);
-    background-image: url('@/assets/image/back.jpg');
-    opacity: 0.8;
-    filter: blur(65px);
-    background-size: 200% 200%;
-}
-
 .ball {
     position: absolute;
     width: 80vmin;
     height: 80vmin;
     border-radius: 50%;
-    background-color: #607ff1;
+    background-color: #607ff1ad;
     filter: blur(20vmin);
 
     &:first-child {
         top: 10%;
         left: 10%;
         transform-origin: 0 0;
+        background-color: #6060f1ab;
         animation: rotate 30s linear infinite;
     }
 

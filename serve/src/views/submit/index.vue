@@ -174,12 +174,15 @@ router.beforeEach((to, from, next) => {
 
             .button {
                 display: flex;
+                flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
                 margin-top: 10px;
+                gap: 8px;
 
                 .el-button {
                     flex: 1;
+                    margin-left: 0;
                 }
             }
 

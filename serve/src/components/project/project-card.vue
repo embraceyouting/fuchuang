@@ -218,6 +218,7 @@ onBeforeUnmount(() => {
                 height: 100%;
                 width: 100%;
                 object-fit: cover;
+                border-radius: inherit;
                 filter: blur(16px) brightness(1.2);
             }
 
