@@ -57,4 +57,5 @@ export const useUserStore = defineStore("user", {
     }
   },
   plugins: [createPersistedState()],
+  persist: true
 });

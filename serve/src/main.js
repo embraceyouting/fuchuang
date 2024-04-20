@@ -4,6 +4,7 @@ import '@/scss/font.scss';
 import App from './App.vue';
 import router from './router/index';  
 import { createPinia } from 'pinia';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@/scss/element.scss'
@@ -16,7 +17,9 @@ const app = createApp(App);
 
 app.config.globalProperties.$echarts = echarts
 app.use(i18n)
-app.use(createPinia());
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia);
 app.use(ElementPlus)
 app.use(router);
 app.directive('animate', animate)
