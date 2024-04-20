@@ -80,5 +80,17 @@ export default {
 		value6: "Click Errors",
 		value7: "Loading Errors",
 		value8: "White Screen"
+	},
+
+	visual:{
+		title:{
+			distribution:"User distribution",
+			ratings:"website ratings",
+			indicators:"core indicators",
+			visits:"visits",
+			trends:"compatibility trends",
+			monitor:"real-time monitoring",
+			signage:"digital signage"
+		}
 	}
 };

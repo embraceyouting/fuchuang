@@ -44,10 +44,14 @@ function toUser() {
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 import { useI18n } from 'vue-i18n'
 let { locale } = useI18n()
-let language = ref('zh')
+
+let language = (localStorage.getItem("lang") == 'en' ? 'en':'zh')
+locale.value = language
+
 const chooseLang = (languagevalue) => {
     language = (languagevalue == 'zh' ? 'en' : 'zh');
-    locale.value = (languagevalue == 'zh' ? 'en' : 'zh');
+    locale.value = language;
+    localStorage.setItem("lang",locale.value);
 }
 </script>
 

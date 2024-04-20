@@ -80,5 +80,19 @@ export default {
         value6: "点击错误",
         value7: "加载错误",
         value8: "白屏"
+	},
+
+
+
+	visual:{
+		title:{
+			distribution:"用户分布",
+			ratings:"网站评分",
+			indicators:"核心网站指标",
+			visits:"用户访问量",
+			trends:"兼容性趋势",
+			monitor:"流量实时监测",
+			signage:"数字看板"
+		}
 	}
 };

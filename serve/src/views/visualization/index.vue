@@ -26,19 +26,19 @@
             
             <div class="left">
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>用户分布</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.distribution") }}</span></BorderBox2>
                 <div class="chart">
                   <stack></stack>
                 </div>
               </div>
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>网站评分</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.ratings") }}</span></BorderBox2>
                 <div class="chart">
                   <left_pie></left_pie>
                 </div>
               </div>
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>核心网站指标</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.indicators") }}</span></BorderBox2>
                 <div class="chart">
                   <left_line></left_line>
                 </div>
@@ -51,7 +51,7 @@
                 <china></china>
               </div>
               <div class="middle_font">
-                <BorderBox2 class="text"><span>用户访问量</span></BorderBox2>
+                <BorderBox2 class="text"><span>{{ $t("visual.title.visits") }}</span></BorderBox2>
                 <thermal></thermal>
               </div>
             </div>
@@ -60,7 +60,7 @@
 
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>兼容性趋势</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.trends") }}</span></BorderBox2>
                 <div class="chart">
                   <pie></pie>
                 </div>
@@ -68,14 +68,14 @@
               </div>
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>流量实时监测</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.monitor") }}</span></BorderBox2>
                 <div class="chart">
                   <linerace></linerace>
                 </div>
               </div>
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>数字看板</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.signage") }}</span></BorderBox2>
                 <div class="grid chart">
                   <div class="item" v-for="item in problemList" :key="item.name"
                     :style="{ background: getColor(item.times) }">
@@ -99,7 +99,7 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref ,toRef } from "vue"
+import { ref ,toRef , computed } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -303,6 +303,8 @@ function getColor(times) {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                writing-mode: tb-rl;
+                text-orientation: upright;
               }
             }
 
