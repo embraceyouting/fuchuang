@@ -26,7 +26,6 @@ export default [
 		meta: {
 			isNavItem: true,
 			isNav: true,
-			isKeepAlive: true,
 			title: "navbar.visualization"
 		},
 	},

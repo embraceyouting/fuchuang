@@ -1,29 +1,28 @@
 <template>
   <div class="main">
     <div class="swiper-container">
-      <div v-if="isloading" style="height: 100%;width: 100%;" class="isloading">
+      <div class="warn center" v-if="isMobile">
+        <Logo></Logo>
+        <p>Sorry, something is wrong.</p>
+        <p>Warning: You are in mobile version.</p>
+        <p>
+          Please use PC version to view for better experience.
+        </p>
+        <p>© 2024 FlyView</p>
+      </div>
+      <div v-else-if="isloading" style="height: 100%;width: 100%;" class="isloading">
         <loading></loading>
       </div>
-      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true">
+      <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :noSwiping="true"
+        :allowTouchMove="false">
         <swiper-slide>
           <div class="charts">
             <div class="select_part">
-              <el-select
-                v-model="value"
-                filterable
-                placeholder="Select"
-                style="width: 200px;"
-                @change="handleChange"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+              <el-select v-model="value" filterable placeholder="Select" style="width: 200px;" @change="handleChange">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </div>
-            
+
             <div class="left">
               <div class="left_chart">
                 <BorderBox2 class="text_pv"><span>{{ $t("visual.title.distribution") }}</span></BorderBox2>
@@ -113,21 +112,25 @@ import left_pie from "../../components/visualization/left_pie.vue"
 import pie from "../../components/visualization/pie.vue"
 import stack from "../../components/visualization/stack.vue"
 import World from '@/components/charts/world.vue'
+import Logo from '@/icons/Logo.vue'
 import service from '@/service'
-import { BorderBox8, BorderBox2, BorderBox7, BorderBox6, BorderBox10 } from '@newpanjing/datav-vue3';
+import { BorderBox2 } from '@newpanjing/datav-vue3';
+import { storeToRefs } from 'pinia'
+import { useMobileStore } from '@/store/mobile'
+const { isMobile } = storeToRefs(useMobileStore())
 
 let value = ref("")
 let options = []
-service.get("/subject").then((res)=>{
+service.get("/subject").then((res) => {
   const optionsSet = new Set(res.data.map(obj => obj.url));
   options = [...optionsSet].map(url => ({ value: url, label: url }));
 })
 
-function handleChange(){
+function handleChange() {
   isloading.value = true;
-  setTimeout(()=>{
+  setTimeout(() => {
     isloading.value = false;
-  },3000)
+  }, 3000)
 }
 
 defineOptions({
@@ -144,7 +147,7 @@ const problemList = [
   { name: '加载错误', times: '10' },
   { name: '页面加载缓慢', times: '1' },
   { name: '点击报错', times: '9' },
-  { name : '多个事件' , times: '12'}
+  { name: '多个事件', times: '12' }
 ];
 
 function getColor(times) {
@@ -169,6 +172,22 @@ function getColor(times) {
   align-items: center;
   justify-content: center;
   height: calc(100vh - 60px);
+
+  .warn.center {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    svg {
+      height: 30vmin;
+      width: 30vmin;
+    }
+
+    p {
+      margin: 20px 0 0;
+    }
+  }
 
   .swiper-container {
     width: 94%;
@@ -213,8 +232,8 @@ function getColor(times) {
           width: 100%;
           position: relative;
 
-          .select_part{
-            position:absolute;
+          .select_part {
+            position: absolute;
             left: 50%;
             top: 17px;
             transform: translateX(-50%);
@@ -408,6 +427,16 @@ function getColor(times) {
   transform: translateX(-50px)
 }
 
+@media screen and (max-width: 768px) {
+  :deep(.swiper-button-next) {
+    transform: translateX(100%)
+  }
+
+  :deep(.swiper-button-prev) {
+    transform: translateX(-100%)
+  }
+}
+
 :deep(.swiper-pagination-bullet) {
   width: 10%;
   height: 5px;
@@ -421,15 +450,15 @@ function getColor(times) {
   border-radius: 5px;
 }
 
-:deep(.el-select__wrapper){
+:deep(.el-select__wrapper) {
   background-color: rgba(244, 239, 239, 0.096);
 }
 
-:deep(.el-select__placeholder){
+:deep(.el-select__placeholder) {
   color: black;
 }
 
-:deep(.el-icon svg){
+:deep(.el-icon svg) {
   color: black;
 }
 

@@ -36,12 +36,13 @@ app.use((req, res, next) => {
 		if (!payload) {
 			throw new Error();
 		}
-		req.user = {
+		const user = {
 			id: payload.id,
 			username: payload.username,
-			email: payload.email,
+			email: payload.email
 		};
-		const newToken = JWT.generate(req.user);
+		req.user = user
+		const newToken = JWT.generate(user);
 		res.setHeader("Authorization", newToken);
 		next();
 	} catch (err) {

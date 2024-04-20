@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <header>
       <button class="span prev" :disabled="current <= 0" @click="current--">
         <el-icon>
@@ -27,7 +27,7 @@
       </template>
     </ElEmpty>
     <iframe v-else :src="currentProject?.src" frameborder="0"></iframe>
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -87,7 +87,7 @@ html,
 body {
   overflow: hidden;
 
-  div {
+  main {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -118,6 +118,7 @@ body {
         gap: 8px;
         line-height: 1;
         font-size: 14px;
+        white-space: nowrap;
         cursor: pointer;
         background-color: unset;
         border: unset;
@@ -176,6 +177,7 @@ body {
     }
 
     .el-empty {
+      margin-top: 30vh;
 
       :deep(.el-empty__description) {
         p {
@@ -188,5 +190,20 @@ body {
   }
 
 
+}
+
+@media screen and (max-width: 768px) {
+  main {
+    header {
+      padding: 0 24px !important;
+
+      p {
+        b,
+        button {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>

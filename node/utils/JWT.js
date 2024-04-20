@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const secret = "feiyue"
 
 const JWT = {
-    generate(payload, expiresIn = "1h") {
+    generate(payload, expiresIn = "24h") {
         return jwt.sign(payload, secret, { expiresIn })
     },
     verify(token) {

@@ -19,6 +19,7 @@
                     <input type="password" v-model="register.confirmPassword" required>
                     <span data-placeholder="Confirm Password"></span>
                 </div>
+                <a @click.prevent="isLogin = !isLogin" v-if="isMobile">已有账号，立即登录</a>
                 <button>注册</button>
             </form>
         </div>
@@ -33,7 +34,8 @@
                     <input type="password" v-model="login.password" required>
                     <span data-placeholder="Password"></span>
                 </div>
-                <a @click.prevent>忘记密码？</a>
+                <!-- <a @click.prevent>忘记密码？</a> -->
+                <a @click.prevent="isLogin = !isLogin" v-if="isMobile">没有账号，立即注册</a>
                 <button>登录</button>
             </form>
         </div>
@@ -65,7 +67,10 @@ import RegisterIcon from '@/icons/RegisterIcon.vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/store/user';
-import axios from 'axios';
+import { storeToRefs } from "pinia";
+import { useMobileStore } from "@/store/mobile";
+
+const { isMobile } = storeToRefs(useMobileStore())
 
 const router = useRouter()
 
@@ -290,7 +295,15 @@ const loginFn = () => {
             position: relative;
             width: 100%;
             text-align: right;
-            margin-bottom: 30px;
+            margin: 8px 0 0 0;
+
+            &:nth-last-of-type(1){
+                margin-bottom: 16px;
+            }
+        }
+
+        button {
+            margin-top: 20px;
         }
     }
 
@@ -302,6 +315,11 @@ const loginFn = () => {
 
         button {
             margin-top: 20px;
+        }
+
+        a {
+            text-align: right;
+            margin: 6px 0;
         }
     }
 

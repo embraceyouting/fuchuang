@@ -1,8 +1,8 @@
 <template>
     <main>
-        <el-carousel :interval="4000" type="card" motion-blur height="300px" class="carousel" loop>
+        <el-carousel :interval="4000" type="card" motion-blur :height="isMobile ? '240px' : '300px'" class="carousel" loop>
             <el-carousel-item v-for="item in list2.slice(0, 5)" :key="item.url">
-                <ProjectCard height="300px" :url="item.url" in-cover is-cover-click></ProjectCard>
+                <ProjectCard :height="isMobile ? '240px' : '300px'" :url="item.url" in-cover is-cover-click></ProjectCard>
             </el-carousel-item>
         </el-carousel>
 
@@ -13,11 +13,9 @@
 
         <h1>最佳创意</h1>
         <div class="waterfall" ref="waterfall">
-            <TransitionGroup name="list">
-                <ProjectCard v-for="item in list2.slice(0, end)" :key="item.url" v-bind="item" in-cover auto-height
-                    @loaded="layout" is-mask>
-                </ProjectCard>
-            </TransitionGroup>
+            <ProjectCard v-for="item in list2.slice(0, end)" :key="item.url" v-bind="item" in-cover auto-height
+                @loaded="layout" is-mask is-enter>
+            </ProjectCard>
         </div>
 
         <DataStatus @more="getMore" :isDataEnd :length="list2.length"></DataStatus>
@@ -34,6 +32,10 @@ import { ref, onMounted } from 'vue';
 import { debounce } from '@/utils/debounce';
 import { computed } from 'vue';
 import { ElCarousel } from 'element-plus';
+import { useMobileStore } from '@/store/mobile';
+import { storeToRefs } from 'pinia';
+
+const { isMobile } = storeToRefs(useMobileStore())
 
 defineOptions({
     name: 'ue'
@@ -144,7 +146,7 @@ const waterfall = ref(null)
 
 function layout() {
     nextTick(() => {
-        waterFall(waterfall.value, 3, 20);
+        waterFall(waterfall.value, isMobile ? 2 : 3, 20);
     })
 }
 
@@ -168,6 +170,14 @@ main {
 
     .carousel {
         margin: 36px 0;
+
+        .el-carousel {
+            :deep(.el-carousel-container) {
+                .el-carousel__item {
+                    width: 75%;
+                }
+            }
+        }
     }
 
     h1 {
@@ -226,6 +236,7 @@ main {
     }
 
     .waterfall {
+
         .list-enter-active,
         .list-leave-active {
             transition: transform 0.5s ease, opacity 0.5s ease;
@@ -236,7 +247,52 @@ main {
             opacity: 0;
             transform: scale(0.1);
         }
-        
+
+    }
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        padding: 24px;
+
+        .el-carousel {
+            margin: 12px 0;
+
+            :deep(.el-carousel__container) {
+                .el-carousel__item {
+                    &.is-active {
+                        width: 80% !important;
+                        left: -15%;
+                    }
+                }
+            }
+
+            :deep(.el-carousel__indicators) {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .grid {
+            grid-template-columns: repeat(2, 1fr);
+
+            .card {
+                &:nth-child(2) {
+                    grid-area: 1/2/2/3;
+                }
+
+                &:nth-child(3) {
+                    grid-area: 2/1/3/3;
+                }
+
+                &:nth-child(6) {
+                    grid-area: 4/1/6/3;
+                }
+
+                &:nth-child(7) {
+                    grid-area: 7/1/8/3;
+                }
+            }
+        }
     }
 }
 </style>

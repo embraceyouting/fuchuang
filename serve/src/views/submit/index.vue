@@ -174,12 +174,15 @@ router.beforeEach((to, from, next) => {
 
             .button {
                 display: flex;
+                flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
                 margin-top: 10px;
+                gap: 8px;
 
                 .el-button {
                     flex: 1;
+                    margin-left: 0;
                 }
             }
 
@@ -220,6 +223,16 @@ router.beforeEach((to, from, next) => {
                     }
                 }
             }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        height: max-content;
+
+        .editor-container {
+            width: 100%;
+            padding: 12px;
+            margin: 0;
         }
     }
 }
