@@ -51,7 +51,7 @@
                     </ElIcon>
                     {{ $t('navbar.login') }}
                 </router-link>
-                <router-link class="login" to="/user" v-else>
+                <router-link class="login" to="/user" @click="show = false" v-else>
                     <ElAvatar @click="toUser" :src="userStore.userInfo?.avatar" :size="32">{{
                         userStore.userInfo?.username }}
                     </ElAvatar>
