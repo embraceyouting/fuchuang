@@ -1,41 +1,44 @@
 <template>
-    <section class="card" ref="card" v-if="!autoHeight || autoHeight && paddingTop" :class="{ 'enter-animation': isEnter }">
-        <ElIcon class="delete" @click="remove" v-if="id">
-            <Delete />
-        </ElIcon>
-        <div class="cover" :class="{ 'mask': isMask }" :style="{
-            paddingTop: paddingTop + '%',
-            height: autoHeight && !height ? '0' : height
-        }" @click="open">
-            <img v-if="!autoHeight" class="bg" :src="cover" alt="">
-            <img :class="{ 'center': autoHeight }" :src="cover" alt="">
-        </div>
-        <div class="info" :class="{ 'in-cover': inCover }">
-            <h4 class="title" :title="title" v-if="id">{{ title }}</h4>
-            <a class="title url" :title="title" v-else :href="url" target="_blank">{{ title }}</a>
-            <p class="url" v-if="id">
-                <a :href="url" target="_blank"><span class="tag"><el-icon>
-                            <Monitor />
-                        </el-icon>访问该网站</span></a>
-                <span class="tag"><el-icon>
-                        <DocumentChecked />
-                    </el-icon>{{ score || '暂无评' }}分</span>
-            </p>
-            <p class="user" v-if="uid">
-                <router-link :to="`/user/${uid}`">@{{ username }}</router-link>
-                <span class="dot">·</span>
-                {{ formatTime(time) }}
-            </p>
-            <p class="tools" v-if="id">
-                <ElButton type="primary" class="pdf" size="large" @click="router.push(`/project/${id}`)">评分体验报告<el-icon>
-                        <Document />
-                    </el-icon></ElButton>
-                <ElButton @click="download" type="primary" plain size="large" class="json">
-                    <el-icon :size="20">
-                        <JsonIcon></JsonIcon>
-                    </el-icon>
-                </ElButton>
-            </p>
+    <section class="card" v-if="!autoHeight || autoHeight && paddingTop">
+        <div class="box" ref="card" :class="{ 'enter-animation': isEnter }">
+            <ElIcon class="delete" @click="remove" v-if="id">
+                <Delete />
+            </ElIcon>
+            <div class="cover" :class="{ 'mask': isMask }" :style="{
+                paddingTop: paddingTop + '%',
+                height: autoHeight && !height ? '0' : height
+            }" @click="open">
+                <img v-if="!autoHeight" class="bg" :src="cover" alt="">
+                <img :class="{ 'center': autoHeight }" :src="cover" alt="">
+            </div>
+            <div class="info" :class="{ 'in-cover': inCover }">
+                <h4 class="title" :title="title" v-if="id">{{ title }}</h4>
+                <a class="title url" :title="title" v-else :href="url" target="_blank">{{ title }}</a>
+                <p class="url" v-if="id">
+                    <a :href="url" target="_blank"><span class="tag"><el-icon>
+                                <Monitor />
+                            </el-icon>访问该网站</span></a>
+                    <span class="tag"><el-icon>
+                            <DocumentChecked />
+                        </el-icon>{{ score || '暂无评' }}分</span>
+                </p>
+                <p class="user" v-if="uid">
+                    <router-link :to="`/user/${uid}`">@{{ username }}</router-link>
+                    <span class="dot">·</span>
+                    {{ formatTime(time) }}
+                </p>
+                <p class="tools" v-if="id">
+                    <ElButton type="primary" class="pdf" size="large" @click="router.push(`/project/${id}`)">
+                        评分体验报告<el-icon>
+                            <Document />
+                        </el-icon></ElButton>
+                    <ElButton @click="download" type="primary" plain size="large" class="json">
+                        <el-icon :size="20">
+                            <JsonIcon></JsonIcon>
+                        </el-icon>
+                    </ElButton>
+                </p>
+            </div>
         </div>
     </section>
 </template>
@@ -136,193 +139,197 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .card {
-    width: 100%;
-    border-radius: 15px;
-    overflow: hidden;
-    display: flex;
-    position: relative;
-    flex-direction: column;
+    transform: rotate(0);
 
-    &.enter-animation {
-        animation: scale 0.5s;
-
-        @keyframes scale {
-            0% {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-    }
-
-    .delete {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 20px;
-        color: white;
-        cursor: pointer;
-        z-index: 99;
-        mix-blend-mode: difference;
-    }
-
-    .tag {
-        font-size: 12px;
-        vertical-align: center;
-        background-color: #ffffff66;
-        color: $dark-color;
-        display: inline-block;
-        padding: 4px 6px;
-        line-height: 1;
-        margin-right: 6px;
-        border-radius: 4px;
-
-        .el-icon {
-            margin-right: 4px;
-            margin-left: 2px;
-        }
-    }
-
-    .cover {
+    .box {
         width: 100%;
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: 15px;
         overflow: hidden;
-        position: relative;
-
-        &.mask {
-
-            &::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(180deg, transparent 20%, #000 100%);
-            }
-        }
-
-        img {
-            max-width: 100%;
-            object-fit: cover;
-            z-index: -99;
-            box-shadow: 0 0 20px -2px #0003;
-
-            &.bg {
-                position: absolute;
-                inset: 0;
-                height: 100%;
-                width: 100%;
-                object-fit: cover;
-                border-radius: inherit;
-                filter: blur(16px) brightness(1.2);
-            }
-
-            &.center {
-                position: absolute;
-                inset: 0;
-                height: 100%;
-                width: 100%;
-                object-fit: cover;
-            }
-        }
-    }
-
-    .info {
-        flex: 1;
-        padding: 12px 16px 16px;
         display: flex;
+        position: relative;
         flex-direction: column;
-        gap: 4px;
-        background-color: #fff3;
 
-        &.in-cover {
-            position: absolute;
-            bottom: 0;
-            background-color: unset;
+        &.enter-animation {
+            animation: scale 0.5s;
 
-            .title {
-                color: $white;
-            }
-        }
+            @keyframes scale {
+                0% {
+                    transform: scale(0.9);
+                    opacity: 0;
+                }
 
-        .title {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 900;
-            color: #202020;
-            text-decoration: none;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-
-            &.url {
-                font-weight: normal;
-                display: -webkit-box;
-                white-space: pre-line;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-
-                &:hover {
-                    text-decoration: underline;
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
                 }
             }
         }
 
-        p {
-            margin: 0;
+        .delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            z-index: 99;
+            mix-blend-mode: difference;
+        }
+
+        .tag {
             font-size: 12px;
-            color: #202020;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            vertical-align: center;
+            background-color: #ffffff66;
+            color: $dark-color;
+            display: inline-block;
+            padding: 4px 6px;
+            line-height: 1;
+            margin-right: 6px;
+            border-radius: 4px;
+
+            .el-icon {
+                margin-right: 4px;
+                margin-left: 2px;
+            }
+        }
+
+        .cover {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
+            position: relative;
 
-            a {
-                text-decoration: none;
-                font-size: 14px;
+            &.mask {
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(180deg, transparent 20%, #000 100%);
+                }
+            }
+
+            img {
+                max-width: 100%;
+                object-fit: cover;
+                z-index: -99;
+                box-shadow: 0 0 20px -2px #0003;
+
+                &.bg {
+                    position: absolute;
+                    inset: 0;
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                    border-radius: inherit;
+                    filter: blur(16px) brightness(1.2);
+                }
+
+                &.center {
+                    position: absolute;
+                    inset: 0;
+                    height: 100%;
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+        .info {
+            flex: 1;
+            padding: 12px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background-color: #fff3;
+
+            &.in-cover {
+                position: absolute;
+                bottom: 0;
+                background-color: unset;
+
+                .title {
+                    color: $white;
+                }
+            }
+
+            .title {
+                margin: 0;
+                font-size: 18px;
+                font-weight: 900;
                 color: #202020;
+                text-decoration: none;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
 
-                &:hover {
+                &.url {
+                    font-weight: normal;
+                    display: -webkit-box;
+                    white-space: pre-line;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
 
-                    &,
-                    &>span {
+                    &:hover {
                         text-decoration: underline;
                     }
                 }
             }
 
-            &.url {
-                margin-top: 6px;
-            }
+            p {
+                margin: 0;
+                font-size: 12px;
+                color: #202020;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
 
-            &.user {
-                margin-top: 4px;
-            }
+                a {
+                    text-decoration: none;
+                    font-size: 14px;
+                    color: #202020;
 
-            &.tools {
-                height: 36px;
-                margin-top: auto;
-                display: flex;
-                margin-top: 6px;
+                    &:hover {
 
-                .el-button {
-                    height: 100%;
-                    flex: 1;
-
-                    &.json {
-                        flex: 0;
-                        padding: 10px;
-                        width: min-content;
+                        &,
+                        &>span {
+                            text-decoration: underline;
+                        }
                     }
+                }
 
-                    &.is-plain:hover,
-                    &.is-plain:active {
-                        background-color: $white;
+                &.url {
+                    margin-top: 6px;
+                }
+
+                &.user {
+                    margin-top: 4px;
+                }
+
+                &.tools {
+                    height: 36px;
+                    margin-top: auto;
+                    display: flex;
+                    margin-top: 6px;
+
+                    .el-button {
+                        height: 100%;
+                        flex: 1;
+
+                        &.json {
+                            flex: 0;
+                            padding: 10px;
+                            width: min-content;
+                        }
+
+                        &.is-plain:hover,
+                        &.is-plain:active {
+                            background-color: $white;
+                        }
                     }
                 }
             }

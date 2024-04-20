@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import ChatCard from './chat-card.vue';
 import { ElIcon, ElMessage } from 'element-plus';
 import { ArrowLeftBold } from '@element-plus/icons-vue';
@@ -59,11 +59,11 @@ import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
 import { getToken } from '@/utils/token';
 import { useUserStore } from '@/store/user';
-import { computed } from 'vue';
 import { DocumentAdd } from '@element-plus/icons-vue';
 import ChatFiles from './chat-files.vue';
 import * as PDFJS from 'pdfjs-dist';
-import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs';
+import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
+import service from '@/service';
 
 PDFJS.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -83,10 +83,10 @@ async function readPdfText(fileUrl) {
 }
 
 const messageList = ref([]);
-const isEnter = computed(() => messageList.value[messageList.value.length - 1] && !messageList.value[messageList.value.length - 1].isEnd)
+const isEnter = computed(() => messageList.value.length >= 1 && messageList.value[messageList.value.length - 1] && !messageList.value[messageList.value.length - 1].isEnd)
 const key = ref('');
 const fileList = ref([]);
-const infos = ref([
+const infos = [
     {
         text: "gpt.text1",
         img: AssistantDie
@@ -99,11 +99,61 @@ const infos = ref([
         text: "gpt.text3",
         img: Assistant
     }
-])
-
+]
 let source = null;
+let signal = null;
 
 async function search(e) {
+    if (e.ctrlKey || e.shiftKey) return
+    e.preventDefault()
+    if (!key.value.trim() && !fileList.value.length) return
+    signal = new AbortController()
+    messageList.value.push({ text: key.value, type: "user", isEnd: true, files: fileList.value })
+    let result = await new Promise((resolve) => {
+        let result = new Array(fileList.value.length);
+        let count = 0;
+        if (fileList.value.length === 0) {
+            resolve(result);
+        }
+        fileList.value.forEach((file, index) => {
+            if (file.type === 'application/pdf') {
+                readPdfText(file).then(text => {
+                    count++;
+                    result[index] = text;
+                    if (count === fileList.value.length) resolve(result);
+                })
+            } else {
+                const fileReader = new FileReader();
+                fileReader.readAsText(file);
+                fileReader.onload = () => {
+                    count++;
+                    result[index] = fileReader.result;
+                    if (count === fileList.value.length) resolve(result);
+                }
+            }
+        })
+    })
+    const message = reactive({ text: '', type: "assistant", isEnd: false })
+    messageList.value.push(message);
+    const content = `${key.value}${result.length?',files:':''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
+    service.get(`/gpt?key=${content}&token=${getToken()}`, {
+        signal: signal.signal,
+        timeout: 30000
+    }).then(res => {
+        message.text = res.data
+    }).catch(err => {
+        if (err.name === "CanceledError") {
+            return
+        }
+        message.text = "出错了，请检查登录状态后重试..."
+    }).finally(() => {
+        message.isEnd = true
+    })
+    key.value = '';
+    fileList.value = []
+}
+
+async function searchStream(e) {
     if (e.ctrlKey || e.shiftKey) return
     e.preventDefault()
     if (!key.value.trim() && !fileList.value.length) return
@@ -132,7 +182,8 @@ async function search(e) {
             }
         })
     })
-    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${key.value},files:${result.join("[FILE SEPARATOR]").slice(0, 4000)}&token=${getToken()}`);
+    const content = `${key.value}${result.length?',files:':''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
+    source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${content}&token=${getToken()}`);
     key.value = '';
     fileList.value = []
     const obj = reactive({ text: '', type: "assistant", isEnd: false })
@@ -158,8 +209,12 @@ async function search(e) {
 }
 
 function cancle() {
-    if (!source) return
-    source.close();
+    if (source) {
+        source.close();
+    } else if (signal) {
+        signal.abort();
+        signal = new AbortController();
+    }
     messageList.value[messageList.value.length - 1].text += '\n\n(已中断)'
     messageList.value[messageList.value.length - 1].isEnd = true
 }
