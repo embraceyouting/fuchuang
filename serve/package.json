@@ -19,12 +19,9 @@
     "element-plus": "^2.6.3",
     "file-saver": "^2.0.5",
     "intro.js": "^7.2.0",
-    "json-editor-vue3": "^1.0.9",
-    "jspdf": "^2.5.1",
     "jszip": "^3.10.1",
     "marked": "^12.0.1",
     "monaco-editor": "^0.47.0",
-    "nanoid": "^5.0.6",
     "pdfjs-dist": "^4.0.379",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
@@ -34,9 +31,7 @@
     "vue-awesome-swiper": "^5.0.1",
     "vue-echarts": "^6.6.9",
     "vue-i18n": "^9.10.2",
-    "vue-json-editor": "^1.4.3",
-    "vue-router": "^4.3.0",
-    "vuex": "^4.1.0"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
