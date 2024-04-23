@@ -2,8 +2,8 @@
     <div class="world" ref="world">
         <div ref="chart" class="chart"></div>
         <div class="title">
-            <span>网站服务器来源</span>
-            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;&nbsp;访问来源</span>
+            <span>{{ $t('visual.world.title1') }}</span>
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&&nbsp;&nbsp;&nbsp;&nbsp;{{ $t('visual.world.title2') }}</span>
         </div>
         <div class="desc top">
             <Bar></Bar>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="desc bottom">
-            数据展示了监控网站的全球服务器分布及请求来源。数据基于大数据、数据集推理得出，反映了最新的网站流量预测情况。
+            {{ $t('visual.world.bottom') }}
         </div>
     </div>
 </template>

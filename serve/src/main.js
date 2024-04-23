@@ -8,7 +8,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '@/scss/element.scss'
-import ECharts from 'vue-echarts'  // 引入ECharts
+import ECharts from 'vue-echarts'
 import * as echarts from 'echarts'
 import i18n from '@/i18n/index.js'
 import animate from './directives/animate';

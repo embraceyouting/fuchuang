@@ -1,0 +1,23 @@
+visual:{
+    title:{
+        distribution:"用户分布",
+        ratings:"网站评分",
+        indicators:"核心网站指标",
+        visits:"用户访问量",
+        trends:"兼容性趋势",
+        monitor:"流量实时监测",
+        signage:"数字看板"
+    }
+},
+
+visual:{
+    title:{
+        distribution:"User distribution",
+        ratings:"website ratings",
+        indicators:"core indicators",
+        visits:"visits",
+        trends:"compatibility trends",
+        monitor:"real-time monitoring",
+        signage:"digital signage"
+    }
+}

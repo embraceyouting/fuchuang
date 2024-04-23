@@ -12,7 +12,8 @@ onMounted(() => {
     const myChart = echarts.init(dom); // 初始化echarts实例
     const option = {
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            position: 'left'
         },
         legend: {
             align: 'left',

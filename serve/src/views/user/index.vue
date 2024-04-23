@@ -39,7 +39,7 @@
                     <div class="container">
                         <TransitionGroup name="list">
                             <div class="item" v-for="sub in filteredList" :key="sub.id">
-                                <ProjectCard :time="add8(sub.time)" :url="sub.url" :title="sub.title" :uid="sub.uid"
+                                <ProjectCard :time="sub.time" :url="sub.url" :title="sub.title" :uid="sub.uid"
                                     :username="sub.username" :path="sub.path" :score="sub.score" :id="sub.id">
                                 </ProjectCard>
                             </div>
@@ -91,11 +91,11 @@ function toggleAll() {
     }
 }
 
-function add8(time){
-    var date = new Date(time);
-    date.setHours(date.getHours() + 8);
-    return date.toISOString();
-}
+// function add8(time){
+//     var date = new Date(time);
+//     date.setHours(date.getHours());
+//     return date.toISOString();
+// }
 
 userStore.getUserInfo()
 

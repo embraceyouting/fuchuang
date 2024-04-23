@@ -25,19 +25,19 @@
 
             <div class="left">
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>用户分布</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.distribution") }}</span></BorderBox2>
                 <div class="chart">
                   <stack></stack>
                 </div>
               </div>
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>网站评分</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.ratings") }}</span></BorderBox2>
                 <div class="chart">
                   <left_pie></left_pie>
                 </div>
               </div>
               <div class="left_chart">
-                <BorderBox2 class="text_pv"><span>核心网站指标</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.indicators") }}</span></BorderBox2>
                 <div class="chart">
                   <left_line></left_line>
                 </div>
@@ -50,7 +50,7 @@
                 <china></china>
               </div>
               <div class="middle_font">
-                <BorderBox2 class="text"><span>用户访问量</span></BorderBox2>
+                <BorderBox2 class="text"><span>{{ $t("visual.title.visits") }}</span></BorderBox2>
                 <thermal></thermal>
               </div>
             </div>
@@ -59,7 +59,7 @@
 
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>兼容性趋势</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.trends") }}</span></BorderBox2>
                 <div class="chart">
                   <pie></pie>
                 </div>
@@ -67,14 +67,14 @@
               </div>
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>流量实时监测</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.monitor") }}</span></BorderBox2>
                 <div class="chart">
                   <linerace></linerace>
                 </div>
               </div>
 
               <div class="right_chart">
-                <BorderBox2 class="text_pv"><span>数字看板</span></BorderBox2>
+                <BorderBox2 class="text_pv"><span>{{ $t("visual.title.signage") }}</span></BorderBox2>
                 <div class="grid chart">
                   <div class="item" v-for="item in problemList" :key="item.name"
                     :style="{ background: getColor(item.times) }">
@@ -98,7 +98,7 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref } from "vue"
+import { ref ,toRef , computed , onMounted , inject , getCurrentInstance } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -139,15 +139,18 @@ defineOptions({
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
+
 setTimeout(() => isloading.value = false, 3000)
 
+const { $t } = getCurrentInstance().proxy
+
 const problemList = [
-  { name: '用户白屏', times: '1' },
-  { name: '重复点击', times: '12' },
-  { name: '加载错误', times: '10' },
-  { name: '页面加载缓慢', times: '1' },
-  { name: '点击报错', times: '9' },
-  { name: '多个事件', times: '12' }
+  { name: $t('visual.problem.white_screen'), times: '1' },
+  { name: $t('visual.problem.repeated_click'), times: '12' },
+  { name: $t('visual.problem.loading_error'), times: '10' },
+  { name: $t('visual.problem.loading_slow'), times: '1' },
+  { name: $t('visual.problem.click_error'), times: '9' },
+  { name: $t('visual.problem.multiple_events'), times: '12' }
 ];
 
 function getColor(times) {
@@ -322,6 +325,8 @@ function getColor(times) {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                writing-mode: tb-rl;
+                text-orientation: upright;
               }
             }
 
