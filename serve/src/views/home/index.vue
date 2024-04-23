@@ -284,6 +284,7 @@ const cardList = computed(() => {
     margin-right: auto;
     max-width: 880px;
     width: 90%;
+    gap: 40px;
 
     .card {
         width: 100%;

@@ -9,7 +9,7 @@ export default {
 	mounted(el, binding) {
 		let options = {
 			root: null,
-			threshold: 0.2,
+			threshold: 0.15,
 		};
 
 		const direction = binding.value?.direction || "left";

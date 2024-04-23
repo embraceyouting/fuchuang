@@ -34,6 +34,7 @@ import { computed } from 'vue';
 import { ElCarousel } from 'element-plus';
 import { useMobileStore } from '@/store/mobile';
 import { storeToRefs } from 'pinia';
+import service from '@/service';
 
 const { isMobile } = storeToRefs(useMobileStore())
 
@@ -134,6 +135,12 @@ const list2 = [
         url: "https://www.zcool.com.cn/work/ZMjYzNjc5MzY=.html"
     },
 ].sort(() => Math.random() - 0.5);
+
+const list = ref([])
+
+service.get("/article").then((res) => {
+    list.value = res.data
+})
 
 const end = ref(5)
 function getMore() {

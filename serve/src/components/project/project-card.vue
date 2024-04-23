@@ -140,12 +140,14 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .card {
     transform: rotate(0);
+    width: 100%;
+    display: flex;
 
     .box {
-        width: 100%;
         border-radius: 15px;
         overflow: hidden;
         display: flex;
+        flex: 1;
         position: relative;
         flex-direction: column;
 
