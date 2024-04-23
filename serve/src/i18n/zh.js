@@ -94,6 +94,45 @@ export default {
 			trends:"兼容性趋势",
 			monitor:"流量实时监测",
 			signage:"数字看板"
+		},
+		problem:{
+			white_screen:"用户白屏",
+			repeated_click:"重复点击",
+			loading_error:"加载错误",
+			loading_slow:"页面加载缓慢",
+			click_error:"点击报错",
+			multiple_events:"多个事件"
+		},
+		day:{
+			mon: "一",
+			tue: "二",
+			wed: "三",
+			thu: "四",
+			fri: "五",
+			sat: "六",
+			sun: "日",
+			date:"日期",
+			views:"访问量"
+		},
+		pie:{
+			excellent:"优秀",
+			good:"良好",
+			fair:"一般",
+			poor:"差",
+			awful:"极差",
+		},
+		line:{
+			bounce_rate:"跳出率",
+			exit_rate:"退出率",
+			date:"日期"
+		},
+		linerace:{
+			views:"实时访问流量"
+		},
+		world:{
+			title1:"网站服务器来源",
+			title2:"访问来源",
+			bottom:"数据展示了监控网站的全球服务器分布及请求来源。数据基于大数据、数据集推理得出，反映了最新的网站流量预测情况。"
 		}
 	}
 };

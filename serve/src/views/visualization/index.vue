@@ -98,7 +98,7 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref ,toRef , computed } from "vue"
+import { ref ,toRef , computed , onMounted , inject , getCurrentInstance } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -139,15 +139,18 @@ defineOptions({
 
 const modules = [Autoplay, Pagination, Navigation, A11y]
 const isloading = ref(true)
+
 setTimeout(() => isloading.value = false, 3000)
 
+const { $t } = getCurrentInstance().proxy
+
 const problemList = [
-  { name: '用户白屏', times: '1' },
-  { name: '重复点击', times: '12' },
-  { name: '加载错误', times: '10' },
-  { name: '页面加载缓慢', times: '1' },
-  { name: '点击报错', times: '9' },
-  { name: '多个事件', times: '12' }
+  { name: $t('visual.problem.white_screen'), times: '1' },
+  { name: $t('visual.problem.repeated_click'), times: '12' },
+  { name: $t('visual.problem.loading_error'), times: '10' },
+  { name: $t('visual.problem.loading_slow'), times: '1' },
+  { name: $t('visual.problem.click_error'), times: '9' },
+  { name: $t('visual.problem.multiple_events'), times: '12' }
 ];
 
 function getColor(times) {

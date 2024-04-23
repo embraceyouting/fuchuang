@@ -8,6 +8,7 @@ import { getRandom } from '@/utils';
 import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
+const { $t } = getCurrentInstance().proxy
 onMounted(() => {
     const dom = document.getElementById('myChart11');
     const myChart = echarts.init(dom); // Initialize echarts instance
@@ -32,11 +33,11 @@ onMounted(() => {
                 startAngle: 180,
                 endAngle: 360,
                 data: [
-                    { value: getRandom(1800, 2400), name: '优秀', itemStyle: { color:"#91CC75" } },
-                    { value: getRandom(500, 800), name: '良好', itemStyle: { color:"#6F89CF" } },
-                    { value: getRandom(300, 800), name: '一般', itemStyle: { color:"#FAC858" } },
-                    { value: getRandom(200, 400), name: '较差', itemStyle: { color:"#FFAC00" } },
-                    { value: getRandom(200, 400), name: '极差', itemStyle: { color:"#EE6666" } }
+                    { value: getRandom(1800, 2400), name: $t('visual.pie.excellent'), itemStyle: { color:"#91CC75" } },
+                    { value: getRandom(500, 800), name: $t('visual.pie.good'), itemStyle: { color:"#6F89CF" } },
+                    { value: getRandom(300, 800), name: $t('visual.pie.fair'), itemStyle: { color:"#FAC858" } },
+                    { value: getRandom(200, 400), name: $t('visual.pie.poor'), itemStyle: { color:"#FFAC00" } },
+                    { value: getRandom(200, 400), name: $t('visual.pie.awful'), itemStyle: { color:"#EE6666" } }
                 ],
                 itemStyle: {
                     borderRadius: 6

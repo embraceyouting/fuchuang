@@ -76,7 +76,7 @@ function initEchartMap() {
     tooltip: {
       trigger: 'item',
       formatter: function (params) {
-        return `<b>${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i>&emsp;${userData[params.name]}人`
+        return `<b>${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i>&emsp;${userData[params.name]}`
       }
     },
     visualMap: {

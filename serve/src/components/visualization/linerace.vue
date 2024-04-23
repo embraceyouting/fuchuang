@@ -6,7 +6,7 @@
 import { getCurrentInstance, onMounted, ref, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
-
+const { $t } = getCurrentInstance().proxy
 // 初始化流量数据和时间点数组
 const trafficData = ref([]);
 const timeArray = ref([]);
@@ -81,7 +81,7 @@ onMounted(() => {
             },
             tooltip: {
                 formatter: function (params) {
-                    return `<b>${new Date().toLocaleString().slice(0, 10)}&nbsp;&nbsp;${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>实时访问流量</b>&emsp;${trafficData.value[params.dataIndex]}人`
+                    return `<b>${new Date().toLocaleString().slice(0, 10)}&nbsp;&nbsp;${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.linerace.views')}</b>&emsp;${trafficData.value[params.dataIndex]}`
                 }
             },
             grid: {

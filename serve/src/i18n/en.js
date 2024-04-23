@@ -92,6 +92,45 @@ export default {
 			trends:"compatibility trends",
 			monitor:"real-time monitoring",
 			signage:"digital signage"
+		},
+		problem:{
+			white_screen:"white screen",
+			repeated_click:"repeated click",
+			loading_error:"loading error",
+			loading_slow:"loading slow",
+			click_error:"click error",
+			multiple_events:"multiple events"
+		},
+		day:{
+			mon: "Mon",
+			tue: "Tue",
+			wed: "Wed",
+			thu: "Thu",
+			fri: "Fri",
+			sat: "Sat",
+			sun: "Sun",
+			date:"Date",
+			views:"Page Views",
+		},
+		pie:{
+			excellent:"exclnt",
+			good:"good",
+			fair:"fair",
+			poor:"poor",
+			awful:"awful",
+		},
+		line:{
+			bounce_rate:"Bounce rate",
+			exit_rate:"Exit rate",
+			date:"Date"
+		},
+		linerace:{
+			views:"real-time views"
+		},
+		world:{
+			title1:" Web Server Source ",
+			title2:" Access Sources ",
+			bottom:" The data shows the global distribution of servers and the source of requests for monitoring websites. The data is based on big data, data set reasoning and reflects the latest website traffic forecasts."
 		}
 	}
 };

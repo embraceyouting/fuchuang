@@ -67,7 +67,7 @@ import { ref } from "vue"
 import Logo from '@/icons/Logo.vue';
 import UserIcon from '@/icons/UserIcon.vue';
 import LanguageIcon from '@/icons/LanguageIcon.vue';
-import { useRouter } from 'vue-router';
+import { useRouter , useRoute } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from "pinia";
@@ -76,6 +76,7 @@ const { isMobile } = storeToRefs(useMobileStore())
 const show = ref(false)
 const userStore = useUserStore()
 const router = useRouter();
+const route = useRoute()
 function toUser() {
     router.push(`/user`)
 }
@@ -85,11 +86,17 @@ let { locale } = useI18n()
 let language = (localStorage.getItem("lang") == 'en' ? 'en':'zh')
 locale.value = language
 
-const chooseLang = (languagevalue) => {
+function chooseLang(languagevalue){
     language = (languagevalue == 'zh' ? 'en' : 'zh');
     locale.value = language;
     localStorage.setItem("lang",locale.value);
+    if(route.path == "/visualization"){
+        window.location.reload();
+    }
 }
+
+
+
 </script>
 
 <style scoped lang="scss">

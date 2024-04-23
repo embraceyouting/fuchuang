@@ -6,6 +6,7 @@
 import { getCurrentInstance, onMounted, defineProps, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
+const { $t } = getCurrentInstance().proxy
 function getVirtualData() {
     const today = new Date();
     const data = [];
@@ -32,7 +33,7 @@ onMounted(() => {
         calendar: [
             {
                 left: 'center',
-                top: '45',
+                top: '50',
                 range: [new Date(new Date().getTime() - (200 - new Date().getDay() + 1) * 3600 * 24 * 1000), new Date()],
                 splitLine: {
                     show: true,
@@ -55,7 +56,8 @@ onMounted(() => {
                 dayLabel: {
                     show: true,
                     firstDay: 1,
-                    nameMap: ['日', '一', '二', '三', '四', '五', '六'],
+                    nameMap: [$t('visual.day.sun'), $t('visual.day.mon'), $t('visual.day.tue'), $t('visual.day.wed'), $t('visual.day.thu'), $t('visual.day.fri'), $t('visual.day.sat')],
+                    margin: 5
                 },
                 monthLabel: {
                     show: false
@@ -79,7 +81,7 @@ onMounted(() => {
                 data: data,
                 tooltip: {
                     formatter: function (params) {
-                        return '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + '<b>日期</b>&emsp;&emsp;' + params.value[0] + '<br/>' + '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + '<b>访问量</b>&emsp;' + params.value[1];
+                        return '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + `<b>${$t('visual.day.date')}</b>&emsp;&emsp;` + params.value[0] + '<br/>' + '<i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:' + params.color + ';"></i>' + `<b>${$t('visual.day.views')}</b>&emsp;` + params.value[1];
                     }
                 },
                 symbolSize: function (val) {
@@ -96,7 +98,7 @@ onMounted(() => {
                 coordinateSystem: 'calendar',
                 tooltip: {
                     formatter: function (params) {
-                        return `<b>Top 12</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>日期</b>&emsp;&emsp;${params.data[0]} <br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>访问量</b>&emsp; ${params.data[1]}`
+                        return `<b>Top 12</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.day.date')}</b>&emsp;&emsp;${params.data[0]} <br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.day.views')}</b>&emsp; ${params.data[1]}`
                     }
                 },
                 data: data
