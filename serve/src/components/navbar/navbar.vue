@@ -90,9 +90,6 @@ function chooseLang(languagevalue){
     language = (languagevalue == 'zh' ? 'en' : 'zh');
     locale.value = language;
     localStorage.setItem("lang",locale.value);
-    if(route.path == "/visualization"){
-        window.location.reload();
-    }
 }
 
 

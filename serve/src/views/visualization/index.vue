@@ -14,7 +14,7 @@
         <loading></loading>
       </div>
       <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :noSwiping="true"
-        :allowTouchMove="false">
+        :allowTouchMove="false" :key="locale">
         <swiper-slide>
           <div class="charts">
             <div class="select_part">
@@ -98,7 +98,7 @@
 
 <script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref ,toRef , computed , onMounted , inject , getCurrentInstance } from "vue"
+import { ref, getCurrentInstance } from "vue"
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -117,6 +117,8 @@ import service from '@/service'
 import { BorderBox2 } from '@newpanjing/datav-vue3';
 import { storeToRefs } from 'pinia'
 import { useMobileStore } from '@/store/mobile'
+import { useI18n } from 'vue-i18n'
+
 const { isMobile } = storeToRefs(useMobileStore())
 
 let value = ref("")
@@ -165,7 +167,7 @@ function getColor(times) {
   }
 }
 
-
+let { locale } = useI18n()
 
 </script>
 
