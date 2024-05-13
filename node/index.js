@@ -71,4 +71,8 @@ server.on("close", function () {
 	});
 });
 
+process.on('uncaughtException', (err) => {
+	console.error('Caught Exception: ' + err);
+})
+
 module.exports = app;
