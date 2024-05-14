@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const { upload } = require("./upload");
 const crypto = require("crypto");
+const axios = require("axios");
 // const chromium = require('chrome-aws-lambda');
 
 const assetsDir = path.resolve(process.cwd(), "assets");
@@ -18,6 +19,12 @@ function hashBuffer(buffer) {
 }
 
 async function generatePDF(html, data) {
+	const name = hashBuffer(Buffer.from(html));
+	const onlineUrl = `https://flyview-1321329206.cos.ap-beijing.myqcloud.com/${name}.pdf`;
+	const res = await axios.get(onlineUrl).catch(() => ({status: 404}));
+	if (res.status === 200) {
+		return onlineUrl;
+	}
 	const browser = await puppeteer.launch()
 	// const browser = await chromium.puppeteer.launch({
 	// 	args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
@@ -44,7 +51,6 @@ async function generatePDF(html, data) {
 		preferCSSPageSize: true,
 	});
 
-	const name = hashBuffer(Buffer.from(html));
 	const url = await upload(buffer, `${name}.pdf`, "application/pdf");
 	await browser.close();
 	return url;
