@@ -227,11 +227,11 @@ function chooseLang(languagevalue){
                         i {
 
                             &.up {
-                                transform: translateY(7.5px) rotate(45deg);
+                                transform: translateY(7.2px) rotate(45deg);
                             }
 
                             &.down {
-                                transform: translateY(-7.5px) rotate(-45deg);
+                                transform: translateY(-7.2px) rotate(-45deg);
                             }
 
                             &.middle {

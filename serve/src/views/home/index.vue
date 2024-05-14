@@ -137,7 +137,7 @@ const cardList = computed(() => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin: 25vh auto;
+        margin: 20vh auto 25vh;
 
         .text {
             font-size: 140px;
