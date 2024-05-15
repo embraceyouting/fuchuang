@@ -104,6 +104,10 @@ onMounted(() => {
 const { $t } = getCurrentInstance().proxy
 let file_list = ref([]);
 
+window.addEventListener('monitor', (e) => {
+    addFile(e.detail)
+})
+
 function start() {
     intro.start()
 }
@@ -118,7 +122,7 @@ function handleChange(file, fileList) {
 }
 
 async function addFile(file) {
-    const name = new Date().toLocaleString().replace(/\//g, '-') + '.json'
+    const name = `log_${Date.now()}.json`
     const f = {
         name,
         raw: new File(
