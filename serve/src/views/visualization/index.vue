@@ -14,8 +14,8 @@
         <loading></loading>
       </div>
       <swiper v-else :modules="modules" :simulateTouch="false" :navigation="true" :noSwiping="true"
-        :allowTouchMove="false" :key="locale">
-        <swiper-slide>
+        :allowTouchMove="false">
+        <swiper-slide :key="locale">
           <div class="charts">
             <div class="select_part">
               <el-select v-model="value" filterable placeholder="Select" style="width: 200px;" @change="handleChange">
