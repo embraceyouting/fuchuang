@@ -32,8 +32,8 @@
                 v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
             <ElButton native-type="button" @click="addFile" :disabled="!useUserStore().userInfo || isEnter">
-                <el-icon size="24">
-                    <DocumentAdd />
+                <el-icon size="26">
+                    <FileIcon />
                 </el-icon>
             </ElButton>
             <ElButton native-type="submit" @click="search"
@@ -59,7 +59,7 @@ import AssistantLoading from './image/assistant_loading.png'
 import AssistantDie from './image/assistant_die.png'
 import { getToken } from '@/utils/token';
 import { useUserStore } from '@/store/user';
-import { DocumentAdd } from '@element-plus/icons-vue';
+import FileIcon from '@/icons/FileIcon.vue';
 import ChatFiles from './chat-files.vue';
 import * as PDFJS from 'pdfjs-dist';
 import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?worker';
@@ -135,7 +135,7 @@ async function search(e) {
     })
     const message = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(message);
-    const content = `${key.value}${result.length?',files:':''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
+    const content = `${key.value}${result.length ? ',files:' : ''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
     service.get(`/gpt?key=${content}&token=${getToken()}`, {
         signal: signal.signal,
         timeout: 30000
@@ -182,7 +182,7 @@ async function searchStream(e) {
             }
         })
     })
-    const content = `${key.value}${result.length?',files:':''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
+    const content = `${key.value}${result.length ? ',files:' : ''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
     source = new EventSource(`${import.meta.env.VITE_API_URL}gpt?key=${content}&token=${getToken()}`);
     key.value = '';
     fileList.value = []
@@ -400,6 +400,10 @@ function addFile() {
                 display: flex;
                 cursor: pointer;
                 align-items: center;
+
+                svg {
+                    fill: $color;
+                }
             }
         }
     }

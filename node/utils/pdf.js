@@ -19,9 +19,12 @@ function hashBuffer(buffer) {
 }
 
 async function generatePDF(html, data) {
-	const name = hashBuffer(Buffer.from(html));
+	if (typeof data !== 'string') {
+		data = JSON.stringify(data)
+	}
+	const name = hashBuffer(Buffer.from(html + data));
 	const onlineUrl = `https://flyview-1321329206.cos.ap-beijing.myqcloud.com/${name}.pdf`;
-	const res = await axios.get(onlineUrl).catch(() => ({status: 404}));
+	const res = await axios.get(onlineUrl).catch(() => ({ status: 404 }));
 	if (res.status === 200) {
 		return onlineUrl;
 	}

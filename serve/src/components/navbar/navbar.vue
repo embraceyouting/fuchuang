@@ -36,6 +36,9 @@
             <div class="navbar_menu" v-if="isMobile && show">
                 <router-link v-for="(item, index) in nav" :key="index" :to="`${item.path}`" @click="show = false"
                     active-class="active">
+                    <ElIcon :size="26">
+                        <Component :is="item.meta.icon"></Component>
+                    </ElIcon>
                     {{
                         $t(item.meta.title) }}
                 </router-link>
@@ -43,16 +46,16 @@
                     <ElIcon :size="26">
                         <LanguageIcon :language="locale"></LanguageIcon>
                     </ElIcon>
-                    <span>{{$t('navbar.change')}} （{{ $t('navbar.lang') }}）</span>
+                    <span>{{ $t('navbar.change') }} （{{ $t('navbar.lang') }}）</span>
                 </a>
                 <router-link class="login" to="/login" v-if="!userStore.userInfo">
-                    <ElIcon>
+                    <ElIcon :size="26">
                         <UserIcon></UserIcon>
                     </ElIcon>
                     {{ $t('navbar.login') }}
                 </router-link>
                 <router-link class="login" to="/user" @click="show = false" v-else>
-                    <ElAvatar @click="toUser" :src="userStore.userInfo?.avatar" :size="32">{{
+                    <ElAvatar @click="toUser" :src="userStore.userInfo?.avatar" :size="26">{{
                         userStore.userInfo?.username }}
                     </ElAvatar>
                     <span>{{ userStore.userInfo?.username }}</span>
@@ -67,7 +70,7 @@ import { ref } from "vue"
 import Logo from '@/icons/Logo.vue';
 import UserIcon from '@/icons/UserIcon.vue';
 import LanguageIcon from '@/icons/LanguageIcon.vue';
-import { useRouter , useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useUserStore } from '@/store/user';
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from "pinia";
@@ -83,13 +86,13 @@ function toUser() {
 const nav = router.getRoutes().filter(item => item.meta.isNavItem)
 let { locale } = useI18n()
 
-let language = (localStorage.getItem("lang") == 'en' ? 'en':'zh')
+let language = (localStorage.getItem("lang") == 'en' ? 'en' : 'zh')
 locale.value = language
 
-function chooseLang(languagevalue){
+function chooseLang(languagevalue) {
     language = (languagevalue == 'zh' ? 'en' : 'zh');
     locale.value = language;
-    localStorage.setItem("lang",locale.value);
+    localStorage.setItem("lang", locale.value);
 }
 
 

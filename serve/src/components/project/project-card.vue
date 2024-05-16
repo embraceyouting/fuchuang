@@ -55,6 +55,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { useUserStore } from '@/store/user';
 import { useRouter } from 'vue-router';
 import { onMounted, onBeforeUnmount } from 'vue';
+import { useCoverStore } from '@/store/cover';
 
 const router = useRouter();
 
@@ -101,11 +102,20 @@ function remove() {
 }
 
 let ob;
+const coverStore = useCoverStore()
 
 function getCover() {
-    return service.get(`/cover?url=${props.url}`).then(res => {
+    return new Promise((resolve) => {
+        if (coverStore.get(props.url)) {
+            resolve(coverStore.get(props.url))
+            return
+        }
+        service.get(`/cover?url=${props.url}`).then(res => {
+            resolve(res.data)
+        })
+    }).then(img => {
         const image = new Image();
-        image.src = res.data;
+        image.src = img;
         image.onload = () => {
             cover.value = image.src
             if (!props.autoHeight) return
@@ -113,7 +123,8 @@ function getCover() {
             paddingTop.value = redio * 100
             emit('loaded')
         }
-        return res
+        coverStore.set(props.url, img)
+        return img
     })
 }
 

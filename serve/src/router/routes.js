@@ -1,3 +1,8 @@
+import UserIcon from "@/icons/UserPageIcon.vue";
+import UEIcon from "@/icons/UEIcon.vue";
+import VisualizationIcon from "@/icons/VisualizationIcon.vue";
+import { Opportunity, UploadFilled } from "@element-plus/icons-vue";
+
 export default [
 	{
 		path: "/login",
@@ -26,7 +31,8 @@ export default [
 		meta: {
 			isNavItem: true,
 			isNav: true,
-			title: "navbar.visualization"
+			title: "navbar.visualization",
+			icon: VisualizationIcon
 		},
 	},
 	{
@@ -37,7 +43,8 @@ export default [
 			isNavItem: true,
 			isNav: true,
 			isKeepAlive: true,
-			title: "navbar.submit"
+			title: "navbar.submit",
+			icon: UploadFilled
 		},
 	},
 	{
@@ -47,7 +54,8 @@ export default [
 		meta: {
 			isNavItem: true,
 			isNav: true,
-			title: "navbar.mine"
+			title: "navbar.mine",
+			icon: UserIcon,
 		},
 	},
 	{
@@ -57,7 +65,8 @@ export default [
 		meta: {
 			isNavItem: true,
 			isNav: true,
-			title: "navbar.chat"
+			title: "navbar.chat",
+			icon: Opportunity
 		},
 	},
 	{
@@ -68,7 +77,8 @@ export default [
 			isNav: true,
 			isKeepAlive: true,
 			isNavItem: true,
-			title: "navbar.ue"
+			title: "navbar.ue",
+			icon: UEIcon
 		}
 	},
 	{
