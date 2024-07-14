@@ -11,7 +11,7 @@
             </span>
             <span class="email">
                 {{ $t('contact.email') }}
-                <a href="mailto:uestc_zeqistudio@163.com">xxxxxxxxxx@xxx.com</a>
+                <a href="mailto:tgb@std.uestc.edu.com">tgb@std.uestc.edu.com</a>
                 {{ $t('contact.dot') }}
             </span>
         </p>
