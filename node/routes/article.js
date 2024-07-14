@@ -20,10 +20,6 @@ const list1 = [
         title: "UX Coffee 专访 《谷歌设计师给你带来不一样的设计专访》"
     },
     {
-        title: "用户体验设计定义&详细案例",
-        url: "https://zhuanlan.zhihu.com/p/377701686"
-    },
-    {
         url: "https://www.zcool.com.cn/article/ZMTczNDY0.html",
         title: "交互设计技巧——创造好的用户体验"
     },

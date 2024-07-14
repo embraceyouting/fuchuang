@@ -63,7 +63,7 @@ const getPdf = (cur) => {
           getPdf(cur)
         }, 1000)
       } else {
-        const fullPath = 'https://' + res.data.path_pdf
+        const fullPath = res.data.path_pdf
         const blob = await fetch(fullPath).then(res => res.blob())
         const url = URL.createObjectURL(blob)
         cur.src = url
