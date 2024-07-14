@@ -25,7 +25,7 @@ onMounted(() => {
 
         // 添加新的数据点
         trafficData.value.push(newTraffic);
-        const time = new Date(currentTime).toISOString().substr(14, 5); // 获取时分
+        const time = new Date(currentTime).toString().slice(16, 24); // 获取时分
         timeArray.value.push(time);
 
         // 保持只显示最近的12个数据点
@@ -44,7 +44,6 @@ onMounted(() => {
                 axisLabel: {
                     interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
                 },
-                boundaryGap: false,
                 axisLine: {
                     lineStyle: {
                         color: 'white',
@@ -69,7 +68,7 @@ onMounted(() => {
     function generateInitialData() {
         const currentTime = new Date().getTime();
         for (let i = 11; i >= 0; i--) {
-            const time = new Date(currentTime - i * 5000).toISOString().substr(14, 5);
+            const time = new Date(currentTime - i * 5000).toString().slice(16, 24);
             timeArray.value.push(time);
             const traffic = Math.floor(Math.random() * (80 - 10 + 1)) + 10;
             trafficData.value.push(traffic);
@@ -81,7 +80,7 @@ onMounted(() => {
             },
             tooltip: {
                 formatter: function (params) {
-                    return `<b>${new Date().toLocaleString().slice(0, 10)}&nbsp;&nbsp;${params.name}</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.linerace.views')}</b>&emsp;${trafficData.value[params.dataIndex]}`
+                    return `<b>${new Date().toLocaleString().slice(0, 10)}&nbsp;&nbsp;${params.name}</b><br/>${params.marker}<b>${$t('visual.linerace.views')}</b>&emsp;${trafficData.value[params.dataIndex]}`
                 }
             },
             grid: {
@@ -95,7 +94,8 @@ onMounted(() => {
                 data: timeArray.value,
                 axisLabel: {
                     interval: 2, //加入axisLabel字段,interval后面加你想要间隔的个数
-                }
+                },
+                boundaryGap: false,
             },
             yAxis: {
                 type: 'value',

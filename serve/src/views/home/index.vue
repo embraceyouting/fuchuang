@@ -59,11 +59,12 @@ onMounted(() => {
                 {
                     element: document.querySelector('.bar_right').children[1],
                     intro: '点击上传文件',
-                    title: "第一步"
+                    title: "第一步",
                 },
             ],
             totalSteps: 2,
-            doneLabel: 'Next'
+            doneLabel: 'Next',
+            exitOnEsc: true,
         });
     }, 1000)
     let title1 = document.querySelectorAll(".content")[0].firstChild;
@@ -82,8 +83,10 @@ onMounted(() => {
 
 function handleClick() {
     intro.start();
-    intro.oncomplete(() => {
-        router.push('/submit?intro=1')
+    intro.oncomplete((_, status) => {
+        if (status == 'done') {
+            router.push('/submit?intro=1')
+        }
     })
 }
 
@@ -171,20 +174,27 @@ const cardList = computed(() => {
         }
 
         .intro_div {
-            transition: all 0.5s ease;
             margin-top: 20px;
 
             .intro_a {
+                box-sizing: content-box;
                 text-decoration: none;
-                font-size: 25px;
+                font-size: 20px;
                 color: aliceblue;
-                padding: 10px 20px;
-                background-color: #ffffff33;
-                border-radius: 4px;
-                transition: all 0.2s ease;
+                padding: 8px 16px;
+                background-color: $light-color;
+                box-shadow: 0 6px $dark-color;
+                border-radius: 12px;
+                transition: all 0.1s ease;
 
                 &:hover {
-                    box-shadow: 5px 5px 10px -2px rgb(255, 255, 255);
+                    filter: brightness(0.9);
+                }
+
+                &:active {
+                    padding: 6px 16px 10px;
+                    outline: $dark-color 2px solid;
+                    box-shadow: 0 0 $dark-color;
                 }
 
                 .icon {
@@ -357,10 +367,7 @@ const cardList = computed(() => {
 .glowing-border {
     border: 2px solid transparent;
     border-radius: 5px;
-}
-
-.glowing-border {
-    animation: glowing 4s linear infinite alternate;
+    // animation: glowing 4s linear infinite alternate;
 }
 
 @media screen and (max-width: 768px) {
@@ -399,6 +406,7 @@ const cardList = computed(() => {
             right: -10%;
 
         }
+
         :deep(.float) {
             display: none;
         }

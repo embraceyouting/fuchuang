@@ -39,7 +39,6 @@ body {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(1px) scale(0.98);
 }
 
 .slide-enter-active,

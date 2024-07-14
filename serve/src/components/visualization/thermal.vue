@@ -98,7 +98,7 @@ onMounted(() => {
                 coordinateSystem: 'calendar',
                 tooltip: {
                     formatter: function (params) {
-                        return `<b>Top 12</b><br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.day.date')}</b>&emsp;&emsp;${params.data[0]} <br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${$t('visual.day.views')}</b>&emsp; ${params.data[1]}`
+                        return `<b>Top 12</b><br/>${params.marker}<b>${$t('visual.day.date')}</b>&emsp;&emsp;${params.data[0]} <br/>${params.marker}<b>${$t('visual.day.views')}</b>&emsp; ${params.data[1]}`
                     }
                 },
                 data: data

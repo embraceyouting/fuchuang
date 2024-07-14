@@ -31,7 +31,7 @@ onMounted(() => {
             },
             tooltip: {
                 formatter: function (params) {
-                    return `<b>${$t('visual.line.date')}</b>&emsp;${params.name}<br/><i style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${params.color};"></i><b>${params.seriesName}</b>&emsp;${params.value}%`
+                    return `<b>${$t('visual.line.date')}</b>&emsp;${params.name}<br/>${params.marker}<b>${params.seriesName}</b>&emsp;${params.value}%`
                 }
             },
             legend: {

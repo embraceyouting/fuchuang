@@ -227,8 +227,8 @@ async function getReport(json) {
 			},
 			{ role: "user", content: JSON.stringify(problems) },
 		],
-		model: "gpt-4-turbo-preview",
-		// model: "gpt-3.5-turbo",
+		// model: "gpt-4-turbo-preview",
+		model: "gpt-3.5-turbo",
 	});
 	const gptContent = chatCompletion.choices[0].message.content;
 	console.log(gptContent);

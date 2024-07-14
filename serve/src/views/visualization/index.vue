@@ -80,7 +80,7 @@
                     :style="{ background: getColor(item.times) }">
                     <div>
                       <span style="font-size: 32px;">{{ item.times }}</span>
-                      <span><small>{{ item.name }}</small></span>
+                      <span><small>{{ $t(item.name) }}</small></span>
                     </div>
                   </div>
                 </div>
@@ -147,12 +147,12 @@ setTimeout(() => isloading.value = false, 3000)
 const { $t } = getCurrentInstance().proxy
 
 const problemList = [
-  { name: $t('visual.problem.white_screen'), times: '1' },
-  { name: $t('visual.problem.repeated_click'), times: '12' },
-  { name: $t('visual.problem.loading_error'), times: '10' },
-  { name: $t('visual.problem.loading_slow'), times: '1' },
-  { name: $t('visual.problem.click_error'), times: '9' },
-  { name: $t('visual.problem.multiple_events'), times: '12' }
+  { name: 'visual.problem.white_screen', times: '1' },
+  { name: 'visual.problem.repeated_click', times: '12' },
+  { name: 'visual.problem.loading_error', times: '10' },
+  { name: 'visual.problem.loading_slow', times: '1' },
+  { name: 'visual.problem.click_error', times: '9' },
+  { name: 'visual.problem.multiple_events', times: '12' }
 ];
 
 function getColor(times) {
