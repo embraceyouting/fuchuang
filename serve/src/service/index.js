@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/user";
 
 const service = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
-	timeout: 5000,
+	timeout: 30000,
 });
 
 service.interceptors.request.use(
