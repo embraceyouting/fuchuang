@@ -30,7 +30,7 @@ import DataStatus from '@/components/data-status/DataStatus.vue'
 import waterFall from '@/utils/waterfallLayout';
 import { onBeforeUnmount } from 'vue';
 import { nextTick } from 'vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onActivated } from 'vue';
 import { debounce } from '@/utils/debounce';
 import { computed } from 'vue';
 import { ElCarousel } from 'element-plus';
@@ -167,6 +167,10 @@ const debouncedLayout = debounce(layout, 100)
 
 onMounted(() => {
     window.addEventListener('resize', debouncedLayout)
+})
+
+onActivated(() => {
+    layout()
 })
 
 onBeforeUnmount(() => {

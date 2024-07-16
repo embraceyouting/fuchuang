@@ -26,13 +26,15 @@
                     <el-icon v-if="current" @click="save(current)" title="save current file.">
                         <DocumentCopy />
                     </el-icon>
-                    <el-button plain text bg v-if="current" @click="uploadCurrent">{{ $t('post.uploadnow')
+                    <el-button plain text bg v-if="current" :disabled="requestStatus" :loading="requestStatus == 1"
+                        @click="uploadCurrent">{{ $t('post.uploadnow')
                         }}</el-button>
                     <el-icon v-if="files.length" @click="saveAll(files)" title="save all files.">
                         <FolderOpened />
                     </el-icon>
-                    <el-button type="primary" class="all" v-if="files.length" @click="uploadAll(files)">{{
-                        $t('post.uploadall')
+                    <el-button :disabled="requestStatus" :loading="requestStatus == 2" type="primary" class="all"
+                        v-if="files.length" @click="uploadAll(files)">{{
+                            $t('post.uploadall')
                         }}</el-button>
                 </h4>
             </header>
@@ -70,6 +72,7 @@ defineExpose({
 })
 
 const emit = defineEmits(['uploaded'])
+const requestStatus = ref(0);
 
 watch(() => props.files, () => {
     if (props.files.includes(current.value)) return
@@ -118,6 +121,8 @@ function saveAll(files) {
 }
 
 function uploadCurrent() {
+    if (requestStatus.value) return
+    requestStatus.value = 1
     // 获取当前文件对象
     if (current.value) {
         const files = current.value.raw;
@@ -139,13 +144,18 @@ function uploadCurrent() {
             .catch((err) => {
                 // 处理上传失败的错误
                 console.log(err);
-            });
+            }).finally(() => {
+                requestStatus.value = 0
+            })
     }
 }
 
 
 // 处理上传全部文件的函数
 function uploadAll(files) {
+    if (requestStatus.value) return
+    requestStatus.value = 2
+
     // 获取所有文件列表
     const allFiles = [...files];
 
@@ -183,7 +193,9 @@ function uploadAll(files) {
         .catch((err) => {
             // 处理上传失败的错误
             console.log(err);
-        });
+        }).finally(() => {
+            requestStatus.value = 0
+        })
 }
 
 function onEditorValueChange() {

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const secret = "feiyue"
+const secret = "flyview-feiyue"
 
 const JWT = {
     generate(payload, expiresIn = "2h") {

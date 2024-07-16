@@ -34,12 +34,13 @@ app.use((req, res, next) => {
 	try {
 		const payload = JWT.verify(token);
 		if (!payload) {
-			throw new Error();
+			throw new Error("invalid token");
 		}
 		const user = {
 			id: payload.id,
 			username: payload.username,
-			email: payload.email
+			email: payload.email,
+			timestamp: Date.now()
 		};
 		req.user = user
 		const newToken = JWT.generate(user);

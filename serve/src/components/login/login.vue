@@ -20,7 +20,9 @@
                     <span data-placeholder="Confirm Password"></span>
                 </div>
                 <a @click.prevent="isLogin = !isLogin" v-if="isMobile">已有账号，立即登录</a>
-                <button>注册</button>
+                <button :disabled="requestStatus"><el-icon v-if="requestStatus">
+                        <Loading class="loading" />
+                    </el-icon>{{ requestStatus === 1 ? '注册中...' : requestStatus === 2 ? '正在处理登录...' : '注册' }}</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
@@ -36,7 +38,9 @@
                 </div>
                 <!-- <a @click.prevent>忘记密码？</a> -->
                 <a @click.prevent="isLogin = !isLogin" v-if="isMobile">没有账号，立即注册</a>
-                <button>登录</button>
+                <button :disabled="requestStatus"><el-icon v-if="requestStatus">
+                        <Loading class="loading" />
+                    </el-icon>{{ requestStatus === 2 ? '登录中...' : requestStatus === 1 ? '正在处理注册...' : '登录' }}</button>
             </form>
         </div>
 
@@ -69,10 +73,12 @@ import { ElMessage } from 'element-plus';
 import { useUserStore } from '@/store/user';
 import { storeToRefs } from "pinia";
 import { useMobileStore } from "@/store/mobile";
+import { Loading } from '@element-plus/icons-vue';
 
 const { isMobile } = storeToRefs(useMobileStore())
 
 const router = useRouter()
+const requestStatus = ref(0)
 
 const isLogin = ref(true)
 const login = reactive({
@@ -87,6 +93,9 @@ const register = reactive({
 })
 
 const check = () => {
+    if (requestStatus.value) {
+        return false
+    }
     const obj = isLogin.value ? login : register
     const mailReg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
     if (!mailReg.test(obj.email)) {
@@ -105,9 +114,12 @@ const registerFn = () => {
     if (!check()) {
         return
     }
+    requestStatus.value = 1
     useUserStore().register(register.email, register.username, register.password).then((res) => {
         ElMessage.success(res.msg)
         router.push('/home')
+    }).finally(() => {
+        requestStatus.value = 0
     })
 }
 
@@ -115,9 +127,12 @@ const loginFn = () => {
     if (!check()) {
         return
     }
+    requestStatus.value = 2
     useUserStore().login(login.email, login.password).then(res => {
         ElMessage.success(res.msg)
         router.push('/home')
+    }).finally(() => {
+        requestStatus.value = 0
     })
 }
 </script>
@@ -215,9 +230,19 @@ const loginFn = () => {
                 background-size: 200%;
                 color: #fff;
                 transition: .5s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
 
                 &:hover {
                     background-position: right;
+                }
+
+                &:disabled {
+                    background: linear-gradient(120deg, #2871a2, #592a6d);
+                    cursor: not-allowed;
+                    pointer-events: none;
                 }
             }
 
@@ -297,7 +322,7 @@ const loginFn = () => {
             text-align: right;
             margin: 8px 0 0 0;
 
-            &:nth-last-of-type(1){
+            &:nth-last-of-type(1) {
                 margin-bottom: 16px;
             }
         }
