@@ -17,11 +17,22 @@
 </template>
 
 <script setup lang="js">
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import Login from '@/components/login/login.vue';
 import { Application } from '@splinetool/runtime';
 import { storeToRefs } from 'pinia';
 import { useMobileStore } from '@/store/mobile';
+import pubsub from '@/utils/pubsub';
+import { ElMessage } from 'element-plus';
+
+function error(msg) {
+    ElMessage.error(msg)
+}
+pubsub.on('error', error)
+
+onBeforeUnmount(() => {
+    pubsub.off('error', error)
+})
 
 const { isMobile } = storeToRefs(useMobileStore())
 

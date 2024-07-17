@@ -28,7 +28,7 @@
             </ChatCard>
         </div>
         <ElForm class="input" @submit.prevent="search" :class="{ cancle: isEnter }">
-            <ElInput type="textarea" :disabled="!useUserStore().userInfo" :autosize="{ minRows: 1, maxRows: 6 }"
+            <ElInput type="textarea" :disabled="!useUserStore().userInfo || isEnter" :autosize="{ minRows: 1, maxRows: 6 }"
                 v-model="key" placeholder="请输入内容" resize="none" @keydown.enter="search">
             </ElInput>
             <ElButton native-type="button" @click="addFile" :disabled="!useUserStore().userInfo || isEnter">

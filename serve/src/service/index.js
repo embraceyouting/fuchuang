@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getToken, setToken } from "@/utils/token";
-import { ElMessage } from "element-plus";
+import pubsub from "@/utils/pubsub";
 import { useUserStore } from "@/store/user";
 
 const service = axios.create({
@@ -21,10 +21,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response) => {
         if (response.data.code && response.data.code !== 200) {
-            ElMessage.error({
-                message: response.data.msg,
-                grouping: true,
-            });
+            pubsub.emit("error", response.data.msg, response.status, response.statusText);
             useUserStore().logout()
             return Promise.reject(response.data);
         }
@@ -33,16 +30,13 @@ service.interceptors.response.use(
     },
     (error) => {
         if (!error.response?.data && error.message) {
-            ElMessage.error({
-                message: error.message,
-                grouping: true,
-            });
+            pubsub.emit("error", error.message);
             return Promise.reject(error);
         }
         if (error.response.status === 401) {
             useUserStore().logout()
         }
-        ElMessage.error(error.response.data.msg);
+        pubsub.emit("error", error.response.data.msg, error.response.status, error.response.statusText);
         return Promise.reject(error.response);
     }
 );
