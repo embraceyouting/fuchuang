@@ -51,6 +51,7 @@
             <!-- 用户没有登陆 -->
             <el-empty v-if="!userInfo?.id" description="点击右上角按钮进行登录" :image-size="180">
             </el-empty>
+            <Loading v-else-if="isRequest" class="loading"></Loading>
             <el-empty v-else-if="!filteredList.length" :image-size="180" description="暂无内容"></el-empty>
         </main>
     </el-container>
@@ -64,12 +65,14 @@ import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import { Filter } from '@element-plus/icons-vue';
 import { computed } from 'vue';
+import Loading from '@/components/data-status/Loading.vue';
 
 const userStore = useUserStore()
 const { userInfo, subjectList, subjectUrlList } = storeToRefs(userStore)
 const activeChoice = ref('work')
 const activeList = ref([])
 const filteredList = computed(() => subjectList.value.filter(item => activeList.value.includes(item.url)))
+const isRequest = ref(true)
 
 function logout() {
     userStore.logout()
@@ -95,6 +98,7 @@ userStore.getUserInfo().then(() => {
     return userStore.getSubjectList()
 }).then(() => {
     activeList.value = subjectUrlList.value
+    isRequest.value = false
 })
 
 </script>
@@ -368,6 +372,10 @@ userStore.getUserInfo().then(() => {
                     margin: 10px;
                 }
             }
+        }
+
+        .loading {
+            margin: 16vh auto;
         }
     }
 

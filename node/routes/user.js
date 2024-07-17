@@ -22,10 +22,19 @@ router.post("/login", (req, res) => {
 	});
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 	const registerInfo = req.body;
 	const sql =
 		"INSERT INTO users (username, email, password, avatar) VALUES ($1, $2, $3, $4) RETURNING id";
+	await new Promise((resolve) => db.query("SELECT * FROM users WHERE username = $1 OR email = $2", [registerInfo.username, registerInfo.email], (err, result) => {
+		if (err) {
+			return res.status(500).send(createMessage(500, "服务器错误: 注册失败"));
+		}
+		if (result.rowCount > 0) {
+			return res.status(400).send(createMessage(400, "用户名或邮箱已被注册"));
+		}
+		resolve();
+	}))
 	db.query(
 		sql,
 		[
