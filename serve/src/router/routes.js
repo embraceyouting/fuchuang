@@ -66,7 +66,8 @@ export default [
 			isNavItem: true,
 			isNav: true,
 			title: "navbar.chat",
-			icon: Opportunity
+			icon: Opportunity,
+			isKeepAlive: true
 		},
 	},
 	{

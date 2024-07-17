@@ -17,6 +17,14 @@ const whiteList = [
 ];
 
 app.use((req, res, next) => {
+	if (req.method === "OPTIONS") {
+		res.sendStatus(200);
+		return;
+	}
+	next();
+})
+
+app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Expose-Headers", "Authorization");
 	next();
@@ -40,11 +48,14 @@ app.use((req, res, next) => {
 			id: payload.id,
 			username: payload.username,
 			email: payload.email,
-			timestamp: Date.now()
+			avatar: payload.avatar,
 		};
 		req.user = user
-		const newToken = JWT.generate(user);
+		const newToken = JWT.generate({...user});
 		res.setHeader("Authorization", newToken);
+		res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.setHeader("Pragma", "no-cache");
+		res.setHeader("Expires", "0");
 		next();
 	} catch (err) {
 		return res.status(401).send(createMessage(401, "请登录"));

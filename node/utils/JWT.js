@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const secret = "flyview-feiyue"
 
 const JWT = {
-    generate(payload, expiresIn = "2h") {
+    generate(payload, expiresIn = "30d") {
         return jwt.sign(payload, secret, { expiresIn })
     },
     verify(token) {

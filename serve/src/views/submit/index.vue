@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="js">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, onActivated, onDeactivated } from "vue";
 import { UploadFilled } from '@element-plus/icons-vue';
 import CodeEditor from "@/components/editor/code-editor.vue";
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance, onBeforeUnmount } from 'vue'
 import 'intro.js/introjs.css';
 import introJs from 'intro.js';
 import { useRoute, useRouter } from "vue-router";
@@ -36,6 +36,19 @@ import { Pointer } from '@element-plus/icons-vue';
 import { ElMessage } from "element-plus";
 import Log2 from "@/assets/json/log2.json";
 import Log4 from "@/assets/json/log4.json";
+import pubsub from '@/utils/pubsub';
+
+function error(msg) {
+    ElMessage.error(msg)
+}
+
+onDeactivated(() => {
+    pubsub.off('error', error)
+})
+
+onActivated(() => {
+    pubsub.on('error', error)
+})
 
 defineOptions({
     name: 'submit'

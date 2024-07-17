@@ -8,7 +8,11 @@
 import Chat from '@/components/chat/chat.vue'
 import pubsub from '@/utils/pubsub';
 import { ElMessage } from 'element-plus';
-import { onBeforeUnmount } from 'vue';
+import { onDeactivated, onActivated } from 'vue';
+
+defineOptions({
+    name: 'chat'
+})
 
 function error(msg) {
     ElMessage.error(msg)
@@ -16,8 +20,12 @@ function error(msg) {
 
 pubsub.on('error', error)
 
-onBeforeUnmount(() => {
+onDeactivated(() => {
     pubsub.off('error', error)
+})
+
+onActivated(() => {
+    pubsub.on('error', error)
 })
 
 </script>

@@ -102,6 +102,7 @@ const infos = [
 ]
 let source = null;
 let signal = null;
+let thread = null;
 
 async function search(e) {
     if (e.ctrlKey || e.shiftKey) return
@@ -136,7 +137,12 @@ async function search(e) {
     const message = reactive({ text: '', type: "assistant", isEnd: false })
     messageList.value.push(message);
     const content = `${key.value}${result.length ? ',files:' : ''}${result.join("[FILE SEPARATOR]").slice(0, 4000)}`
-    service.get(`/gpt?key=${content}&token=${getToken()}`, {
+    if (!thread) thread = await service.post('/gpt').then(res => res.data).catch(err => {
+        message.text = "出错了，请重试..."
+        message.isEnd = true
+    })
+    if (thread)
+    service.get(`/gpt?key=${content}&token=${getToken()}&thread=${thread}`, {
         signal: signal.signal,
         timeout: 30000
     }).then(res => {
@@ -145,7 +151,7 @@ async function search(e) {
         if (err.name === "CanceledError") {
             return
         }
-        message.text = "出错了，请检查登录状态后重试..."
+        message.text = "出错了，请重试..."
     }).finally(() => {
         message.isEnd = true
     })
@@ -222,6 +228,7 @@ function cancle() {
 function goBack() {
     cancle()
     messageList.value = []
+    thread = null
 }
 
 function addFile() {

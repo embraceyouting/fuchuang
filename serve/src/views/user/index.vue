@@ -14,10 +14,10 @@
                     </span>
 
                     <span class="location tag">
-                        {{ userInfo?.location || 'xxxx大学' }}</span>
+                        {{ userInfo?.location || '电子科技大学' }}</span>
                 </p>
                 <p class="signature" v-if="userInfo?.id" :title="userInfo?.signature">{{ userInfo?.signature ||
-            '这个人很懒，什么也没留下...' }}</p>
+                    '这个人很懒，什么也没留下...' }}</p>
                 <p class="info" v-else>
                     用户尚未登录，无法使用全部功能，如需使用，请注册/登录
                 </p>
@@ -91,17 +91,12 @@ function toggleAll() {
     }
 }
 
-// function add8(time){
-//     var date = new Date(time);
-//     date.setHours(date.getHours());
-//     return date.toISOString();
-// }
-
-userStore.getUserInfo()
-
-userStore.getSubjectList().then(() => {
+userStore.getUserInfo().then(() => {
+    return userStore.getSubjectList()
+}).then(() => {
     activeList.value = subjectUrlList.value
 })
+
 </script>
 
 <style lang="scss" scoped>

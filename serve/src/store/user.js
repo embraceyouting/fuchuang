@@ -35,7 +35,8 @@ export const useUserStore = defineStore("user", {
         });
     },
     getUserInfo() {
-      getToken() && service.get("/user").then((res) => {
+      if (!getToken()) return Promise.reject(new Error("No token found"));
+      return service.get("/user").then((res) => {
         this.userInfo = res.data;
       });
     },
