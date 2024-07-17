@@ -159,7 +159,7 @@ const waterfall = ref(null)
 
 function layout() {
     nextTick(() => {
-        waterFall(waterfall.value, isMobile ? 2 : 3, 20);
+        waterFall(waterfall.value, isMobile.value ? 2 : 3, 20);
     })
 }
 
@@ -201,7 +201,7 @@ main {
         font-style: normal;
         margin: 36px 0 24px;
         font-family: "Paytone One", "PingFangSC", sans-serif;
-        background: linear-gradient(45deg, #ffffff, #7285ff 50%, #c7a7ff 80%);
+        background: linear-gradient(45deg, #ffffff, #aeb9ff 50%, #cdb0ff 80%);
         background-size: 200%;
         background-clip: text;
         color: transparent;
@@ -253,6 +253,10 @@ main {
     }
 
     .waterfall {
+
+        .card {
+            transition: left .3s, top .3s;
+        }
 
         .list-enter-active,
         .list-leave-active {

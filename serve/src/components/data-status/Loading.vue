@@ -35,6 +35,7 @@
 
     .loading-text {
         margin-top: 10px;
+        color: $white;
     }
 }
 </style>

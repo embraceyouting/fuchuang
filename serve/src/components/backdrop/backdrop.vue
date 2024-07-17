@@ -2,8 +2,6 @@
     <div id="bg" :style="{
         backgroundPosition: `${bgX}% ${bgY}%`,
     }">
-        <div class="ball"></div>
-        <div class="ball"></div>
     </div>
 </template>
 
@@ -52,10 +50,10 @@ body {
 #bg {
     position: fixed;
     inset: 0;
-    filter: blur(65px);
-    background: linear-gradient(45deg, #d4e7ff, #7166ef);
-    background-image: url('@/assets/image/back.jpg');
-    background-size: 200% 200%;
+    // filter: blur(65px);
+    // background-size: 150% 150%;
+    background: linear-gradient(45deg, $light-color 0%, $color 100%);
+    // background-image: url('@/assets/image/back.jpg');
     overflow: hidden;
     transform: scale(1.1);
     z-index: -99;

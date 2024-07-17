@@ -21,17 +21,17 @@
         </div>
 
         <div class="info">
-            <div v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }"
+            <section v-for="(card, index) in cardList" v-animate="{ direction: index % 2 ? 'left' : 'right' }"
                 :key="card.icon" class="card">
                 <component :is="card.icon" class="icon" style="width: 400px;height: 400px;"></component>
                 <div class="content">
                     <h4>{{ card.title }}</h4>
                     <p>{{ card.content }}</p>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <Contact v-animate="{ direction: 'bottom', offset: 40 }"></Contact>
+        <Contact class="contact" v-animate="{ direction: 'bottom', offset: 40 }"></Contact>
     </main>
 </template>
 
@@ -300,6 +300,20 @@ const cardList = computed(() => {
         width: 100%;
         display: flex;
         align-items: center;
+        position: relative;
+
+        &:nth-child(odd) {
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -50%;
+                width: 200vw;
+                height: 100%;
+                z-index: -1;
+                background-color: $light-color;
+            }
+        }
 
         svg {
             width: 400px;
@@ -337,6 +351,7 @@ const cardList = computed(() => {
 
             .content {
                 width: 80%;
+                margin-bottom: 48px;
 
                 h4 {
                     text-align: center;
@@ -370,6 +385,10 @@ const cardList = computed(() => {
     // animation: glowing 4s linear infinite alternate;
 }
 
+.contact {
+    margin-top: 240px;
+}
+
 @media screen and (max-width: 768px) {
     .title {
         .text_title {
@@ -399,6 +418,8 @@ const cardList = computed(() => {
     }
 
     .contact {
+        margin-top: 60px;
+
         :deep(.icon) {
             transform-origin: right bottom;
             transform: scale(0.8);

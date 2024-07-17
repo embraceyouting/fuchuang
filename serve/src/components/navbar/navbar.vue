@@ -95,15 +95,14 @@ function chooseLang(languagevalue) {
     localStorage.setItem("lang", locale.value);
 }
 
-
-
 </script>
 
 <style scoped lang="scss">
 .navbar {
     width: 100%;
     height: 60px;
-    background-image: linear-gradient(to bottom, #5e77d27b, #5e77d21e);
+    background: url('./bg.svg') no-repeat;
+    background-size: cover;
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
