@@ -12,15 +12,29 @@ export default {
 			threshold: 0.15,
 		};
 
-		const direction = binding.value?.direction || "left";
-		const duration = binding.value?.duration || "0.6s";
+		const direction = binding.value?.direction.toUpperCase() || "LEFT";
+		const duration = binding.value?.duration || 600;
+
+		const pos = direction === "LEFT" || direction === "RIGHT" ? "X" : "Y";
+		const isPositive = direction === "LEFT" || direction === "TOP" ? 1 : -1;
 
 		let observer = new IntersectionObserver((entries, observer) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
-					el.style.transition = `all ${duration} ease-in-out`;
-					el.style.transform = `translate(0)`;
-					el.style.opacity = 1;
+					const offset = binding.value?.offset || (innerWidth - el.getBoundingClientRect().width) / 2 - 20;
+					const fromStyle = {
+						transform: `translate${pos}(${offset * isPositive}px)`,
+						opacity: 0,
+					};
+					const toStyle = {
+						transform: `translate(0)`,
+						opacity: 1,
+					};
+					el.animate([fromStyle, toStyle], {
+						duration,
+						easing: "ease-in-out",
+						fill: "forwards",
+					});
 				} else {
 					init();
 				}
@@ -28,21 +42,6 @@ export default {
 		}, options);
 
 		function init() {
-			el.style.transform = `translate${
-				direction.toUpperCase() === "LEFT" ||
-				direction.toUpperCase() === "RIGHT"
-					? "X"
-					: "Y"
-			}(${
-				direction.toUpperCase() === "LEFT" ||
-				direction.toUpperCase() === "TOP"
-					? "-"
-					: "+"
-			}${
-				binding.value?.offset ||
-				(innerWidth - el.getBoundingClientRect().width) / 2 - 20
-			}px)`;
-			el.style.opacity = 0;
 			observer.observe(el);
 		}
 

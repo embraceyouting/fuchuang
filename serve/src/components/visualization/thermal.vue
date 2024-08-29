@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, onMounted, defineProps, onBeforeUnmount } from 'vue';
+import { getCurrentInstance, onMounted, onBeforeUnmount } from 'vue';
 let internalInstance = getCurrentInstance();
 let echarts = internalInstance.appContext.config.globalProperties.$echarts;
 const { $t } = getCurrentInstance().proxy

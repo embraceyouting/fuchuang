@@ -16,7 +16,8 @@ body {
 	min-height: 100vh;
 	margin: 0;
 	padding: 0;
-	scroll-behavior: smooth;
+	scroll-behavior: smooth;	
+	overflow-x: hidden;
 
 	&::-webkit-scrollbar {
 		width: 4px;
@@ -32,8 +33,4 @@ body {
 			background-color: #ffffff;
 		}
 	}
-}
-
-#app {
-	overflow-x: hidden;
 }

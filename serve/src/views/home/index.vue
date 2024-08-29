@@ -323,7 +323,7 @@ const cardList = computed(() => {
         .content {
             flex: 1;
             line-height: 1.5;
-            margin: 0 30px;
+            margin: 40px 30px;
 
             .contenta {
                 cursor: pointer;
